@@ -73,11 +73,21 @@ body {
       .logo {
         margin-top: 3.125vw;
         margin-left: 3.125vw;
+
+        @include mobile {
+          margin-top: 20px;
+          margin-left: 20px;
+        }
       }
 
       .menu {
         margin-top: 3.125vw;
         margin-right: 3.125vw;
+
+        @include mobile {
+          margin-top: 20px;
+          margin-left: 20px;
+        }
 
         .close {
           display: none;
@@ -99,6 +109,11 @@ body {
     padding-top: 20vw;
     padding-bottom: 6vw;
 
+    @include mobile {
+      padding-top: 100px;
+      padding-bottom: 60px;
+    }
+
     .footer-logo {
       position: absolute;
       width: 140px;
@@ -109,6 +124,9 @@ body {
       position: absolute;
       display: block;
       left: 31.5vw;
+      @include mobile {
+        left: 200px;
+      }
 
       li {
         list-style: none;
@@ -119,16 +137,27 @@ body {
     .star {
       position: absolute;
       left: 70vw;
+
+      @include mobile {
+        display: none;
+        left: 20px;
+      }
     }
 
     .pupil {
       position: absolute;
       left: 79vw;
+      @include mobile {
+        display: none;
+      }
     }
 
     .cta {
       position: absolute;
       right: 3.125vw;
+      @include mobile {
+        display: none;
+      }
     }
   }
 
@@ -170,6 +199,7 @@ body {
     position: relative;
     width: 100%;
     height: 100vh;
+    border-bottom: 1px solid red;
 
     .title-wrapper {
       display: flex;
@@ -183,12 +213,23 @@ body {
       font-size: $title;
       font-family: $h1;
       line-height: $title;
+
+      @include mobile {
+        font-size: 24vw;
+        line-height: 24vw;
+      }
     }
 
     .hero01 {
       left: 13.5vw;
       top: 27vw;
       width: 230px;
+
+      @include mobile {
+        width: 130px;
+        left: 50px;
+        top: 150px;
+      }
       &::before {
         position: absolute;
         content: '';
@@ -204,16 +245,31 @@ body {
       width: 230px;
       right: 37.5vw;
       bottom: 10vw;
+
+      @include mobile {
+        width: 180px;
+        right: 50px;
+        bottom: 110px;
+      }
     }
 
     .hero03 {
       right: 29vw;
       bottom: 6vw;
+
+      @include mobile {
+        bottom: 50px;
+        right: 50px;
+      }
     }
 
     .hero04 {
       top: 15.5vw;
       right: 20vw;
+
+      @include mobile {
+        display: none;
+      }
     }
 
     .hero05{
@@ -221,6 +277,10 @@ body {
       left: 13.5vw;
       span {
         display: block;
+      }
+
+      @include mobile {
+        display: none;
       }
 
       .second {
@@ -233,6 +293,11 @@ body {
     position: relative;
     width: 100%;
     height: 120vh;
+    border-bottom: 1px solid red;
+
+    @include mobile {
+      height: 100vh;
+    }
 
     &-title {
       position: absolute;
@@ -242,22 +307,39 @@ body {
       left: 17.34vw;
       top: 16vw;
 
+      @include mobile {
+        top: 150px;
+        left: 50px;
+        font-size: 24vw;
+        line-height: 24vw;
+      }
+
       span {
         display: inline-block;
       }
 
       .second {
         margin-left: 14vw;
+        @include mobile {
+          margin-left: 70px;
+        }
       }
       .third {
         display: block;
         margin-left: 9.5vw;
+        @include mobile {
+          margin-left: 30px;
+        }
       }
     }
 
     .protagonist01 {
       right: 29vw;
       bottom: 14.5vw;
+      @include mobile {
+        right: 50px;
+        bottom: 50px;
+      }
       span {
         display: block;
       }
@@ -267,6 +349,12 @@ body {
       width: 230px;
       left: 13vw;
       bottom: -3vw;
+
+      @include mobile {
+        left: 50px;
+        bottom: 150px;
+        width: 180px;
+      }
 
       &::before {
         position: absolute;
@@ -284,6 +372,11 @@ body {
     width: 100%;
     position: relative;
     height: 120vh;
+    border-bottom: 1px solid red;
+
+    @include mobile {
+      height: 100vh;
+    }
 
     &-title {
       position: absolute;
@@ -294,20 +387,38 @@ body {
       right: 8vw;
       top: 16vw;
 
+      @include mobile {
+        top: 150px;
+        right: 50px;
+        font-size: 24vw;
+        line-height: 24vw;
+      }
+
       .number {
         position: absolute;
         margin-left: 3vw;
+        @include mobile {
+          margin-left: 20px;
+          display: none;
+        }
       }
 
       .second {
         margin-right: 5vw;
         display: block;
+        @include mobile {
+          margin-right: 0px;
+        }
       }
     }
 
     .objective01 {
       top: 30vw;
       left: -1vw;
+      @include mobile {
+        top: 300px;
+        left: -10px;
+      }
       span {
         display: block;
       }
@@ -316,6 +427,10 @@ body {
     .objective02 {
       top: 30vw;
       right: 14vw;
+      @include mobile {
+        top: 300px;
+        right: 100px;
+      }
       span {
         display: block;
       }
@@ -325,6 +440,11 @@ body {
       width: 230px;
       bottom: -3vw;
       right: 36vw;
+
+      @include mobile {
+        right: 50px;
+        bottom: 50px;
+      }
       &::before {
         position: absolute;
         content: '';
@@ -341,6 +461,11 @@ body {
     width: 100%;
     position: relative;
     height: 120vh;
+    border-bottom: 1px solid red;
+
+    @include mobile {
+      height: 100vh;
+    }
 
     &-title {
       position: absolute;
@@ -351,22 +476,39 @@ body {
       left: 8vw;
       top: 16vw;
 
+      @include mobile {
+        font-size: 24vw;
+        line-height: 24vw;
+        top: 150px;
+        left: 50px;
+      }
+
       .first {
         display: inline-block;
       }
 
       .second {
         margin-left: 27vw;
+        @include mobile {
+          margin-left: 100px;
+        }
       }
 
       .third {
         margin-left: 9.5vw;
+        @include mobile {
+          margin-left: 50px;
+        }
         display: block;
       }
     }
     .reality01 {
       top: 21vw;
       left: 60vw;
+      @include mobile {
+        top: 50px;
+        left: 250px;
+      }
       span {
         display: block;
       }
@@ -375,6 +517,12 @@ body {
       width: 340px;
       right: 17vw;
       bottom: -3vw;
+
+      @include mobile {
+        width: 280px;
+        right: 50px;
+        bottom: 50px;
+      }
       &::before {
         position: absolute;
         content: '';
@@ -392,6 +540,10 @@ body {
     position: relative;
     height: 120vh;
 
+    @include mobile {
+      height: 100vh;
+    }
+
     &-title {
       display: flex;
       flex-direction: column;
@@ -401,6 +553,12 @@ body {
       line-height: $title;
       padding-top: 12vw;
       text-align: center;
+
+      @include mobile {
+        font-size: 24vw;
+        line-height: 24vw;
+        padding-top: 100px;
+      }
 
       span {
         display: block;
@@ -412,12 +570,23 @@ body {
         line-height: $main;
         padding-top: 3vw;
         padding-bottom: 2.3vw;
+
+        @include mobile {
+          padding-top: 20px;
+          padding-bottom: 20px;
+        }
       }
     }
     .simulation01 {
       width: 340px;
       bottom: -3vw;
       left: 26vw;
+
+      @include mobile {
+        width: 230px;
+        left: 20px;
+        bottom: 50px;
+      }
       &::before {
         position: absolute;
         content: '';
