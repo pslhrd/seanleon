@@ -59,7 +59,7 @@ body {
   header {
     position: fixed;
     top: 0;
-    z-index: 50;
+    z-index: 65;
     width: 100%;
     font-size: $main;
     font-family: $mono;
@@ -78,6 +78,10 @@ body {
       .menu {
         margin-top: 3.125vw;
         margin-right: 3.125vw;
+
+        .close {
+          display: none;
+        }
 
         &:hover {
           cursor: pointer;
@@ -136,8 +140,10 @@ body {
     top: 0;
     width: 100%;
     height: 100vh;
-    background-color: #0F122D;
+    background-color: #0C0F24;
     z-index: 60;
+    display: none;
+    opacity: 0;
 
     ul {
       width: 100%;
@@ -147,8 +153,15 @@ body {
       align-items: center;
 
       li {
-        padding: 0.8vw;
+        margin: 3.2vw;
         list-style: none;
+        display: block;
+        overflow: hidden;
+
+        a {
+          transform: translateY(100%);
+          display: block;
+        }
       }
     }
   }

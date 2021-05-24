@@ -49,4 +49,36 @@ function homeLaunch() {
 	smooth(body)
 }
 
+
+function drawMenu() {
+  const wrapper = document.querySelector('.menu-wrapper')
+  const height = document.querySelector('.menu-wrapper').clientHeight
+  const menu = document.querySelector('.open')
+  const close = document.querySelector('.close')
+  const main = document.querySelector('main')
+
+  const tl = gsap.timeline()
+  const tl2 = gsap.timeline()
+
+  menu.addEventListener('click', e => {
+    tl
+    .set(wrapper, {display:'block'})
+    .to('.menu-wrapper', {autoAlpha:1, duration:0.5, ease:'power4.out'})
+    .fromTo('.menu-wrapper a', {y:'100%'}, {y:'0%', duration:0.6, ease:'power3.out', stagger:0.1}, '-=0.3')
+    close.style.display = 'block'
+    menu.style.display = 'none'
+    main.style.overflow = 'hidden'
+  })
+
+  close.addEventListener('click', e => {
+    tl
+    .to('.menu-wrapper', {autoAlpha:0, duration:0.5, ease:'power3.out'})
+    .set(wrapper, {display:'none'})
+    main.style.overflow = 'visible'
+    close.style.display = 'none'
+    menu.style.display = 'block'
+  })
+}
+
+drawMenu()
 homeLaunch()
