@@ -1,0 +1,441 @@
+:root {
+  --c-bg: #080A18;
+  --c-fg: #FFFFFF;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100vw;
+  max-width: 100%;
+  overflow-x: hidden;
+  background-color: var(--c-bg);
+  color: var(--c-fg);
+}
+body a, body button {
+  cursor: pointer;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: currentColor;
+  background: none;
+  border: none;
+  padding: 0;
+  outline: none;
+}
+body .data {
+  position: absolute;
+  font-size: 12px;
+  color: #939393;
+  font-family: "Monument Grotesk Mono";
+  text-transform: uppercase;
+}
+body .margin {
+  margin-bottom: -4.6875vw;
+}
+body header {
+  position: fixed;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  font-size: 12px;
+  font-family: "Monument Grotesk Mono";
+  text-transform: uppercase;
+}
+body header .flex-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+body header .flex-wrapper .logo {
+  margin-top: 3.125vw;
+  margin-left: 3.125vw;
+}
+body header .flex-wrapper .menu {
+  margin-top: 3.125vw;
+  margin-right: 3.125vw;
+}
+body header .flex-wrapper .menu:hover {
+  cursor: pointer;
+}
+body footer {
+  width: 100%;
+  font-size: 12px;
+  font-family: "Monument Grotesk Mono";
+  text-transform: uppercase;
+  position: relative;
+  padding-top: 20vw;
+  padding-bottom: 6vw;
+}
+body footer .footer-logo {
+  position: absolute;
+  width: 140px;
+  left: 3.125vw;
+}
+body footer ul {
+  position: absolute;
+  display: block;
+  left: 31.5vw;
+}
+body footer ul li {
+  list-style: none;
+  display: block;
+}
+body footer .star {
+  position: absolute;
+  left: 70vw;
+}
+body footer .pupil {
+  position: absolute;
+  left: 79vw;
+}
+body footer .cta {
+  position: absolute;
+  right: 3.125vw;
+}
+body .menu-wrapper {
+  position: fixed;
+  font-size: 12px;
+  font-family: "Monument Grotesk Mono";
+  text-transform: uppercase;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #0F122D;
+  z-index: 60;
+}
+body .menu-wrapper ul {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body .menu-wrapper ul li {
+  padding: 0.8vw;
+  list-style: none;
+}
+body .hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+body .hero .title-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+body .hero-title {
+  font-size: 14.583vw;
+  font-family: "Skrappa";
+  line-height: 14.583vw;
+}
+body .hero .hero01 {
+  left: 13.5vw;
+  top: 27vw;
+  width: 230px;
+}
+body .hero .hero01::before {
+  position: absolute;
+  content: "";
+  width: 6px;
+  height: 1px;
+  background-color: white;
+  top: -2vw;
+  left: 0;
+}
+body .hero .hero02 {
+  width: 230px;
+  right: 37.5vw;
+  bottom: 10vw;
+}
+body .hero .hero03 {
+  right: 29vw;
+  bottom: 6vw;
+}
+body .hero .hero04 {
+  top: 15.5vw;
+  right: 20vw;
+}
+body .hero .hero05 {
+  top: 41vw;
+  left: 13.5vw;
+}
+body .hero .hero05 span {
+  display: block;
+}
+body .hero .hero05 .second {
+  margin-top: 15vw;
+}
+body .protagonist {
+  position: relative;
+  width: 100%;
+  height: 120vh;
+}
+body .protagonist-title {
+  position: absolute;
+  font-size: 14.583vw;
+  font-family: "Skrappa";
+  line-height: 14.583vw;
+  left: 17.34vw;
+  top: 16vw;
+}
+body .protagonist-title span {
+  display: inline-block;
+}
+body .protagonist-title .second {
+  margin-left: 14vw;
+}
+body .protagonist-title .third {
+  display: block;
+  margin-left: 9.5vw;
+}
+body .protagonist .protagonist01 {
+  right: 29vw;
+  bottom: 14.5vw;
+}
+body .protagonist .protagonist01 span {
+  display: block;
+}
+body .protagonist .protagonist02 {
+  width: 230px;
+  left: 13vw;
+  bottom: -3vw;
+}
+body .protagonist .protagonist02::before {
+  position: absolute;
+  content: "";
+  width: 6px;
+  height: 1px;
+  background-color: white;
+  top: -2vw;
+  left: 0;
+}
+body .objective {
+  width: 100%;
+  position: relative;
+  height: 120vh;
+}
+body .objective-title {
+  position: absolute;
+  font-size: 14.583vw;
+  font-family: "Skrappa";
+  line-height: 14.583vw;
+  text-align: right;
+  right: 8vw;
+  top: 16vw;
+}
+body .objective-title .number {
+  position: absolute;
+  margin-left: 3vw;
+}
+body .objective-title .second {
+  margin-right: 5vw;
+  display: block;
+}
+body .objective .objective01 {
+  top: 30vw;
+  left: -1vw;
+}
+body .objective .objective01 span {
+  display: block;
+}
+body .objective .objective02 {
+  top: 30vw;
+  right: 14vw;
+}
+body .objective .objective02 span {
+  display: block;
+}
+body .objective .objective03 {
+  width: 230px;
+  bottom: -3vw;
+  right: 36vw;
+}
+body .objective .objective03::before {
+  position: absolute;
+  content: "";
+  width: 6px;
+  height: 1px;
+  background-color: white;
+  top: -2vw;
+  left: 0;
+}
+body .reality {
+  width: 100%;
+  position: relative;
+  height: 120vh;
+}
+body .reality-title {
+  position: absolute;
+  font-size: 14.583vw;
+  font-family: "Skrappa";
+  line-height: 14.583vw;
+  text-align: left;
+  left: 8vw;
+  top: 16vw;
+}
+body .reality-title .first {
+  display: inline-block;
+}
+body .reality-title .second {
+  margin-left: 27vw;
+}
+body .reality-title .third {
+  margin-left: 9.5vw;
+  display: block;
+}
+body .reality .reality01 {
+  top: 21vw;
+  left: 60vw;
+}
+body .reality .reality01 span {
+  display: block;
+}
+body .reality .reality02 {
+  width: 340px;
+  right: 17vw;
+  bottom: -3vw;
+}
+body .reality .reality02::before {
+  position: absolute;
+  content: "";
+  width: 6px;
+  height: 1px;
+  background-color: white;
+  top: -2vw;
+  left: 0;
+}
+body .simulation {
+  width: 100%;
+  position: relative;
+  height: 120vh;
+}
+body .simulation-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14.583vw;
+  font-family: "Skrappa";
+  line-height: 14.583vw;
+  padding-top: 12vw;
+  text-align: center;
+}
+body .simulation-title span {
+  display: block;
+}
+body .simulation-title .mono {
+  font-family: "Monument Grotesk Mono";
+  font-size: 12px;
+  line-height: 12px;
+  padding-top: 3vw;
+  padding-bottom: 2.3vw;
+}
+body .simulation .simulation01 {
+  width: 340px;
+  bottom: -3vw;
+  left: 26vw;
+}
+body .simulation .simulation01::before {
+  position: absolute;
+  content: "";
+  width: 6px;
+  height: 1px;
+  background-color: white;
+  top: -2vw;
+  left: 0;
+}
+
+/*! locomotive-scroll v4.1.1 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+html.has-scroll-smooth {
+  overflow: hidden;
+}
+
+html.has-scroll-dragging {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.has-scroll-smooth body {
+  overflow: hidden;
+}
+
+.has-scroll-smooth [data-scroll-container] {
+  min-height: 100vh;
+}
+
+[data-scroll-direction=horizontal] [data-scroll-container] {
+  height: 100vh;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+[data-scroll-direction=horizontal] [data-scroll-section] {
+  display: inline-block;
+  vertical-align: top;
+  white-space: nowrap;
+  height: 100%;
+}
+
+.c-scrollbar {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 11px;
+  height: 100%;
+  transform-origin: center right;
+  transition: transform 0.3s, opacity 0.3s;
+  opacity: 0;
+}
+
+.c-scrollbar:hover {
+  transform: scaleX(1.45);
+}
+
+.c-scrollbar:hover, .has-scroll-scrolling .c-scrollbar, .has-scroll-dragging .c-scrollbar {
+  opacity: 1;
+}
+
+[data-scroll-direction=horizontal] .c-scrollbar {
+  width: 100%;
+  height: 10px;
+  top: auto;
+  bottom: 0;
+  transform: scaleY(1);
+}
+
+[data-scroll-direction=horizontal] .c-scrollbar:hover {
+  transform: scaleY(1.3);
+}
+
+.c-scrollbar_thumb {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: black;
+  opacity: 0.5;
+  width: 7px;
+  border-radius: 10px;
+  margin: 2px;
+  cursor: -webkit-grab;
+  cursor: grab;
+}
+
+.has-scroll-dragging .c-scrollbar_thumb {
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+
+[data-scroll-direction=horizontal] .c-scrollbar_thumb {
+  right: auto;
+  bottom: 0;
+}
+
+/*# sourceMappingURL=/style.6d80b553.css.map */
