@@ -1,0 +1,9 @@
+@font-face {
+	font-family: 'Skrappa';
+	src: url('./skrappa.otf') format('OpenType')
+}
+
+@font-face {
+	font-family: 'Monument Grotesk Mono';
+	src: url('./MonumentGrotesk-Mono.otf') format('OpenType')
+}
