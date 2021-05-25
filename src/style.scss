@@ -52,6 +52,16 @@ body {
     text-transform: uppercase;
   }
 
+  .transition {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    z-index: 100;
+    background-color: #0C0F24;
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+
   .margin {
     margin-bottom: -4.6875vw;
   }
@@ -64,6 +74,7 @@ body {
     font-size: $main;
     font-family: $mono;
     text-transform: uppercase;
+    mix-blend-mode: difference;
 
     .flex-wrapper {
       display: flex;
@@ -74,29 +85,30 @@ body {
         margin-top: 3.125vw;
         margin-left: 3.125vw;
 
+        &:hover {
+          opacity: 0.6;
+        }
+
         @include mobile {
           margin-top: 20px;
           margin-left: 20px;
         }
       }
 
-      .menu {
+      ul {
         margin-top: 3.125vw;
         margin-right: 3.125vw;
-
-        @include mobile {
-          margin-top: 20px;
-          margin-left: 20px;
-        }
-
-        .close {
-          display: none;
-        }
-
-        &:hover {
-          cursor: pointer;
+        display: block;
+        li {
+          margin-left: 1.5vw;
+          list-style: none;
+          display: inline-block;
+          &:hover {
+            opacity: 0.6;
+          }
         }
       }
+
     }
   }
 
@@ -199,7 +211,6 @@ body {
     position: relative;
     width: 100%;
     height: 100vh;
-    border-bottom: 1px solid red;
 
     .title-wrapper {
       display: flex;
@@ -293,7 +304,6 @@ body {
     position: relative;
     width: 100%;
     height: 120vh;
-    border-bottom: 1px solid red;
 
     @include mobile {
       height: 100vh;
@@ -372,7 +382,6 @@ body {
     width: 100%;
     position: relative;
     height: 120vh;
-    border-bottom: 1px solid red;
 
     @include mobile {
       height: 100vh;
@@ -461,7 +470,6 @@ body {
     width: 100%;
     position: relative;
     height: 120vh;
-    border-bottom: 1px solid red;
 
     @include mobile {
       height: 100vh;
@@ -595,6 +603,88 @@ body {
         background-color: white; 
         top: -2vw;
         left: 0;
+      }
+    }
+  }
+
+  .products {
+    width: 100%;
+    position: relative;
+    font-family: $mono;
+    font-size: $main;
+    color: #939393;
+    text-transform: uppercase;
+
+    .left {
+      padding-left: 12.5vw;
+    }
+
+    .bottom {
+      margin-bottom: 13vw;
+    }
+
+    .overlap {
+      margin-top: -4vw;
+      z-index: 2 !important;
+    }
+
+    .closeLeft {
+      padding-left: 4vw;
+    }
+
+    .right {
+      padding-left: 60vw;
+    }
+
+    .closeRight {
+      padding-left: 64vw;
+    }
+
+    .middle {
+      padding-left: 36vw;
+    }
+
+    .product {
+      width: 32vw;
+      position: relative;
+      z-index: 3;
+      &:hover {
+        cursor: pointer;
+
+        img {
+          transform: scale(1.1);
+        }
+      }
+      &-content {
+        position: relative;
+        width: 32vw;
+        z-index: 3;
+      }
+      &-name {
+        position: absolute;
+      }
+      &-quantity {
+        position: absolute;
+        right: 0;
+      }
+      &-price {
+        position: absolute;
+        left: 25vw;
+      }
+      &-img {
+        width: 32vw;
+        height: 32vw;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 20px;
+
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 1s cubic-bezier(.165,.84,.44,1);
+        }
       }
     }
   }

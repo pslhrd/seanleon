@@ -49,36 +49,34 @@ function homeLaunch() {
 	smooth(body)
 }
 
+const tl = gsap.timeline()
 
-function drawMenu() {
-  const wrapper = document.querySelector('.menu-wrapper')
-  const height = document.querySelector('.menu-wrapper').clientHeight
-  const menu = document.querySelector('.open')
-  const close = document.querySelector('.close')
-  const main = document.querySelector('main')
+barba.init({
+  debug: true,
+  transitions: [{
+    name: 'opacity-transition',
+    beforeEnter({ next }) { 
+      scroll.destroy()
+      smooth(next.container)
+    },
+    leave(data) {
+      if (isMobile.any()) {
+        gsap.set(window, {scrollTo: 0})
+      }
+      document.querySelector('.transition').style.transformOrigin = 'bottom'
+      gsap.to('.transition', {scaleY:1, duration:1, ease:'power3.inOut'})
+      gsap.to(data.current.container, {y:'-2%', duration:1, ease:'power3.inOut'})
+      return gsap.to(data.current.container, {opacity: 0,duration:0.6,ease:'power3.inOut'})
+    },
+    enter(data) {
+      data.current.container.style.display = 'none';
+      document.querySelector('.transition').style.transformOrigin = 'top'
+      scroll.update()
+      gsap.to('.transition', {scaleY:0, duration:0.8, ease:'power3.out'})
+      gsap.from(data.next.container, {y:'2%', duration:1, ease:'power3.out'})
+      return gsap.from(data.next.container, {opacity: 0,duration:0.5,ease:'power3.inOut'})
+    }
+  }]
+});
 
-  const tl = gsap.timeline()
-  const tl2 = gsap.timeline()
-
-  menu.addEventListener('click', e => {
-    tl
-    .set(wrapper, {display:'block'})
-    .to('.menu-wrapper', {autoAlpha:1, duration:0.5, ease:'power4.out'})
-    .fromTo('.menu-wrapper a', {y:'100%'}, {y:'0%', duration:0.6, ease:'power3.out', stagger:0.1}, '-=0.3')
-    close.style.display = 'block'
-    menu.style.display = 'none'
-    main.style.overflow = 'hidden'
-  })
-
-  close.addEventListener('click', e => {
-    tl
-    .to('.menu-wrapper', {autoAlpha:0, duration:0.5, ease:'power3.out'})
-    .set(wrapper, {display:'none'})
-    main.style.overflow = 'visible'
-    close.style.display = 'none'
-    menu.style.display = 'block'
-  })
-}
-
-drawMenu()
 homeLaunch()
