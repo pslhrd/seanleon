@@ -189,7 +189,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"./skrappa.otf":[["skrappa.248f6759.otf","src/assets/fonts/skrappa.otf"],"src/assets/fonts/skrappa.otf"],"./MonumentGrotesk-Mono.otf":[["MonumentGrotesk-Mono.283162c0.otf","src/assets/fonts/MonumentGrotesk-Mono.otf"],"src/assets/fonts/MonumentGrotesk-Mono.otf"],"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./Skrappa.otf":[["Skrappa.1abd550a.otf","src/assets/fonts/Skrappa.otf"],"src/assets/fonts/Skrappa.otf"],"./MonumentGrotesk-Mono.otf":[["MonumentGrotesk-Mono.283162c0.otf","src/assets/fonts/MonumentGrotesk-Mono.otf"],"src/assets/fonts/MonumentGrotesk-Mono.otf"],"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -217,7 +217,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63282" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49591" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
