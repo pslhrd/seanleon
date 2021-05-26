@@ -18160,14 +18160,14 @@ function homeLaunch() {
     opacity: 1,
     stagger: 0.1,
     duration: 0.1
-  }).to('.gods', {
+  }, 0.2).to('.gods', {
     opacity: 1,
     duration: 0.01
   }, 0.3).to('.gods', {
     x: '0%',
     duration: 1.5,
     ease: 'power4.out'
-  }).to('.algo', {
+  }, 0.3).to('.algo', {
     opacity: 1,
     duration: 0.01
   }, 0.7).to('.algo', {
@@ -18424,7 +18424,7 @@ _core.default.init({
       scroll.update();
       return _gsap.default.from(data.next.container, {
         opacity: 0,
-        duration: 0.1,
+        duration: 0.2,
         ease: 'power3.inOut'
       });
     }
@@ -18481,7 +18481,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49591" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52723" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
