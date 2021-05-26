@@ -3,6 +3,7 @@ import { ScrollToPlugin } from 'gsap/all'
 import LocomotiveScroll from 'locomotive-scroll'
 import barba from '@barba/core'
 import { startRubiks } from './js/rubiks/rubiks'
+import { startCubes } from './js/rubiks/randomCubes'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import state from './state'
 
@@ -64,8 +65,6 @@ function smooth (container) {
 }
 
 function homeLaunch () {
-  startRubiks()
-
   const tl = gsap.timeline()
   gsap.set('.gods, .algo', { opacity: 0, x: '-10%' })
   gsap.set('.hero .data', { opacity: 0 })
@@ -77,6 +76,7 @@ function homeLaunch () {
     .to('header .logo, ul li a', { opacity: 1, stagger: 0.1, duration: 0.1 }, 0.2)
     .to('.gods', { opacity: 1, duration: 0.01 }, 0.3)
     .to('.gods', { x: '0%', duration: 1.5, ease: 'power4.out' }, 0.3)
+    .add(() => startRubiks(), 0.3)
     .to('.algo', { opacity: 1, duration: 0.01 }, 0.7)
     .to('.algo', { x: '0%', duration: 1.4, ease: 'power4.out' }, '-=1.5')
     .to('.hero .data', { opacity: 1, duration: 0.1, stagger: 0.075 }, '-=1.5')
@@ -84,9 +84,7 @@ function homeLaunch () {
     .to('.hero03', { x: '0%', duration: 1.2, ease: 'power4.out' }, '-=1.5')
 }
 
-function touchLaunch () {
-  // startRubiks()
-
+function touchLaunch (cubes) {
   const tl = gsap.timeline()
   gsap.set('.touch', { opacity: 0, x: '-10%' })
   gsap.set('.hero03', { x: '50%' })
@@ -97,6 +95,7 @@ function touchLaunch () {
     .to('header .logo, ul li a', { opacity: 1, stagger: 0.1, duration: 0.1 })
     .to('.touch', { opacity: 1, duration: 0.01 }, 0.3)
     .to('.touch', { x: '0%', duration: 1.5, ease: 'power4.out' }, 0.3)
+    .add(() => startCubes(cubes), 0.3)
     .to('.hero .data', { opacity: 1, duration: 0.1, stagger: 0.075 }, '-=1.4')
     .to('.hero03', { x: '0%', duration: 1.2, ease: 'power4.out' }, '-=1.4')
 }
@@ -211,7 +210,13 @@ barba.init({
     namespace: 'touch',
     beforeEnter ({ next }) {
       smooth(next.container)
-      touchLaunch()
+      touchLaunch([
+        { x: -2, y: 0, z: 2 },
+        { x: -5, y: -5, z: 0 },
+        { x: 7, y: -10, z: 1 },
+        { x: -4, y: -15, z: 2 },
+        { x: 2, y: -20, z: -1 }
+      ])
     },
     afterEnter ({ next }) {
       // smooth(next.container)
@@ -221,7 +226,13 @@ barba.init({
     namespace: 'see',
     beforeEnter ({ next }) {
       smooth(next.container)
-      touchLaunch()
+      touchLaunch([
+        { x: -2, y: 0, z: 2 },
+        { x: -5, y: -5, z: 0 },
+        { x: 7, y: -10, z: 1 },
+        { x: -4, y: -15, z: 2 },
+        { x: 2, y: -20, z: -1 }
+      ])
     },
     afterEnter ({ next }) {
       // smooth(next.container)

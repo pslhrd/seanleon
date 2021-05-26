@@ -13,10 +13,9 @@ const loader = new TextureLoader()
 gsap.registerPlugin(ScrollTrigger)
 
 // const seed = Math.round(Math.random() * 999999999)
-const random = randomGenerator(17846364) // seed qui marche bien (le random sera toujours le même au refresh)
+const Random = randomGenerator(17846364) // seed qui marche bien (le random sera toujours le même au refresh)
 
 // INIT
-
 const inits = [
   init('.gl-back', { alpha: false, from: 11, to: 100 }),
   init('.gl-front', { alpha: true, from: 0.1, to: 11.1 })
@@ -36,7 +35,7 @@ for (let x = 0; x < 3; x++) {
   for (let y = 0; y < 3; y++) {
     for (let z = 0; z < 3; z++) {
       const wrapper = new Object3D()
-      const color = colors[Math.round(random() * (colors.length - 1))]
+      const color = colors[Math.round(Random() * (colors.length - 1))]
       const normalMap = loader.load(normalMapTexture)
       normalMap.wrapS = RepeatWrapping
       normalMap.wrapT = RepeatWrapping
@@ -58,9 +57,9 @@ for (let x = 0; x < 3; x++) {
 
 const composers = []
 
-inits.forEach(({ camera, renderer, scene, controls }, i) => {
+inits.forEach(({ camera, renderer, scene }, i) => {
   // const seed = Math.round(Math.random() * 999999999)
-  const random = randomGenerator(17846364) // seed qui marche bien (le random sera toujours le même au refresh)
+  // const random = randomGenerator(17846364) // seed qui marche bien (le random sera toujours le même au refresh)
 
   renderer.pixelRatio = 2
   if (i === 0) scene.background = new Color(0x080A18)
@@ -71,14 +70,14 @@ inits.forEach(({ camera, renderer, scene, controls }, i) => {
   camera.position.x = 25
   camera.position.y = 25
 
-  scene.fog = new Fog(0x080A18, 8, 20)
+  scene.fog = new Fog(0x080A18, 8, 16)
 
   // SKETCH
   scene.add(light1.clone(), light2.clone(), amb.clone())
 })
 
 export function startRubiks () {
-  inits.forEach(({ camera, renderer, scene, controls }, i) => {
+  inits.forEach(({ camera, scene, controls }, i) => {
     // const seed = Math.round(Math.random() * 999999999)
     const random = randomGenerator(17846364) // seed qui marche bien (le random sera toujours le même au refresh)
 
