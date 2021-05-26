@@ -32,7 +32,7 @@ scene.fog = new Fog(0x080A18, 8, 20)
 
 const light1 = new PointLight(0xffffff, 2, 0, 2)
 const light2 = new PointLight(0xffffff, 2, 0, 2)
-const amb = new AmbientLight(0xffffff, 1)
+const amb = new AmbientLight(0xffffff, 2)
 light1.position.set(10, 20, 15)
 light2.position.set(-20, 40, 30)
 scene.add(light1, light2, amb)
