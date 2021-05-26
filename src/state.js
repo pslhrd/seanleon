@@ -1,3 +1,4 @@
 export default {
-  locoScroll: undefined
+  locoScroll: undefined,
+  nextContainer: undefined
 }

@@ -5,35 +5,33 @@ import { randomGenerator } from '../utils/helpers'
 import { AmbientLight, Fog, Mesh, MeshPhysicalMaterial, Object3D, PointLight, RepeatWrapping, TextureLoader } from 'three'
 import { createBoxWithRoundedEdges } from './rubiks-helpers'
 import gsap from 'gsap/all'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import normalMapTexture from '../../assets/normalmap.jpg'
 
-const loader = new TextureLoader()
-gsap.registerPlugin(ScrollTrigger)
-
-// const seed = Math.round(Math.random() * 999999999)
-const Random = randomGenerator(17836364) // seed qui marche bien (le random sera toujours le même au refresh)
-
-const colors = [0x2A3493, 0x329B8A, 0x483090, 0x2E6DA0, 0x4A589F]
-
-const composers = []
-
-function buildCube (color) {
-  const normalMap = loader.load(normalMapTexture)
-  normalMap.wrapS = RepeatWrapping
-  normalMap.wrapT = RepeatWrapping
-
-  const geometry = createBoxWithRoundedEdges(0.98, 0.98, 0.98, 0.07, 2)
-  const material = new MeshPhysicalMaterial({
-    color,
-    metalness: 0.2,
-    roughness: 0.05,
-    normalMap
-  })
-  return new Mesh(geometry, material)
-}
-
 export function startCubes (positions) {
+  const loader = new TextureLoader()
+
+  // const seed = Math.round(Math.random() * 999999999)
+  const Random = randomGenerator(17836364) // seed qui marche bien (le random sera toujours le même au refresh)
+
+  const colors = [0x2A3493, 0x329B8A, 0x483090, 0x2E6DA0, 0x4A589F]
+
+  const composers = []
+
+  function buildCube (color) {
+    const normalMap = loader.load(normalMapTexture)
+    normalMap.wrapS = RepeatWrapping
+    normalMap.wrapT = RepeatWrapping
+
+    const geometry = createBoxWithRoundedEdges(0.98, 0.98, 0.98, 0.07, 2)
+    const material = new MeshPhysicalMaterial({
+      color,
+      metalness: 0.2,
+      roughness: 0.05,
+      normalMap
+    })
+    return new Mesh(geometry, material)
+  }
+
   // INIT
   const inits = [
     init(

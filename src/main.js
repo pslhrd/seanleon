@@ -8,6 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import state from './state'
 
 gsap.registerPlugin(ScrollToPlugin)
+gsap.registerPlugin(ScrollTrigger)
 
 const isMobile = {
   Android: function () {
@@ -178,6 +179,7 @@ barba.init({
       smooth(next.container)
     },
     beforeEnter ({ next }) {
+      state.nextContainer = next.container
       state.locoScroll.destroy()
       smooth(next.container)
     },
@@ -199,6 +201,7 @@ barba.init({
   views: [{
     namespace: 'home',
     beforeEnter ({ next }) {
+      state.nextContainer = next.container
       smooth(next.container)
       homeLaunch()
     },
@@ -209,6 +212,7 @@ barba.init({
   }, {
     namespace: 'touch',
     beforeEnter ({ next }) {
+      state.nextContainer = next.container
       smooth(next.container)
       touchLaunch([
         { x: -2, y: 0, z: 2 },
@@ -225,6 +229,7 @@ barba.init({
   }, {
     namespace: 'see',
     beforeEnter ({ next }) {
+      state.nextContainer = next.container
       smooth(next.container)
       touchLaunch([
         { x: -2, y: 0, z: 2 },
