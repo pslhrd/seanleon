@@ -1,5 +1,5 @@
-$c-set-bg: #080A18;
-$c-set-fg: #FFFFFF;
+$c-set-bg: #12152D;
+$c-set-fg: #F9F9F9;
 
 :root {
   --c-bg: #{$c-set-bg};
@@ -13,7 +13,7 @@ $mono: 'Monument Grotesk Mono';
 $h1: 'Skrappa';
 
 $main: 12px;
-$title: 14.583vw;
+$title: 16vw;
 $ease-out: cubic-bezier(.165,.84,.44,1);
 
 @mixin mobile {
@@ -42,6 +42,11 @@ body {
     border: none;
     padding: 0;
     outline: none;
+  }
+
+  main {
+    width: 100%;
+    overflow-x: hidden
   }
 
 
@@ -251,7 +256,7 @@ body {
 
       svg {
         overflow: visible;
-        width: 54vw;
+        width: 64vw;
         fill: $c-fg;
         margin-top: -2vw;
 
@@ -260,6 +265,10 @@ body {
 
           .gods {
             display: block;
+          }
+
+          .gods, .algo {
+            opacity: 0;
           }
         }
       }
@@ -279,6 +288,7 @@ body {
     }
 
     .hero01 {
+      color: #39A289;
       left: 13.5vw;
       top: 27vw;
       width: 230px;
@@ -333,6 +343,7 @@ body {
     .hero05{
       top: 41vw;
       left: 13.5vw;
+      color: #39A289;
       span {
         display: block;
       }
@@ -391,6 +402,7 @@ body {
     }
 
     .protagonist01 {
+      color: #39A289;
       right: 29vw;
       bottom: 14.5vw;
       @include mobile {
@@ -473,6 +485,7 @@ body {
     }
 
     .objective01 {
+      color: #39A289;
       top: 30vw;
       left: -1vw;
       @include mobile {
@@ -485,6 +498,7 @@ body {
     }
 
     .objective02 {
+      color: #39A289;
       top: 30vw;
       right: 14vw;
       @include mobile {
@@ -563,6 +577,7 @@ body {
       }
     }
     .reality01 {
+      color: #39A289;
       top: 21vw;
       left: 60vw;
       @include mobile {
@@ -809,7 +824,7 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: #080A18;
+    background-color: $c-fg;
     z-index: 200;
 
     .loading {
