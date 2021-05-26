@@ -67,36 +67,37 @@ function smooth (container) {
 
 function homeLaunch () {
   const tl = gsap.timeline()
-  gsap.set('.gods, .algo', { opacity: 0, x: '-10%' })
+  gsap.set('.gods', { opacity: 0, x: '-10%' })
+  gsap.set('.algo', { opacity: 0, y: '-20%' })
   gsap.set('.hero .data', { opacity: 0 })
   gsap.set('.hero01', { x: '10%' })
   gsap.set('.hero03', { x: '-50%' })
   gsap.set('header .logo, ul li a', { opacity: 0 })
 
   tl
-    .to('header .logo, ul li a', { opacity: 1, stagger: 0.1, duration: 0.1 }, 0.2)
-    .to('.gods', { opacity: 1, duration: 0.01 }, 0.3)
-    .to('.gods', { x: '0%', duration: 1.5, ease: 'power4.out' }, 0.3)
-    .add(() => startRubiks(), 0.3)
-    .to('.algo', { opacity: 1, duration: 0.01 }, 0.7)
-    .to('.algo', { x: '0%', duration: 1.4, ease: 'power4.out' }, '-=1.5')
-    .to('.hero .data', { opacity: 1, duration: 0.1, stagger: 0.075 }, '-=1.5')
-    .to('.hero01', { x: '0%', duration: 1.2, ease: 'power4.out' }, '-=1.5')
-    .to('.hero03', { x: '0%', duration: 1.2, ease: 'power4.out' }, '-=1.5')
+    .add(() => startRubiks())
+    .to('header .logo, ul li a', { opacity: 1, stagger: 0.1, duration: 0.1 }, '+=1.5')
+    .to('.gods', { opacity: 1, duration: 0.01 })
+    .to('.gods', { x: '0%', duration: 1.5, ease: 'power4.out' })
+    .to('.algo', { opacity: 1, duration: 0.01 }, '-=1.4')
+    .to('.algo', { y: '0%', duration: 1.4, ease: 'power4.out' }, '-=1.4')
+    .to('.hero .data', { opacity: 1, duration: 0.1, stagger: 0.075 }, '-=1')
+    .to('.hero01', { x: '0%', duration: 1.2, ease: 'power4.out' }, '-=1')
+    .to('.hero03', { x: '0%', duration: 1.2, ease: 'power4.out' }, '-=1')
 }
 
 function touchLaunch (cubes) {
   const tl = gsap.timeline()
-  gsap.set('.touch', { opacity: 0, x: '-10%' })
+  gsap.set('.hero-title', { opacity: 0, x: '-10%' })
   gsap.set('.hero03', { x: '50%' })
   gsap.set('.hero .data', { opacity: 0 })
   gsap.set('header .logo, ul li a', { opacity: 0 })
 
   tl
-    .to('header .logo, ul li a', { opacity: 1, stagger: 0.1, duration: 0.1 })
-    .to('.touch', { opacity: 1, duration: 0.01 }, 0.3)
-    .to('.touch', { x: '0%', duration: 1.5, ease: 'power4.out' }, 0.3)
-    .add(() => startCubes(cubes), 0.3)
+    .add(() => startCubes(cubes))
+    .to('header .logo, ul li a', { opacity: 1, stagger: 0.1, duration: 0.1 }, '+=0.6')
+    .to('.hero-title', { opacity: 1, duration: 0.01 })
+    .to('.hero-title', { x: '0%', duration: 1.5, ease: 'power4.out' })
     .to('.hero .data', { opacity: 1, duration: 0.1, stagger: 0.075 }, '-=1.4')
     .to('.hero03', { x: '0%', duration: 1.2, ease: 'power4.out' }, '-=1.4')
 }
@@ -110,9 +111,12 @@ function homeScroll () {
   gsap.set('.objective .second', { opacity: 0, x: '3%' })
   gsap.set('.objective .number', { opacity: 0, y: '-20%' })
 
-  gsap.set('.reality .first', { opacity: 0, x: '-10%' })
-  gsap.set('.reality .second', { opacity: 0, x: '10%' })
-  gsap.set('.reality .third', { opacity: 0, y: '10%' })
+  gsap.set('.reality .first', {opacity:0, x:'-10%'})
+  gsap.set('.reality .second', {opacity:0, x:'10%'})
+  gsap.set('.reality .third', {opacity:0, y:'10%'})
+
+  gsap.set('.simulation .first', { opacity: 0, x: '-10%' })
+  gsap.set('.simulation .second', { opacity: 0, x: '10%' })
 
   state.locoScroll.on('call', function (event, element, i) {
     if (event === 'protagonist') {
@@ -148,6 +152,16 @@ function homeScroll () {
         .to('.reality .first', { x: '0%', duration: 1.2, ease: 'power4.out' }, '-=1.1')
         .to('.reality .second', { opacity: 1, duration: 0.1 }, '-=1.1')
         .to('.reality .second', { x: '0%', duration: 1.2, ease: 'power4.out' }, '-=1.1')
+    }
+
+    if (event === 'simulation') {
+      console.log('done')
+      const tl = gsap.timeline()
+      tl
+        .to('.simulation .first', { opacity: 1, duration: 0.1 })
+        .to('.simulation .first', { x: '0%', duration: 1.2, ease: 'power4.out' })
+        .to('.simulation .second', { opacity: 1, duration: 0.1 }, '-=1.1')
+        .to('.simulation .second', { x: '0%', duration: 1.2, ease: 'power4.out' }, '-=1.1')
     }
 
     if (event === 'appear') {
@@ -187,14 +201,13 @@ barba.init({
       if (isMobile.any()) {
         gsap.set(window, { scrollTo: 0 })
       }
-      return gsap.to(data.current.container, { opacity: 0, duration: 0.6, ease: 'power3.inOut' })
+      document.querySelector('.transition').style.transformOrigin = 'bottom'
+      return gsap.to(data.current.container, { opacity: 0, duration: 1, ease: 'power3.inOut' })
     },
     enter (data) {
       data.current.container.style.display = 'none'
       document.querySelector('.transition').style.transformOrigin = 'top'
       state.locoScroll.update()
-      gsap.to('.transition', { scaleY: 0, duration: 0.8, ease: 'power3.out' })
-      gsap.from(data.next.container, { y: '2%', duration: 1, ease: 'power3.out' })
       return gsap.from(data.next.container, { opacity: 0, duration: 0.5, ease: 'power3.inOut' })
     }
   }],
@@ -215,8 +228,9 @@ barba.init({
       state.nextContainer = next.container
       smooth(next.container)
       touchLaunch([
-        { x: -2, y: 0, z: 2 },
-        { x: -5, y: -5, z: 0 },
+        { x: 0, y: 1, z: -6 },
+        { x: -2, y: 2, z: 4 },
+        { x: 1, y: -1, z: -1 },
         { x: 7, y: -10, z: 1 },
         { x: -4, y: -15, z: 2 },
         { x: 2, y: -20, z: -1 }
@@ -236,7 +250,8 @@ barba.init({
         { x: -5, y: -5, z: 0 },
         { x: 7, y: -10, z: 1 },
         { x: -4, y: -15, z: 2 },
-        { x: 2, y: -20, z: -1 }
+        { x: 2, y: -20, z: -1 },
+        { x: 2, y: 4, z: -6 },
       ])
     },
     afterEnter ({ next }) {

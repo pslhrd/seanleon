@@ -129,7 +129,7 @@ body {
 
     @include mobile {
       padding-top: 100px;
-      padding-bottom: 60px;
+      padding-bottom: 100px;
     }
 
     .footer-logo {
@@ -236,6 +236,10 @@ body {
         height: 100%;
         object-fit: cover;
       }
+    }
+
+    @include mobile {
+      height: calc(100vh - 50px);
     }
 
     .title-wrapper {

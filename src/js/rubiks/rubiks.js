@@ -14,7 +14,7 @@ export function startRubiks () {
   // const seed = Math.round(Math.random() * 999999999)
   const Random = randomGenerator(17846364) // seed qui marche bien (le random sera toujours le même au refresh)
 
-  const light1 = new PointLight(0xffffff, 1.2, 0, 1)
+  const light1 = new PointLight(0xffffff, 1.5, 0, 1)
   const light2 = new PointLight(0xffffff, 1.2, 0, 1)
   const amb = new AmbientLight(0xffffff, 0.5)
   light1.position.set(10, 20, 15)
@@ -36,7 +36,7 @@ export function startRubiks () {
         const geometry = createBoxWithRoundedEdges(0.98, 0.98, 0.98, 0.07, 2)
         const material = new MeshPhysicalMaterial({
           color,
-          metalness: 0.2,
+          metalness: 0.05,
           roughness: 0.05,
           normalMap
         })
@@ -79,7 +79,8 @@ export function startRubiks () {
 
     rubiks.children.forEach(c => resetCubeRotation(c))
 
-    gsap.to(camera.position, { x: 8, y: 8, z: 8, ease: 'expo.inOut', duration: 3 })
+    gsap.to(camera.position, { x: 8, y: 8, z: 8, ease: 'expo.out', duration: 3 })
+    gsap.from(rubiks.rotation, {y:-16, z: 2, ease: 'expo.out', duration: 3})
 
     // cubes moves every 3.5 seconds
     let currentAnim
