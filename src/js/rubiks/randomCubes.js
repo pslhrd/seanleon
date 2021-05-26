@@ -90,8 +90,6 @@ export function startCubes (positions) {
       }
     })
 
-    console.log(cubes.children)
-
     const progress = { val: 0 }
 
     cubeExplosion.to(progress, { val: 1 }, 0)
