@@ -56316,7 +56316,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var loader = new _three.TextureLoader(); // const seed = Math.round(Math.random() * 999999999)
 
-var random = (0, _helpers.randomGenerator)(17816365); // seed qui marche bien (le random sera toujours le même au refresh)
+var random = (0, _helpers.randomGenerator)(12456365); // seed qui marche bien (le random sera toujours le même au refresh)
 
 _all.default.registerPlugin(_ScrollTrigger.ScrollTrigger); // INIT
 
@@ -56342,8 +56342,8 @@ camera.position.x = 25;
 camera.position.y = 25;
 scene.fog = new _three.Fog(0x080A18, 8, 20); // SKETCH
 
-var light1 = new _three.PointLight(0xffffff, 1.5, 0, 1);
-var light2 = new _three.PointLight(0xffffff, 1.5, 0, 1);
+var light1 = new _three.PointLight(0xffffff, 1.2, 0, 1);
+var light2 = new _three.PointLight(0xffffff, 1.2, 0, 1);
 var amb = new _three.AmbientLight(0xffffff, 0.5);
 light1.position.set(10, 20, 15);
 light2.position.set(-20, 40, 30);
@@ -56361,7 +56361,7 @@ for (var x = 0; x < 3; x++) {
       normalMap.wrapS = _three.RepeatWrapping;
       normalMap.wrapT = _three.RepeatWrapping; // normalMap.repeat.set(4, 4)
 
-      var geometry = (0, _rubiksHelpers.createBoxWithRoundedEdges)(0.98, 0.98, 0.98, 0.07, 2);
+      var geometry = (0, _rubiksHelpers.createBoxWithRoundedEdges)(0.98, 0.98, 0.98, 0.07, 4);
       var material = new _three.MeshPhysicalMaterial({
         color: color,
         metalness: 0.2,
@@ -56396,7 +56396,7 @@ function startRubiks() {
     if (_state.default.locoScroll.scroll.instance.scroll.y === 0 && !document.hidden) {
       var _gsap$to;
 
-      var axis = ['x', 'y', 'z'][Math.round(random() * 4)];
+      var axis = ['x', 'y', 'z'][Math.round(random() * 2)];
       rubiks.children.forEach(function (c) {
         return (0, _rubiksHelpers.resetCubeRotation)(c);
       });
@@ -56938,7 +56938,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53137" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64535" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
