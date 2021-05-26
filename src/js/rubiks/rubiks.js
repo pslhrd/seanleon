@@ -7,15 +7,16 @@ import { createBoxWithRoundedEdges, resetCubeRotation, selectFaceCubes } from '.
 import gsap from 'gsap/all'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import normalMapTexture from '../../assets/normalmap.jpg'
+import state from '../../state'
 
 const loader = new TextureLoader()
-const seed = Math.round(Math.random() * 999999999)
+// const seed = Math.round(Math.random() * 999999999)
 const random = randomGenerator(17846364) // seed qui marche bien (le random sera toujours le même au refresh)
 gsap.registerPlugin(ScrollTrigger)
 
 // INIT
 
-const { camera, renderer, scene } = init()
+const { camera, renderer, scene, controls } = init()
 renderer.pixelRatio = 2
 scene.background = new Color(0x080A18)
 
@@ -36,7 +37,7 @@ light1.position.set(10, 20, 15)
 light2.position.set(-20, 40, 30)
 scene.add(light1, light2, amb)
 
-const colors = [0x110847, 0x085441, 0x111958, 0x07275a]
+const colors = [0x2A3493, 0x329B8A, 0x483090, 0x2E6DA0, 0x4A589F]
 
 // creating rubiks cube
 const rubiks = new Object3D()
@@ -52,7 +53,7 @@ for (let x = 0; x < 3; x++) {
       const geometry = createBoxWithRoundedEdges(0.98, 0.98, 0.98, 0.07, 2)
       const material = new MeshPhysicalMaterial({
         color,
-        metalness: 0.5,
+        metalness: 0.8,
         roughness: 0.2,
         normalMap
       })
@@ -64,7 +65,6 @@ for (let x = 0; x < 3; x++) {
   }
 }
 
-let int
 export function startRubiks () {
   scene.add(rubiks)
 
@@ -73,13 +73,13 @@ export function startRubiks () {
   gsap.to(camera.position, { x: 8, y: 8, z: 8, ease: 'expo.inOut', duration: 3 })
 
   // cubes moves every 3.5 seconds
-  int = setInterval(() => {
-    console.log(window.scrollY)
-    if (window.scrollY === 0 && !document.hidden) {
+  let currentAnim
+  setInterval(() => {
+    if (state.locoScroll.scroll.instance.scroll.y === 0 && !document.hidden) {
       const axis = ['x', 'y', 'z'][Math.round(random() * 2)]
       rubiks.children.forEach(c => resetCubeRotation(c))
 
-      gsap.to(selectFaceCubes(rubiks, axis, Math.round(random() * 2)).map(c => c.rotation), {
+      currentAnim = gsap.to(selectFaceCubes(rubiks, axis, Math.round(random() * 2)).map(c => c.rotation), {
         [axis]: Math.PI / 2 * Math.ceil(random() * 3),
         duration: 3,
         ease: 'expo.inOut'
@@ -87,9 +87,22 @@ export function startRubiks () {
     }
   }, 3500)
 
+  state.locoScroll.on('scroll', () => {
+    if (state.locoScroll.scroll.instance.scroll.y === 0) {
+      controls.autoRotateSpeed = 2
+    } else {
+      controls.autoRotateSpeed = 0
+      if (currentAnim) {
+        currentAnim.progress(0)
+        currentAnim.kill()
+      }
+    }
+  })
+
   const cubeExplosion = gsap.timeline({
     scrollTrigger: {
       trigger: document.body,
+      scroller: '[data-scroll-container]',
       start: 'top',
       end: 'bottom',
       scrub: 0.5
@@ -117,9 +130,9 @@ export function startRubiks () {
   raf.subscribe((time) => {
     const r = randomGenerator(3675)
     rubiks.children.map(c => c.children[0]).forEach(c => {
-      c.rotation.x = progress.val * r()
-      c.rotation.y = progress.val * r()
-      c.rotation.z = progress.val * r()
+      c.rotation.x = progress.val * r() * 2
+      c.rotation.y = progress.val * r() * 2
+      c.rotation.z = progress.val * r() * 2
     })
     composer.render()
   })

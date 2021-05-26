@@ -29,6 +29,7 @@ export function init () {
   return {
     scene,
     camera,
-    renderer
+    renderer,
+    controls
   }
 }
