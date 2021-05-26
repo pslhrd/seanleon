@@ -5,7 +5,7 @@ import { randomGenerator } from '../utils/helpers'
 import { AmbientLight, Fog, Mesh, MeshPhysicalMaterial, Object3D, PointLight, RepeatWrapping, TextureLoader } from 'three'
 import { createBoxWithRoundedEdges } from './rubiks-helpers'
 import gsap from 'gsap/all'
-import normalMapTexture from '../../assets/normalmap.jpg'
+import normalMapTexture from '../../assets/normalmap.jpeg'
 
 export function startCubes (positions) {
   const loader = new TextureLoader()
@@ -26,7 +26,7 @@ export function startCubes (positions) {
     const material = new MeshPhysicalMaterial({
       color,
       metalness: 0.2,
-      roughness: 0.05,
+      roughness: 0.2,
       normalMap
     })
     return new Mesh(geometry, material)
@@ -46,8 +46,8 @@ export function startCubes (positions) {
 
     controls.autoRotateSpeed = 0
 
-    const light1 = new PointLight(0xffffff, 1.2, 0, 1)
-    const light2 = new PointLight(0xffffff, 1.2, 0, 1)
+    const light1 = new PointLight(0xffffff, 1.8, 0, 1)
+    const light2 = new PointLight(0xffffff, 2, 0, 1)
     const amb = new AmbientLight(0xffffff, 0.5)
     light1.position.set(10, 20, 15)
     light2.position.set(-20, 40, 30)
@@ -57,9 +57,9 @@ export function startCubes (positions) {
 
     composers.push(fx({ renderer, scene, camera }).composer)
 
-    camera.position.z = 25
-    camera.position.x = 25
-    camera.position.y = 25
+    camera.position.z = 18
+    camera.position.x = 16
+    camera.position.y = 60
 
     scene.fog = new Fog(0x080A18, 8, 20)
 
@@ -79,7 +79,6 @@ export function startCubes (positions) {
     console.log(cubes.children)
 
     gsap.to(camera.position, { x: 8, y: 8, z: 8, ease: 'expo.out', duration: 1.6 })
-    gsap.from(cubes.children.rotation, {y: 2, ease: 'expo.out', duration: 1.6})
     // gsap.from(cubes.rotation, { x: 3, ease: 'expo.inOut', duration: 3 })
 
     const cubeExplosion = gsap.timeline({

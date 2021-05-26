@@ -246,6 +246,8 @@ barba.init({
       state.nextContainer = next.container
       smooth(next.container)
       touchLaunch([
+        { x: -3, y: 3, z: 4 },
+        { x: 3, y: -5, z: -2 },
         { x: -2, y: 0, z: 2 },
         { x: -5, y: -5, z: 0 },
         { x: 7, y: -10, z: 1 },

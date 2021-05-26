@@ -253,6 +253,7 @@ body {
         overflow: visible;
         width: 54vw;
         fill: $c-fg;
+        margin-top: -2vw;
 
         @include mobile {
           width: 85vw;
