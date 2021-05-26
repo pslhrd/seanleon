@@ -61,7 +61,7 @@ export function startCubes (positions) {
     camera.position.x = 16
     camera.position.y = 60
 
-    scene.fog = new Fog(0x181A31, 8, 20)
+    scene.fog = new Fog(0x10122C, 8, 20)
 
     // SKETCH
     scene.add(light1, light2, amb)
