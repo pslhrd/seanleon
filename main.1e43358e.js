@@ -54341,7 +54341,19 @@ class MapControls extends OrbitControls {
 }
 
 exports.MapControls = MapControls;
-},{"three":"node_modules/three/build/three.module.js"}],"src/js/utils/raf.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js"}],"src/state.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  locoScroll: undefined,
+  nextContainer: undefined
+};
+exports.default = _default;
+},{}],"src/js/utils/raf.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -54441,6 +54453,8 @@ var THREE = _interopRequireWildcard(require("three"));
 
 var _OrbitControls = require("three/examples/jsm/controls/OrbitControls");
 
+var _state = _interopRequireDefault(require("../../state"));
+
 var _raf = _interopRequireDefault(require("../utils/raf"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -54449,15 +54463,20 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function init() {
+function init(selector, opt) {
+  var c = document.querySelector(selector);
+  if (_state.default.nextContainer) c = _state.default.nextContainer.querySelector(selector);
+  console.log(c);
   var scene = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
+  var camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, opt.from, opt.to);
   var renderer = new THREE.WebGLRenderer({
-    antialias: true
+    canvas: c,
+    antialias: true,
+    alpha: opt.alpha
   });
   var controls = new _OrbitControls.OrbitControls(camera, renderer.domElement);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
+  renderer.setSize(window.innerWidth, window.innerHeight); // document.querySelector('main').appendChild(renderer.domElement)
+
   controls.enableDamping = true;
   controls.enableZoom = false;
   controls.autoRotate = true;
@@ -54479,7 +54498,7 @@ function init() {
     controls: controls
   };
 }
-},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/controls/OrbitControls":"node_modules/three/examples/jsm/controls/OrbitControls.js","../utils/raf":"src/js/utils/raf.js"}],"node_modules/three/examples/jsm/shaders/CopyShader.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/controls/OrbitControls":"node_modules/three/examples/jsm/controls/OrbitControls.js","../../state":"src/state.js","../utils/raf":"src/js/utils/raf.js"}],"node_modules/three/examples/jsm/shaders/CopyShader.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -56269,19 +56288,8 @@ function resetCubeRotation(cube) {
   cube.children[0].rotation.set(0, 0, 0);
   cube.children[0].position.set(Math.round(pos.x), Math.round(pos.y), Math.round(pos.z));
 }
-},{"three":"node_modules/three/build/three.module.js"}],"src/assets/normalmap.jpg":[function(require,module,exports) {
-module.exports = "/normalmap.68e60604.jpg";
-},{}],"src/state.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  locoScroll: undefined
-};
-exports.default = _default;
+},{"three":"node_modules/three/build/three.module.js"}],"src/assets/normalmap.jpeg":[function(require,module,exports) {
+module.exports = "/normalmap.d4c6ba73.jpeg";
 },{}],"src/js/rubiks/rubiks.js":[function(require,module,exports) {
 "use strict";
 
@@ -56304,9 +56312,7 @@ var _rubiksHelpers = require("./rubiks-helpers");
 
 var _all = _interopRequireDefault(require("gsap/all"));
 
-var _ScrollTrigger = require("gsap/ScrollTrigger");
-
-var _normalmap = _interopRequireDefault(require("../../assets/normalmap.jpg"));
+var _normalmap = _interopRequireDefault(require("../../assets/normalmap.jpeg"));
 
 var _state = _interopRequireDefault(require("../../state"));
 
@@ -56314,163 +56320,309 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var loader = new _three.TextureLoader(); // const seed = Math.round(Math.random() * 999999999)
-
-var random = (0, _helpers.randomGenerator)(12456365); // seed qui marche bien (le random sera toujours le même au refresh)
-
-_all.default.registerPlugin(_ScrollTrigger.ScrollTrigger); // INIT
-
-
-var _init = (0, _threeHelpers.init)(),
-    camera = _init.camera,
-    renderer = _init.renderer,
-    scene = _init.scene,
-    controls = _init.controls;
-
-renderer.pixelRatio = 2;
-scene.background = new _three.Color(0x080A18);
-
-var _fx = (0, _effects.default)({
-  renderer: renderer,
-  scene: scene,
-  camera: camera
-}),
-    composer = _fx.composer;
-
-camera.position.z = 25;
-camera.position.x = 25;
-camera.position.y = 25;
-scene.fog = new _three.Fog(0x080A18, 8, 20); // SKETCH
-
-var light1 = new _three.PointLight(0xffffff, 1.2, 0, 1);
-var light2 = new _three.PointLight(0xffffff, 1.2, 0, 1);
-var amb = new _three.AmbientLight(0xffffff, 0.5);
-light1.position.set(10, 20, 15);
-light2.position.set(-20, 40, 30);
-scene.add(light1, light2, amb);
-var colors = [0x2A3493, 0x329B8A, 0x483090, 0x2E6DA0, 0x4A589F]; // creating rubiks cube
-
-var rubiks = new _three.Object3D();
-
-for (var x = 0; x < 3; x++) {
-  for (var y = 0; y < 3; y++) {
-    for (var z = 0; z < 3; z++) {
-      var wrapper = new _three.Object3D();
-      var color = colors[Math.round(random() * (colors.length - 1))];
-      var normalMap = loader.load(_normalmap.default);
-      normalMap.wrapS = _three.RepeatWrapping;
-      normalMap.wrapT = _three.RepeatWrapping; // normalMap.repeat.set(4, 4)
-
-      var geometry = (0, _rubiksHelpers.createBoxWithRoundedEdges)(0.98, 0.98, 0.98, 0.07, 4);
-      var material = new _three.MeshPhysicalMaterial({
-        color: color,
-        metalness: 0.2,
-        roughness: 0.05,
-        normalMap: normalMap
-      });
-      var mesh = new _three.Mesh(geometry, material);
-      mesh.position.set(x - 1, y - 1, z - 1);
-      wrapper.add(mesh);
-      rubiks.add(wrapper);
-    }
-  }
-}
-
 function startRubiks() {
-  scene.add(rubiks);
-  rubiks.children.forEach(function (c) {
-    return (0, _rubiksHelpers.resetCubeRotation)(c);
-  });
+  var loader = new _three.TextureLoader(); // const seed = Math.round(Math.random() * 999999999)
 
-  _all.default.to(camera.position, {
-    x: 8,
-    y: 8,
-    z: 8,
-    ease: 'expo.inOut',
-    duration: 3
-  }); // cubes moves every 3.5 seconds
+  var Random = (0, _helpers.randomGenerator)(17846364); // seed qui marche bien (le random sera toujours le même au refresh)
 
+  var light1 = new _three.PointLight(0xffffff, 1.8, 0, 1);
+  var light2 = new _three.PointLight(0xffffff, 1.8, 0, 1);
+  var amb = new _three.AmbientLight(0xffffff, 0.4);
+  light1.position.set(10, 20, 15);
+  light2.position.set(-20, 40, 30);
+  var colors = [0x2A3493, 0x329B8A, 0x483090, 0x2E6DA0, 0x4A589F]; // creating rubiks cube
 
-  var currentAnim;
-  setInterval(function () {
-    if (_state.default.locoScroll.scroll.instance.scroll.y === 0 && !document.hidden) {
-      var _gsap$to;
+  var originalRubiks = new _three.Object3D();
 
-      var axis = ['x', 'y', 'z'][Math.round(random() * 2)];
-      rubiks.children.forEach(function (c) {
-        return (0, _rubiksHelpers.resetCubeRotation)(c);
-      });
-      currentAnim = _all.default.to((0, _rubiksHelpers.selectFaceCubes)(rubiks, axis, Math.round(random() * 2)).map(function (c) {
-        return c.rotation;
-      }), (_gsap$to = {}, _defineProperty(_gsap$to, axis, Math.PI / 2 * Math.ceil(random() * 3)), _defineProperty(_gsap$to, "duration", 3), _defineProperty(_gsap$to, "ease", 'expo.inOut'), _gsap$to));
-    }
-  }, 3500);
-
-  _state.default.locoScroll.on('scroll', function () {
-    if (_state.default.locoScroll.scroll.instance.scroll.y === 0) {
-      controls.autoRotateSpeed = 2;
-    } else {
-      controls.autoRotateSpeed = 0;
-
-      if (currentAnim) {
-        currentAnim.progress(0);
-        currentAnim.kill();
+  for (var x = 0; x < 3; x++) {
+    for (var y = 0; y < 3; y++) {
+      for (var z = 0; z < 3; z++) {
+        var wrapper = new _three.Object3D();
+        var color = colors[Math.round(Random() * (colors.length - 1))];
+        var normalMap = loader.load(_normalmap.default);
+        normalMap.wrapS = _three.RepeatWrapping;
+        normalMap.wrapT = _three.RepeatWrapping;
+        var geometry = (0, _rubiksHelpers.createBoxWithRoundedEdges)(0.98, 0.98, 0.98, 0.07, 4);
+        var material = new _three.MeshPhysicalMaterial({
+          color: color,
+          metalness: 0.2,
+          roughness: 0.05,
+          normalMap: normalMap
+        });
+        var mesh = new _three.Mesh(geometry, material);
+        mesh.position.set(x - 1, y - 1, z - 1);
+        wrapper.add(mesh);
+        originalRubiks.add(wrapper);
       }
     }
-  });
+  }
 
-  var cubeExplosion = _all.default.timeline({
-    scrollTrigger: {
-      trigger: document.body,
-      scroller: '[data-scroll-container]',
-      start: 'top',
-      end: 'bottom',
-      scrub: 0.5
-    }
-  });
+  var composers = []; // INIT
 
-  var progress = {
-    val: 0
-  };
-  cubeExplosion.to(progress, {
-    val: 1
-  }, 0);
-  cubeExplosion.to(rubiks.scale, {
-    x: 0.7,
-    y: 0.7,
-    z: 0.7
-  }, 0);
-  rubiks.children.map(function (c) {
-    return c.children[0];
-  }).forEach(function (c) {
-    // c = un des 9 cubes du rubiks cube
-    var pos = {
-      x: c.position.x,
-      y: c.position.y,
-      z: c.position.z
+  var inits = [(0, _threeHelpers.init)('.gl-back', {
+    alpha: false,
+    from: 11,
+    to: 100
+  }), (0, _threeHelpers.init)('.gl-front', {
+    alpha: true,
+    from: 0.1,
+    to: 11.1
+  })];
+  inits.forEach(function (_ref, i) {
+    var renderer = _ref.renderer,
+        camera = _ref.camera,
+        scene = _ref.scene,
+        controls = _ref.controls;
+    // const seed = Math.round(Math.random() * 999999999)
+    var random = (0, _helpers.randomGenerator)(17846364); // seed qui marche bien (le random sera toujours le même au refresh)
+
+    renderer.pixelRatio = 2;
+    if (i === 0) scene.background = new _three.Color(0x080A18);
+    composers.push((0, _effects.default)({
+      renderer: renderer,
+      scene: scene,
+      camera: camera
+    }).composer);
+    camera.position.z = 25;
+    camera.position.x = 25;
+    camera.position.y = 25;
+    scene.fog = new _three.Fog(0x080A18, 8, 16); // SKETCH
+
+    scene.add(light1.clone(), light2.clone(), amb.clone());
+    var rubiks = originalRubiks.clone(true);
+    scene.add(rubiks);
+    rubiks.children.forEach(function (c) {
+      return (0, _rubiksHelpers.resetCubeRotation)(c);
+    });
+
+    _all.default.to(camera.position, {
+      x: 8,
+      y: 8,
+      z: 8,
+      ease: 'expo.out',
+      duration: 3
+    });
+
+    _all.default.from(rubiks.rotation, {
+      y: -16,
+      z: 4,
+      x: 4,
+      ease: 'expo.out',
+      duration: 3
+    }); // cubes moves every 3.5 seconds
+
+
+    var currentAnim;
+    setInterval(function () {
+      if (_state.default.locoScroll.scroll.instance.scroll.y === 0 && !document.hidden) {
+        var _gsap$to;
+
+        var axis = ['x', 'y', 'z'][Math.round(random() * 2)];
+        rubiks.children.forEach(function (c) {
+          return (0, _rubiksHelpers.resetCubeRotation)(c);
+        });
+        currentAnim = _all.default.to((0, _rubiksHelpers.selectFaceCubes)(rubiks, axis, Math.round(random() * 2)).map(function (c) {
+          return c.rotation;
+        }), (_gsap$to = {}, _defineProperty(_gsap$to, axis, Math.PI / 2 * Math.ceil(random() * 3)), _defineProperty(_gsap$to, "duration", 3), _defineProperty(_gsap$to, "ease", 'expo.inOut'), _gsap$to));
+      }
+    }, 3500);
+
+    _state.default.locoScroll.on('scroll', function () {
+      if (_state.default.locoScroll.scroll.instance.scroll.y === 0) {
+        controls.autoRotateSpeed = 2;
+      } else {
+        controls.autoRotateSpeed = 1.5;
+
+        if (currentAnim) {
+          currentAnim.progress(0);
+          currentAnim.kill();
+        }
+      }
+    });
+
+    var cubeExplosion = _all.default.timeline({
+      scrollTrigger: {
+        trigger: document.body,
+        scroller: '[data-scroll-container]',
+        start: 'top',
+        end: 'bottom',
+        scrub: 0.5
+      }
+    });
+
+    var progress = {
+      val: 0
     };
-    var randA = random() + 7;
-    var randB = (random() - 0.5) * 10;
-    cubeExplosion.to(c.position, {
-      x: pos.x * randA + randB,
-      y: pos.y * randA + randB,
-      z: pos.z * randA + randB
+    cubeExplosion.to(progress, {
+      val: 1
     }, 0);
-  }); // ANIMATION
-
-  _raf.default.subscribe(function (time) {
-    var r = (0, _helpers.randomGenerator)(3675);
+    cubeExplosion.to(rubiks.scale, {
+      x: 0.7,
+      y: 0.7,
+      z: 0.7
+    }, 0);
     rubiks.children.map(function (c) {
       return c.children[0];
     }).forEach(function (c) {
-      c.rotation.x = progress.val * r() * 2;
-      c.rotation.y = progress.val * r() * 2;
-      c.rotation.z = progress.val * r() * 2;
+      // c = un des 9 cubes du rubiks cube
+      var pos = {
+        x: c.position.x,
+        y: c.position.y,
+        z: c.position.z
+      };
+      var randA = random() + 7;
+      var randB = (random() - 0.5) * 10;
+      cubeExplosion.to(c.position, {
+        x: pos.x * randA + randB,
+        y: pos.y * randA + randB,
+        z: pos.z * randA + randB
+      }, 0);
+    }); // ANIMATION
+
+    _raf.default.subscribe(function (time) {
+      var r = (0, _helpers.randomGenerator)(3675);
+      rubiks.children.map(function (c) {
+        return c.children[0];
+      }).forEach(function (c) {
+        c.rotation.x = progress.val * r() * 2;
+        c.rotation.y = progress.val * r() * 2;
+        c.rotation.z = progress.val * r() * 2;
+      });
+      composers[i].render();
     });
-    composer.render();
   });
 }
-},{"./three-helpers":"src/js/rubiks/three-helpers.js","../utils/raf":"src/js/utils/raf.js","./effects":"src/js/rubiks/effects.js","../utils/helpers":"src/js/utils/helpers.js","three":"node_modules/three/build/three.module.js","./rubiks-helpers":"src/js/rubiks/rubiks-helpers.js","gsap/all":"node_modules/gsap/all.js","gsap/ScrollTrigger":"node_modules/gsap/ScrollTrigger.js","../../assets/normalmap.jpg":"src/assets/normalmap.jpg","../../state":"src/state.js"}],"src/main.js":[function(require,module,exports) {
+},{"./three-helpers":"src/js/rubiks/three-helpers.js","../utils/raf":"src/js/utils/raf.js","./effects":"src/js/rubiks/effects.js","../utils/helpers":"src/js/utils/helpers.js","three":"node_modules/three/build/three.module.js","./rubiks-helpers":"src/js/rubiks/rubiks-helpers.js","gsap/all":"node_modules/gsap/all.js","../../assets/normalmap.jpeg":"src/assets/normalmap.jpeg","../../state":"src/state.js"}],"src/js/rubiks/randomCubes.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.startCubes = startCubes;
+
+var _threeHelpers = require("./three-helpers");
+
+var _raf = _interopRequireDefault(require("../utils/raf"));
+
+var _effects = _interopRequireDefault(require("./effects"));
+
+var _helpers = require("../utils/helpers");
+
+var _three = require("three");
+
+var _rubiksHelpers = require("./rubiks-helpers");
+
+var _all = _interopRequireDefault(require("gsap/all"));
+
+var _normalmap = _interopRequireDefault(require("../../assets/normalmap.jpeg"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function startCubes(positions) {
+  var loader = new _three.TextureLoader(); // const seed = Math.round(Math.random() * 999999999)
+
+  var Random = (0, _helpers.randomGenerator)(17836364); // seed qui marche bien (le random sera toujours le même au refresh)
+
+  var colors = [0x2A3493, 0x329B8A, 0x483090, 0x2E6DA0, 0x4A589F];
+  var composers = [];
+
+  function buildCube(color) {
+    var normalMap = loader.load(_normalmap.default);
+    normalMap.wrapS = _three.RepeatWrapping;
+    normalMap.wrapT = _three.RepeatWrapping;
+    var geometry = (0, _rubiksHelpers.createBoxWithRoundedEdges)(0.98, 0.98, 0.98, 0.07, 2);
+    var material = new _three.MeshPhysicalMaterial({
+      color: color,
+      metalness: 0.2,
+      roughness: 0.2,
+      normalMap: normalMap
+    });
+    return new _three.Mesh(geometry, material);
+  } // INIT
+
+
+  var inits = [(0, _threeHelpers.init)('.gl-front', {
+    alpha: true,
+    from: 0.1,
+    to: 100
+  })];
+  inits.forEach(function (_ref, i) {
+    var camera = _ref.camera,
+        renderer = _ref.renderer,
+        scene = _ref.scene,
+        controls = _ref.controls;
+    // const seed = Math.round(Math.random() * 999999999)
+    // const random = randomGenerator(17846364) // seed qui marche bien (le random sera toujours le même au refresh)
+    controls.autoRotateSpeed = 0;
+    var light1 = new _three.PointLight(0xffffff, 1.8, 0, 1);
+    var light2 = new _three.PointLight(0xffffff, 2, 0, 1);
+    var amb = new _three.AmbientLight(0xffffff, 0.5);
+    light1.position.set(10, 20, 15);
+    light2.position.set(-20, 40, 30);
+    renderer.pixelRatio = 2; // if (i === 0) scene.background = new Color(0x080A18)
+
+    composers.push((0, _effects.default)({
+      renderer: renderer,
+      scene: scene,
+      camera: camera
+    }).composer);
+    camera.position.z = 18;
+    camera.position.x = 16;
+    camera.position.y = 60;
+    scene.fog = new _three.Fog(0x080A18, 8, 20); // SKETCH
+
+    scene.add(light1, light2, amb);
+    var cubes = new _three.Object3D(); // HERE CUBES
+
+    positions.forEach(function (position) {
+      var cube = buildCube(colors[Math.round(Random() * (colors.length - 1))]);
+      cube.position.set(position.x, position.y, position.z);
+      cubes.add(cube);
+    });
+    scene.add(cubes);
+    console.log(cubes.children);
+
+    _all.default.to(camera.position, {
+      x: 8,
+      y: 8,
+      z: 8,
+      ease: 'expo.out',
+      duration: 1.6
+    }); // gsap.from(cubes.rotation, { x: 3, ease: 'expo.inOut', duration: 3 })
+
+
+    var cubeExplosion = _all.default.timeline({
+      scrollTrigger: {
+        trigger: document.body,
+        scroller: '[data-scroll-container]',
+        start: 'top',
+        end: 'bottom',
+        scrub: 0.5
+      }
+    });
+
+    var progress = {
+      val: 0
+    };
+    cubeExplosion.to(progress, {
+      val: 1
+    }, 0);
+    cubeExplosion.to(cubes.position, {
+      y: 20
+    }, 0); // ANIMATION
+
+    _raf.default.subscribe(function (time) {
+      var r = (0, _helpers.randomGenerator)(3675);
+      cubes.children.forEach(function (c) {
+        c.rotation.x = progress.val * r() * 3;
+        c.rotation.y = progress.val * r() * 3;
+        c.rotation.z = progress.val * r() * 3;
+      });
+      composers[i].render();
+    });
+  });
+}
+},{"./three-helpers":"src/js/rubiks/three-helpers.js","../utils/raf":"src/js/utils/raf.js","./effects":"src/js/rubiks/effects.js","../utils/helpers":"src/js/utils/helpers.js","three":"node_modules/three/build/three.module.js","./rubiks-helpers":"src/js/rubiks/rubiks-helpers.js","gsap/all":"node_modules/gsap/all.js","../../assets/normalmap.jpeg":"src/assets/normalmap.jpeg"}],"src/main.js":[function(require,module,exports) {
 "use strict";
 
 var _gsap = _interopRequireDefault(require("gsap"));
@@ -56483,6 +56635,8 @@ var _core = _interopRequireDefault(require("@barba/core"));
 
 var _rubiks = require("./js/rubiks/rubiks");
 
+var _randomCubes = require("./js/rubiks/randomCubes");
+
 var _ScrollTrigger = require("gsap/ScrollTrigger");
 
 var _state = _interopRequireDefault(require("./state"));
@@ -56490,6 +56644,8 @@ var _state = _interopRequireDefault(require("./state"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _gsap.default.registerPlugin(_all.ScrollToPlugin);
+
+_gsap.default.registerPlugin(_ScrollTrigger.ScrollTrigger);
 
 var isMobile = {
   Android: function Android() {
@@ -56556,13 +56712,16 @@ function smooth(container) {
 }
 
 function homeLaunch() {
-  (0, _rubiks.startRubiks)();
-
   var tl = _gsap.default.timeline();
 
-  _gsap.default.set('.gods, .algo', {
+  _gsap.default.set('.gods', {
     opacity: 0,
     x: '-10%'
+  });
+
+  _gsap.default.set('.algo', {
+    opacity: 0,
+    y: '-20%'
   });
 
   _gsap.default.set('.hero .data', {
@@ -56581,45 +56740,45 @@ function homeLaunch() {
     opacity: 0
   });
 
-  tl.to('header .logo, ul li a', {
+  tl.add(function () {
+    return (0, _rubiks.startRubiks)();
+  }).to('header .logo, ul li a', {
     opacity: 1,
     stagger: 0.1,
     duration: 0.1
-  }, 0.2).to('.gods', {
+  }, '+=1.5').to('.gods', {
     opacity: 1,
     duration: 0.01
-  }, 0.3).to('.gods', {
+  }).to('.gods', {
     x: '0%',
     duration: 1.5,
     ease: 'power4.out'
-  }, 0.3).to('.algo', {
+  }).to('.algo', {
     opacity: 1,
     duration: 0.01
-  }, 0.7).to('.algo', {
-    x: '0%',
+  }, '-=1.4').to('.algo', {
+    y: '0%',
     duration: 1.4,
     ease: 'power4.out'
-  }, '-=1.5').to('.hero .data', {
+  }, '-=1.4').to('.hero .data', {
     opacity: 1,
     duration: 0.1,
     stagger: 0.075
-  }, '-=1.5').to('.hero01', {
+  }, '-=1').to('.hero01', {
     x: '0%',
     duration: 1.2,
     ease: 'power4.out'
-  }, '-=1.5').to('.hero03', {
+  }, '-=1').to('.hero03', {
     x: '0%',
     duration: 1.2,
     ease: 'power4.out'
-  }, '-=1.5');
+  }, '-=1');
 }
 
-function touchLaunch() {
-  (0, _rubiks.startRubiks)();
-
+function touchLaunch(cubes) {
   var tl = _gsap.default.timeline();
 
-  _gsap.default.set('.touch', {
+  _gsap.default.set('.hero-title', {
     opacity: 0,
     x: '-10%'
   });
@@ -56636,18 +56795,20 @@ function touchLaunch() {
     opacity: 0
   });
 
-  tl.to('header .logo, ul li a', {
+  tl.add(function () {
+    return (0, _randomCubes.startCubes)(cubes);
+  }).to('header .logo, ul li a', {
     opacity: 1,
     stagger: 0.1,
     duration: 0.1
-  }).to('.touch', {
+  }, '+=0.6').to('.hero-title', {
     opacity: 1,
     duration: 0.01
-  }, 0.3).to('.touch', {
+  }).to('.hero-title', {
     x: '0%',
     duration: 1.5,
     ease: 'power4.out'
-  }, 0.3).to('.hero .data', {
+  }).to('.hero .data', {
     opacity: 1,
     duration: 0.1,
     stagger: 0.075
@@ -56701,6 +56862,16 @@ function homeScroll() {
   _gsap.default.set('.reality .third', {
     opacity: 0,
     y: '10%'
+  });
+
+  _gsap.default.set('.simulation .first', {
+    opacity: 0,
+    x: '-10%'
+  });
+
+  _gsap.default.set('.simulation .second', {
+    opacity: 0,
+    x: '10%'
   });
 
   _state.default.locoScroll.on('call', function (event, element, i) {
@@ -56787,6 +56958,28 @@ function homeScroll() {
       }, '-=1.1');
     }
 
+    if (event === 'simulation') {
+      console.log('done');
+
+      var _tl3 = _gsap.default.timeline();
+
+      _tl3.to('.simulation .first', {
+        opacity: 1,
+        duration: 0.1
+      }).to('.simulation .first', {
+        x: '0%',
+        duration: 1.2,
+        ease: 'power4.out'
+      }).to('.simulation .second', {
+        opacity: 1,
+        duration: 0.1
+      }, '-=1.1').to('.simulation .second', {
+        x: '0%',
+        duration: 1.2,
+        ease: 'power4.out'
+      }, '-=1.1');
+    }
+
     if (event === 'appear') {
       var text = i.el.querySelectorAll('span');
       console.log(text);
@@ -56829,6 +57022,7 @@ _core.default.init({
     },
     beforeEnter: function beforeEnter(_ref2) {
       var next = _ref2.next;
+      _state.default.nextContainer = next.container;
 
       _state.default.locoScroll.destroy();
 
@@ -56841,9 +57035,10 @@ _core.default.init({
         });
       }
 
+      document.querySelector('.transition').style.transformOrigin = 'bottom';
       return _gsap.default.to(data.current.container, {
         opacity: 0,
-        duration: 0.6,
+        duration: 1,
         ease: 'power3.inOut'
       });
     },
@@ -56852,18 +57047,6 @@ _core.default.init({
       document.querySelector('.transition').style.transformOrigin = 'top';
 
       _state.default.locoScroll.update();
-
-      _gsap.default.to('.transition', {
-        scaleY: 0,
-        duration: 0.8,
-        ease: 'power3.out'
-      });
-
-      _gsap.default.from(data.next.container, {
-        y: '2%',
-        duration: 1,
-        ease: 'power3.out'
-      });
 
       return _gsap.default.from(data.next.container, {
         opacity: 0,
@@ -56876,6 +57059,7 @@ _core.default.init({
     namespace: 'home',
     beforeEnter: function beforeEnter(_ref3) {
       var next = _ref3.next;
+      _state.default.nextContainer = next.container;
       smooth(next.container);
       homeLaunch();
     },
@@ -56888,8 +57072,33 @@ _core.default.init({
     namespace: 'touch',
     beforeEnter: function beforeEnter(_ref5) {
       var next = _ref5.next;
+      _state.default.nextContainer = next.container;
       smooth(next.container);
-      touchLaunch();
+      touchLaunch([{
+        x: 0,
+        y: 1,
+        z: -6
+      }, {
+        x: -2,
+        y: 2,
+        z: 4
+      }, {
+        x: 1,
+        y: -1,
+        z: -1
+      }, {
+        x: 7,
+        y: -10,
+        z: 1
+      }, {
+        x: -4,
+        y: -15,
+        z: 2
+      }, {
+        x: 2,
+        y: -20,
+        z: -1
+      }]);
     },
     afterEnter: function afterEnter(_ref6) {// smooth(next.container)
       // homeScroll()
@@ -56900,8 +57109,41 @@ _core.default.init({
     namespace: 'see',
     beforeEnter: function beforeEnter(_ref7) {
       var next = _ref7.next;
+      _state.default.nextContainer = next.container;
       smooth(next.container);
-      touchLaunch();
+      touchLaunch([{
+        x: -3,
+        y: 3,
+        z: 4
+      }, {
+        x: 3,
+        y: -5,
+        z: -2
+      }, {
+        x: -2,
+        y: 0,
+        z: 2
+      }, {
+        x: -5,
+        y: -5,
+        z: 0
+      }, {
+        x: 7,
+        y: -10,
+        z: 1
+      }, {
+        x: -4,
+        y: -15,
+        z: 2
+      }, {
+        x: 2,
+        y: -20,
+        z: -1
+      }, {
+        x: 2,
+        y: 4,
+        z: -6
+      }]);
     },
     afterEnter: function afterEnter(_ref8) {// smooth(next.container)
       // homeScroll()
@@ -56910,7 +57152,7 @@ _core.default.init({
     }
   }]
 });
-},{"gsap":"node_modules/gsap/index.js","gsap/all":"node_modules/gsap/all.js","locomotive-scroll":"node_modules/locomotive-scroll/dist/locomotive-scroll.esm.js","@barba/core":"node_modules/@barba/core/dist/barba.umd.js","./js/rubiks/rubiks":"src/js/rubiks/rubiks.js","gsap/ScrollTrigger":"node_modules/gsap/ScrollTrigger.js","./state":"src/state.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"gsap":"node_modules/gsap/index.js","gsap/all":"node_modules/gsap/all.js","locomotive-scroll":"node_modules/locomotive-scroll/dist/locomotive-scroll.esm.js","@barba/core":"node_modules/@barba/core/dist/barba.umd.js","./js/rubiks/rubiks":"src/js/rubiks/rubiks.js","./js/rubiks/randomCubes":"src/js/rubiks/randomCubes.js","gsap/ScrollTrigger":"node_modules/gsap/ScrollTrigger.js","./state":"src/state.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -56938,7 +57180,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64535" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58769" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
