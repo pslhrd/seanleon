@@ -5,8 +5,8 @@ export default function createParticleSystem (n) {
   const vertices = []
   const pMaterial = new THREE.PointsMaterial({
     color: 0xFFFFFF,
-    opacity: 0.2,
-    size: 0.2,
+    opacity: 0.15,
+    size: 0.1,
     transparent: true
   })
 

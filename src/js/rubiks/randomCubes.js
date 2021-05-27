@@ -64,7 +64,7 @@ export function startCubes (positions) {
 
     scene.fog = new Fog(0x10122C, 8, 20)
 
-    const particles = createParticleSystem(100)
+    const particles = createParticleSystem(200)
 
     // SKETCH
     scene.add(light1, light2, amb)

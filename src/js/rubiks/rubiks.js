@@ -72,7 +72,7 @@ export function startRubiks () {
 
     scene.fog = new Fog(0x10122C, 8, 16)
 
-    const particles = createParticleSystem(300)
+    const particles = createParticleSystem(400)
 
     // SKETCH
     scene.add(light1.clone(), light2.clone(), amb.clone())
