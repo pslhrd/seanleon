@@ -2,11 +2,12 @@ import { init } from './three-helpers'
 import raf from '../utils/raf'
 import fx from './effects'
 import { randomGenerator } from '../utils/helpers'
-import { AmbientLight, Color, CubeReflectionMapping, Fog, Mesh, MeshPhysicalMaterial, Object3D, PointLight, RepeatWrapping, TextureLoader } from 'three'
+import { AmbientLight, Color, CubeReflectionMapping, Fog, Mesh, MeshPhysicalMaterial, Object3D, PointLight, TextureLoader } from 'three'
 import { createBoxWithRoundedEdges, resetCubeRotation, selectFaceCubes } from './rubiks-helpers'
 import gsap from 'gsap/all'
 import normalMapTexture from '../../assets/normalmap.jpeg'
 import state from '../../state'
+import createParticleSystem from './particleSystem'
 
 export function startRubiks () {
   const loader = new TextureLoader()
@@ -71,8 +72,11 @@ export function startRubiks () {
 
     scene.fog = new Fog(0x10122C, 8, 16)
 
+    const particles = createParticleSystem(300)
+
     // SKETCH
     scene.add(light1.clone(), light2.clone(), amb.clone())
+    scene.add(particles)
 
     const rubiks = originalRubiks.clone(true)
     scene.add(rubiks)
@@ -122,6 +126,7 @@ export function startRubiks () {
     const progress = { val: 0 }
     cubeExplosion.to(progress, { val: 1 }, 0)
     cubeExplosion.to(rubiks.scale, { x: 0.7, y: 0.7, z: 0.7 }, 0)
+    cubeExplosion.to(particles.position, { y: 2 }, 0)
 
     rubiks.children.map(c => c.children[0]).forEach(c => {
       // c = un des 9 cubes du rubiks cube

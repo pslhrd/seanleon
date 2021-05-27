@@ -6,6 +6,7 @@ import { AmbientLight, Fog, Mesh, MeshPhysicalMaterial, Object3D, PointLight, Re
 import { createBoxWithRoundedEdges } from './rubiks-helpers'
 import gsap from 'gsap/all'
 import normalMapTexture from '../../assets/normalmap.jpeg'
+import createParticleSystem from './particleSystem'
 
 export function startCubes (positions) {
   const loader = new TextureLoader()
@@ -63,8 +64,11 @@ export function startCubes (positions) {
 
     scene.fog = new Fog(0x10122C, 8, 20)
 
+    const particles = createParticleSystem(100)
+
     // SKETCH
     scene.add(light1, light2, amb)
+    scene.add(particles)
 
     const cubes = new Object3D()
 
@@ -95,16 +99,18 @@ export function startCubes (positions) {
 
     cubeExplosion.to(progress, { val: 1 }, 0)
     cubeExplosion.to(cubes.position, { y: 20 }, 0)
+    cubeExplosion.to(particles.position, { y: 2 }, 0)
 
     // ANIMATION
 
     raf.subscribe((time) => {
       const r = randomGenerator(3675)
       cubes.children.forEach(c => {
-        c.rotation.x = progress.val * r() * 3
-        c.rotation.y = progress.val * r() * 3
-        c.rotation.z = progress.val * r() * 3
+        c.rotation.x = time * (r() - 0.5) / 1500
+        c.rotation.y = time * (r() - 0.5) / 1500
+        c.rotation.z = time * (r() - 0.5) / 1500
       })
+      particles.rotation.y = time / 12000
       composers[i].render()
     })
   })
