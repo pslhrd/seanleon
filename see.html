@@ -44,7 +44,7 @@
 
     <div data-scroll-container>
 
-      <div class="hero">
+      <div class="hero" data-scroll-section>
         <div class="title-wrapper">
           <div class="hero-title margin touch" data-scroll data-scroll-speed="-1">SEE</div>
         </div>
@@ -64,11 +64,11 @@
         </div>
       </div>
 
-      <div class="see-video">
+      <div class="see-video" data-scroll-section>
         <iframe src="https://www.youtube.com/embed/kOroT7FoEW0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
 
-      <footer>
+      <footer data-scroll-section>
         <div class="footer-logo">FROM THE MIND OF SEAN LEON</div>
         <ul>
           <li><a href="#">TERMS & CONDITIONS</a></li>
@@ -80,10 +80,9 @@
         <div class="cta">GO UP</div>
       </footer>
 
+      <canvas class="gl-back"></canvas>
+      <canvas class="gl-front"></canvas>
     </div>
-
-    <canvas class="gl-back"></canvas>
-    <canvas class="gl-front"></canvas>
   </main>
 
   <script src="./src/main.js"></script>

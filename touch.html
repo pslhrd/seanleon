@@ -44,7 +44,7 @@
 
     <div data-scroll-container>
 
-      <div class="hero">
+      <div class="hero" data-scroll-section>
         <div class="title-wrapper">
           <div class="hero-title margin touch" data-scroll data-scroll-speed="-1">TOUCH</div>
         </div>
@@ -64,7 +64,7 @@
         </div>
       </div>
 
-      <div class="products">
+      <div class="products" data-scroll-section>
 
           <div class="left bottom overlap product" data-scroll data-scroll-speed="1.6">
             <a href="https://godsalgorithm.shop/own-1/ols/products/binary-long-sleeve">
@@ -179,7 +179,7 @@
 
       </div>
 
-      <footer>
+      <footer data-scroll-section>
         <div class="footer-logo">FROM THE MIND OF SEAN LEON</div>
         <ul>
           <li>TERMS & CONDITIONS</li>
@@ -191,10 +191,9 @@
         <div class="cta">GO UP</div>
       </footer>
 
+      <canvas class="gl-back"></canvas>
+      <canvas class="gl-front"></canvas>
     </div>
-
-    <canvas class="gl-back"></canvas>
-    <canvas class="gl-front"></canvas>
   </main>
 
   <script src="./src/main.js"></script>

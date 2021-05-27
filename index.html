@@ -44,7 +44,7 @@
 
     <div data-scroll-container>
 
-      <div class="hero">
+      <div class="hero" data-scroll-section>
         <div class="title-wrapper" data-scroll data-scroll-speed="-1.4">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 382.09 90.01">
               <g class="gods">
@@ -83,7 +83,7 @@
         </div>
       </div>
 
-      <div class="protagonist">
+      <div class="protagonist" data-scroll-section>
         <div class="protagonist-title" data-scroll data-scroll-call='protagonist' data-scroll-offset='40%'>
           <span class="first">A</span>
           <span class="second">NEW</span>
@@ -96,7 +96,7 @@
         <div class="data protagonist02" data-scroll data-scroll-speed="-0.5">As part of an ongoing series of commentaries on our connection to art in digital spaces, we’re developing a world around “Maui” that you can participate in. </div>
       </div>
 
-      <div class="objective">
+      <div class="objective" data-scroll-section>
         <div class="objective-title" data-scroll data-scroll-speed="-1" data-scroll-call='objective' data-scroll-offset='40%'>
           <span class="first">WHAT IS</span>
           <span class="number">(1)</span>
@@ -115,7 +115,7 @@
         </div>
       </div>
 
-      <div class="reality">
+      <div class="reality" data-scroll-section>
         <div class="reality-title" data-scroll data-scroll-speed="0.6" data-scroll-call='reality' data-scroll-offset='40%'> 
           <span class="first">WHAT</span>
           <span class="second" data-scroll data-scroll-delay="0.1">IS</span>
@@ -130,7 +130,7 @@
         </div>
       </div>
 
-      <div class="simulation">
+      <div class="simulation" data-scroll-section>
         <div class="simulation-title">
           <span class="mono">IS THERE</span>
           <span class="margin">HUMANITY</span>
@@ -140,7 +140,7 @@
         <div class="data simulation01" data-scroll data-scroll-speed="1.5">Does digital equate to artificial, or are digital experiences, emotions, and adventures serving as vehicles when no other transportation is available? Are computed, and digital emotions less meaningful than traditional ones? How could they be if they resonate deep within us?</div>
       </div>
 
-      <footer>
+      <footer data-scroll-section>
         <div class="footer-logo">FROM THE MIND OF SEAN LEON</div>
         <ul>
           <li>TERMS & CONDITIONS</li>
@@ -152,10 +152,9 @@
         <div class="cta">GO UP</div>
       </footer>
 
+      <canvas class="gl-front"></canvas>
+      <canvas class="gl-back"></canvas>
     </div>
-
-    <canvas class="gl-front"></canvas>
-    <canvas class="gl-back"></canvas>
   </main>
 
   <script src="./src/main.js"></script>

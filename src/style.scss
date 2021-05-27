@@ -75,7 +75,7 @@ body {
   header {
     position: fixed;
     top: 0;
-    z-index: 65;
+    z-index: 999;
     width: 100%;
     font-size: $main;
     font-family: $mono;
@@ -221,6 +221,7 @@ body {
     position: relative;
     width: 100%;
     height: 100vh;
+    z-index: 998;
 
     &-img {
       position: absolute;
@@ -805,7 +806,7 @@ body {
     width: 100vw;
     height: 100vh;
     background-color: #080A18;
-    z-index: 200;
+    z-index: 1000;
 
     .loading {
 
@@ -940,7 +941,7 @@ html.has-scroll-dragging {
     bottom: 0; }
 
 .gl-back {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -950,11 +951,11 @@ html.has-scroll-dragging {
 }
 
 .gl-front {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   pointer-events: none;
-  z-index: 999;
+  z-index: 888;
 }
