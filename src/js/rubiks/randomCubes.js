@@ -25,7 +25,7 @@ export function startCubes (positions) {
     const geometry = createBoxWithRoundedEdges(0.98, 0.98, 0.98, 0.07, 2)
     const material = new MeshPhysicalMaterial({
       color,
-      metalness: 0.2,
+      metalness: 0.3,
       roughness: 0.2,
       normalMap
     })

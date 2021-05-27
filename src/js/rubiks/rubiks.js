@@ -2,7 +2,7 @@ import { init } from './three-helpers'
 import raf from '../utils/raf'
 import fx from './effects'
 import { randomGenerator } from '../utils/helpers'
-import { AmbientLight, Color, Fog, Mesh, MeshPhysicalMaterial, Object3D, PointLight, RepeatWrapping, TextureLoader } from 'three'
+import { AmbientLight, Color, CubeReflectionMapping, Fog, Mesh, MeshPhysicalMaterial, Object3D, PointLight, RepeatWrapping, TextureLoader } from 'three'
 import { createBoxWithRoundedEdges, resetCubeRotation, selectFaceCubes } from './rubiks-helpers'
 import gsap from 'gsap/all'
 import normalMapTexture from '../../assets/normalmap.jpeg'
@@ -30,15 +30,15 @@ export function startRubiks () {
         const wrapper = new Object3D()
         const color = colors[Math.round(Random() * (colors.length - 1))]
         const normalMap = loader.load(normalMapTexture)
-        normalMap.wrapS = RepeatWrapping
-        normalMap.wrapT = RepeatWrapping
+        normalMap.wrapS = CubeReflectionMapping
+        normalMap.wrapT = CubeReflectionMapping
 
         const geometry = createBoxWithRoundedEdges(0.98, 0.98, 0.98, 0.07, 4)
         const material = new MeshPhysicalMaterial({
           color,
-          metalness: 0.2,
+          metalness: 0.3,
           roughness: 0.2,
-          normalMap,
+          normalMap
         })
         const mesh = new Mesh(geometry, material)
         mesh.position.set(x - 1, y - 1, z - 1)
@@ -80,7 +80,7 @@ export function startRubiks () {
     rubiks.children.forEach(c => resetCubeRotation(c))
 
     gsap.to(camera.position, { x: 8, y: 8, z: 8, ease: 'expo.out', duration: 3 })
-    gsap.from(rubiks.rotation, {y:-16, z: 4, x:4, ease: 'expo.out', duration: 3})
+    gsap.from(rubiks.rotation, { y: -16, z: 4, x: 4, ease: 'expo.out', duration: 3 })
 
     // cubes moves every 3.5 seconds
     let currentAnim
