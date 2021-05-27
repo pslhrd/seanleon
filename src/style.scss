@@ -1,5 +1,5 @@
-$c-set-bg: #080A18;
-$c-set-fg: #FFFFFF;
+$c-set-bg: #10122C;
+$c-set-fg: #F9F9F9;
 
 :root {
   --c-bg: #{$c-set-bg};
@@ -13,7 +13,7 @@ $mono: 'Monument Grotesk Mono';
 $h1: 'Skrappa';
 
 $main: 12px;
-$title: 14.583vw;
+$title: 16vw;
 $ease-out: cubic-bezier(.165,.84,.44,1);
 
 @mixin mobile {
@@ -44,6 +44,11 @@ body {
     outline: none;
   }
 
+  main {
+    width: 100%;
+    overflow-x: hidden
+  }
+
 
   .data {
     position: absolute;
@@ -63,9 +68,61 @@ body {
     height: 100vh;
     position: fixed;
     z-index: 100;
-    background-color: #0C0F24;
-    transform: scaleY(0);
     transform-origin: bottom;
+    pointer-events: none;
+
+    &-wrapper {
+      opacity: 0;
+      position: absolute;
+      width: 20vw;
+      height: 15vw;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .t01 {
+      left: 0;
+      top: 0;
+    }
+
+    .t02 {
+      transform: rotate(-90deg);
+      left: 0;
+      bottom: 0;
+    }
+
+    .t03 {
+      transform: rotate(90deg);
+      right: 0;
+      top: 0;
+    }
+
+    .t04 {
+      transform: rotate(180deg);
+      right: 0;
+      bottom: 0;
+    }
+
+    .t01, .t02, .t03, .t04 {
+      position: absolute;
+
+      &:before {
+        position: absolute;
+        content: '';
+        width: 15px;
+        height: 2px;
+        background-color: #39A289;
+      }
+
+      &:after {
+        position: absolute;
+        content: '';
+        height: 15px;
+        width: 2px;
+        background-color: #39A289;
+      }
+    }
   }
 
   .margin {
@@ -129,7 +186,7 @@ body {
 
     @include mobile {
       padding-top: 100px;
-      padding-bottom: 60px;
+      padding-bottom: 100px;
     }
 
     .footer-logo {
@@ -239,6 +296,10 @@ body {
       }
     }
 
+    @include mobile {
+      height: calc(100vh - 50px);
+    }
+
     .title-wrapper {
       display: flex;
       justify-content: center;
@@ -248,14 +309,19 @@ body {
 
       svg {
         overflow: visible;
-        width: 54vw;
+        width: 64vw;
         fill: $c-fg;
+        margin-top: -3.15vw;
 
         @include mobile {
           width: 85vw;
 
           .gods {
             display: block;
+          }
+
+          .gods, .algo {
+            opacity: 0;
           }
         }
       }
@@ -275,11 +341,13 @@ body {
     }
 
     .hero01 {
+      color: #39A289;
       left: 13.5vw;
       top: 27vw;
       width: 230px;
 
       @include mobile {
+        color: $c-fg;
         width: 130px;
         left: 50px;
         top: 150px;
@@ -329,6 +397,7 @@ body {
     .hero05{
       top: 41vw;
       left: 13.5vw;
+      color: #39A289;
       span {
         display: block;
       }
@@ -387,6 +456,7 @@ body {
     }
 
     .protagonist01 {
+      color: #39A289;
       right: 29vw;
       bottom: 14.5vw;
       @include mobile {
@@ -469,6 +539,7 @@ body {
     }
 
     .objective01 {
+      color: #39A289;
       top: 30vw;
       left: -1vw;
       @include mobile {
@@ -481,6 +552,7 @@ body {
     }
 
     .objective02 {
+      color: #39A289;
       top: 30vw;
       right: 14vw;
       @include mobile {
@@ -559,6 +631,7 @@ body {
       }
     }
     .reality01 {
+      color: #39A289;
       top: 21vw;
       left: 60vw;
       @include mobile {
@@ -805,7 +878,7 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: #080A18;
+    background-color: $c-fg;
     z-index: 1000;
 
     .loading {
@@ -901,6 +974,7 @@ html.has-scroll-dragging {
   height: 100%; }
 
 .c-scrollbar {
+  display: none;
   position: absolute;
   right: 0;
   top: 0;

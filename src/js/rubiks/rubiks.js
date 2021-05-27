@@ -5,7 +5,7 @@ import { randomGenerator } from '../utils/helpers'
 import { AmbientLight, Color, Fog, Mesh, MeshPhysicalMaterial, Object3D, PointLight, RepeatWrapping, TextureLoader } from 'three'
 import { createBoxWithRoundedEdges, resetCubeRotation, selectFaceCubes } from './rubiks-helpers'
 import gsap from 'gsap/all'
-import normalMapTexture from '../../assets/normalmap.jpg'
+import normalMapTexture from '../../assets/normalmap.jpeg'
 import state from '../../state'
 
 export function startRubiks () {
@@ -14,9 +14,9 @@ export function startRubiks () {
   // const seed = Math.round(Math.random() * 999999999)
   const Random = randomGenerator(17846364) // seed qui marche bien (le random sera toujours le même au refresh)
 
-  const light1 = new PointLight(0xffffff, 1.2, 0, 1)
-  const light2 = new PointLight(0xffffff, 1.2, 0, 1)
-  const amb = new AmbientLight(0xffffff, 0.5)
+  const light1 = new PointLight(0xffffff, 1.5, 0, 1)
+  const light2 = new PointLight(0xffffff, 2, 0, 1)
+  const amb = new AmbientLight(0xffffff, 0.4)
   light1.position.set(10, 20, 15)
   light2.position.set(-20, 40, 30)
 
@@ -33,12 +33,12 @@ export function startRubiks () {
         normalMap.wrapS = RepeatWrapping
         normalMap.wrapT = RepeatWrapping
 
-        const geometry = createBoxWithRoundedEdges(0.98, 0.98, 0.98, 0.07, 2)
+        const geometry = createBoxWithRoundedEdges(0.98, 0.98, 0.98, 0.07, 4)
         const material = new MeshPhysicalMaterial({
           color,
           metalness: 0.2,
-          roughness: 0.05,
-          normalMap
+          roughness: 0.2,
+          normalMap,
         })
         const mesh = new Mesh(geometry, material)
         mesh.position.set(x - 1, y - 1, z - 1)
@@ -61,7 +61,7 @@ export function startRubiks () {
     const random = randomGenerator(17846364) // seed qui marche bien (le random sera toujours le même au refresh)
 
     renderer.pixelRatio = 2
-    if (i === 0) scene.background = new Color(0x080A18)
+    if (i === 0) scene.background = new Color(0x10122C)
 
     composers.push(fx({ renderer, scene, camera }).composer)
 
@@ -69,7 +69,7 @@ export function startRubiks () {
     camera.position.x = 25
     camera.position.y = 25
 
-    scene.fog = new Fog(0x080A18, 8, 16)
+    scene.fog = new Fog(0x10122C, 8, 16)
 
     // SKETCH
     scene.add(light1.clone(), light2.clone(), amb.clone())
@@ -79,7 +79,8 @@ export function startRubiks () {
 
     rubiks.children.forEach(c => resetCubeRotation(c))
 
-    gsap.to(camera.position, { x: 8, y: 8, z: 8, ease: 'expo.inOut', duration: 3 })
+    gsap.to(camera.position, { x: 8, y: 8, z: 8, ease: 'expo.out', duration: 3 })
+    gsap.from(rubiks.rotation, {y:-16, z: 4, x:4, ease: 'expo.out', duration: 3})
 
     // cubes moves every 3.5 seconds
     let currentAnim

@@ -1,6 +1,7 @@
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass'
+import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
 // import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader'
 // import { Vector2 } from 'three'
@@ -12,6 +13,15 @@ export default function composer ({ renderer, scene, camera }) {
 
   // const bloomFx = new UnrealBloomPass(new Vector2(window.innerWidth * 2, window.innerHeight * 2), 0.8, 0.01, 0)
   // composer.addPass(bloomFx)
+
+	const filmPass = new FilmPass(
+	    0.2,   // noise intensity
+	    0,  // scanline intensity
+	    648,    // scanline count
+	    false,  // grayscale
+	);
+	filmPass.renderToScreen = true;
+	composer.addPass(filmPass);
 
   const fxaa = new ShaderPass(FXAAShader)
   composer.addPass(fxaa)
