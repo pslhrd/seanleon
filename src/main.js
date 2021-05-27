@@ -217,6 +217,10 @@ barba.init({
       state.nextContainer = next.container
       smooth(next.container)
       homeLaunch()
+      if (isMobile.any()) {
+        next.container.querySelector('.gl-front').style.position = 'fixed'
+        next.container.querySelector('.gl-back').style.position = 'fixed'
+      }
     },
     afterEnter ({ next }) {
       smooth(next.container)
@@ -235,6 +239,10 @@ barba.init({
         { x: -4, y: -15, z: 2 },
         { x: 2, y: -20, z: -1 }
       ])
+      if (isMobile.any()) {
+        next.container.querySelector('.gl-front').style.position = 'fixed'
+        next.container.querySelector('.gl-back').style.position = 'fixed'
+      }
     },
     afterEnter ({ next }) {
       // smooth(next.container)
@@ -255,6 +263,10 @@ barba.init({
         { x: 2, y: -20, z: -1 },
         { x: 2, y: 4, z: -6 },
       ])
+      if (isMobile.any()) {
+        next.container.querySelector('.gl-front').style.position = 'fixed'
+        next.container.querySelector('.gl-back').style.position = 'fixed'
+      }
     },
     afterEnter ({ next }) {
       // smooth(next.container)
