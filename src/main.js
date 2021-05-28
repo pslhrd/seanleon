@@ -111,9 +111,9 @@ function homeScroll () {
   gsap.set('.objective .second', { opacity: 0, x: '3%' })
   gsap.set('.objective .number', { opacity: 0, y: '-20%' })
 
-  gsap.set('.reality .first', {opacity:0, x:'-10%'})
-  gsap.set('.reality .second', {opacity:0, x:'10%'})
-  gsap.set('.reality .third', {opacity:0, y:'10%'})
+  gsap.set('.reality .first', { opacity: 0, x: '-10%' })
+  gsap.set('.reality .second', { opacity: 0, x: '10%' })
+  gsap.set('.reality .third', { opacity: 0, y: '10%' })
 
   gsap.set('.simulation .first', { opacity: 0, x: '-10%' })
   gsap.set('.simulation .second', { opacity: 0, x: '10%' })
@@ -261,7 +261,7 @@ barba.init({
         { x: 7, y: -10, z: 1 },
         { x: -4, y: -15, z: 2 },
         { x: 2, y: -20, z: -1 },
-        { x: 2, y: 4, z: -6 },
+        { x: 2, y: 4, z: -6 }
       ])
       if (isMobile.any()) {
         next.container.querySelector('.gl-front').style.position = 'fixed'
