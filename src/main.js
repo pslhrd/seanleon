@@ -186,6 +186,7 @@ barba.init({
   transitions: [{
     name: 'opacity-transition',
     once ({ next }) {
+      gsap.to('.preloader', { autoAlpha: 0, duration: 1, delay: 0.5 })
       smooth(next.container)
     },
     beforeEnter ({ next }) {

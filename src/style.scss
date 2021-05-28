@@ -878,71 +878,9 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: $c-fg;
+    background-color: $c-bg;
     z-index: 1000;
-
-    .loading {
-
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      
-
-      &-square1 {
-        width: 5px;
-        height: 5px;
-        opacity: 0;
-        background-color: $c-fg;
-        animation: square1 2s $ease-out infinite 3s;
-      }
-
-      @keyframes square1 {
-        0% {
-          opacity: 0;
-        }
-        5% {
-          opacity: 1;
-        }
-      }
-
-      @keyframes square2 {
-        5% {
-          opacity: 0;
-        }
-        10% {
-          opacity: 1;
-        }
-      }
-
-      @keyframes square3 {
-        10% {
-          opacity: 0;
-        }
-        15% {
-          opacity: 1;
-        }
-      }
-
-      &-square2 {
-        width: 5px;
-        height: 5px;
-        margin-left: 15px;
-        background-color: $c-fg;
-        opacity: 0;
-        animation: square2 2s $ease-out infinite 3s;
-      }
-
-      &-square3 {
-        width: 5px;
-        height: 5px;
-        opacity: 0;
-        margin-left: 15px;
-        animation: square3 2s $ease-out infinite 3s;
-        background-color: $c-fg;
-      }
-    }
+    cursor: wait;
   }
 }
 
