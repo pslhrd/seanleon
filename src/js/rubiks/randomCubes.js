@@ -80,8 +80,6 @@ export function startCubes (positions) {
     })
     scene.add(cubes)
 
-    console.log(cubes.children)
-
     gsap.to(camera.position, { x: 8, y: 8, z: 8, ease: 'expo.out', duration: 1.6 })
     // gsap.from(cubes.rotation, { x: 3, ease: 'expo.inOut', duration: 3 })
 

@@ -6,7 +6,6 @@ import raf from '../utils/raf'
 export function init (selector, opt) {
   let c = document.querySelector(selector)
   if (state.nextContainer) c = state.nextContainer.querySelector(selector)
-  console.log(c)
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, opt.from, opt.to)
   const renderer = new THREE.WebGLRenderer({ canvas: c, antialias: true, alpha: opt.alpha })

@@ -38,6 +38,7 @@ if (isMobile.any() === null) {
 }
 
 function smooth (container) {
+  if (state.locoScroll) state.locoScroll.destroy()
   state.locoScroll = new LocomotiveScroll({
     el: container.querySelector('[data-scroll-container]'),
     smooth: true,
@@ -120,7 +121,6 @@ function homeScroll () {
 
   state.locoScroll.on('call', function (event, element, i) {
     if (event === 'protagonist') {
-      console.log('done')
       const tl = gsap.timeline()
       tl
         .to('.protagonist .first', { opacity: 1, duration: 0.1 })
@@ -132,7 +132,6 @@ function homeScroll () {
     }
 
     if (event === 'objective') {
-      console.log('done')
       const tl = gsap.timeline()
       tl
         .to('.objective .first', { opacity: 1, duration: 0.1 })
@@ -143,7 +142,6 @@ function homeScroll () {
     }
 
     if (event === 'reality') {
-      console.log('done')
       const tl = gsap.timeline()
       tl
         .to('.reality .third', { opacity: 1, duration: 0.1 })
@@ -155,7 +153,6 @@ function homeScroll () {
     }
 
     if (event === 'simulation') {
-      console.log('done')
       const tl = gsap.timeline()
       tl
         .to('.simulation .first', { opacity: 1, duration: 0.1 })
@@ -166,7 +163,6 @@ function homeScroll () {
 
     if (event === 'appear') {
       const text = i.el.querySelectorAll('span')
-      console.log(text)
       gsap.to(text, { y: '0%', opacity: 1, duration: 1.3, stagger: 0.1, ease: 'power3.out' })
     }
 
@@ -194,7 +190,6 @@ barba.init({
     },
     beforeEnter ({ next }) {
       state.nextContainer = next.container
-      state.locoScroll.destroy()
       smooth(next.container)
     },
     leave (data) {
