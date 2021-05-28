@@ -55059,7 +55059,174 @@ class RenderPass extends _Pass.Pass {
 }
 
 exports.RenderPass = RenderPass;
-},{"three":"node_modules/three/build/three.module.js","../postprocessing/Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js"}],"node_modules/three/examples/jsm/shaders/FXAAShader.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","../postprocessing/Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js"}],"node_modules/three/examples/jsm/shaders/FilmShader.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.FilmShader = void 0;
+
+/**
+ * Film grain & scanlines shader
+ *
+ * - ported from HLSL to WebGL / GLSL
+ * http://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html
+ *
+ * Screen Space Static Postprocessor
+ *
+ * Produces an analogue noise overlay similar to a film grain / TV static
+ *
+ * Original implementation and noise algorithm
+ * Pat 'Hawthorne' Shearon
+ *
+ * Optimized scanlines + noise version with intensity scaling
+ * Georg 'Leviathan' Steinrohder
+ *
+ * This version is provided under a Creative Commons Attribution 3.0 License
+ * http://creativecommons.org/licenses/by/3.0/
+ */
+const FilmShader = {
+  uniforms: {
+    'tDiffuse': {
+      value: null
+    },
+    'time': {
+      value: 0.0
+    },
+    'nIntensity': {
+      value: 0.5
+    },
+    'sIntensity': {
+      value: 0.05
+    },
+    'sCount': {
+      value: 4096
+    },
+    'grayscale': {
+      value: 1
+    }
+  },
+  vertexShader:
+  /* glsl */
+  `
+
+		varying vec2 vUv;
+
+		void main() {
+
+			vUv = uv;
+			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+		}`,
+  fragmentShader:
+  /* glsl */
+  `
+
+		#include <common>
+
+		// control parameter
+		uniform float time;
+
+		uniform bool grayscale;
+
+		// noise effect intensity value (0 = no effect, 1 = full effect)
+		uniform float nIntensity;
+
+		// scanlines effect intensity value (0 = no effect, 1 = full effect)
+		uniform float sIntensity;
+
+		// scanlines effect count value (0 = no effect, 4096 = full effect)
+		uniform float sCount;
+
+		uniform sampler2D tDiffuse;
+
+		varying vec2 vUv;
+
+		void main() {
+
+		// sample the source
+			vec4 cTextureScreen = texture2D( tDiffuse, vUv );
+
+		// make some noise
+			float dx = rand( vUv + time );
+
+		// add noise
+			vec3 cResult = cTextureScreen.rgb + cTextureScreen.rgb * clamp( 0.1 + dx, 0.0, 1.0 );
+
+		// get us a sine and cosine
+			vec2 sc = vec2( sin( vUv.y * sCount ), cos( vUv.y * sCount ) );
+
+		// add scanlines
+			cResult += cTextureScreen.rgb * vec3( sc.x, sc.y, sc.x ) * sIntensity;
+
+		// interpolate between source and result by intensity
+			cResult = cTextureScreen.rgb + clamp( nIntensity, 0.0,1.0 ) * ( cResult - cTextureScreen.rgb );
+
+		// convert to grayscale if desired
+			if( grayscale ) {
+
+				cResult = vec3( cResult.r * 0.3 + cResult.g * 0.59 + cResult.b * 0.11 );
+
+			}
+
+			gl_FragColor =  vec4( cResult, cTextureScreen.a );
+
+		}`
+};
+exports.FilmShader = FilmShader;
+},{}],"node_modules/three/examples/jsm/postprocessing/FilmPass.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.FilmPass = void 0;
+
+var _three = require("three");
+
+var _Pass = require("../postprocessing/Pass.js");
+
+var _FilmShader = require("../shaders/FilmShader.js");
+
+class FilmPass extends _Pass.Pass {
+  constructor(noiseIntensity, scanlinesIntensity, scanlinesCount, grayscale) {
+    super();
+    if (_FilmShader.FilmShader === undefined) console.error('THREE.FilmPass relies on FilmShader');
+    const shader = _FilmShader.FilmShader;
+    this.uniforms = _three.UniformsUtils.clone(shader.uniforms);
+    this.material = new _three.ShaderMaterial({
+      uniforms: this.uniforms,
+      vertexShader: shader.vertexShader,
+      fragmentShader: shader.fragmentShader
+    });
+    if (grayscale !== undefined) this.uniforms.grayscale.value = grayscale;
+    if (noiseIntensity !== undefined) this.uniforms.nIntensity.value = noiseIntensity;
+    if (scanlinesIntensity !== undefined) this.uniforms.sIntensity.value = scanlinesIntensity;
+    if (scanlinesCount !== undefined) this.uniforms.sCount.value = scanlinesCount;
+    this.fsQuad = new _Pass.FullScreenQuad(this.material);
+  }
+
+  render(renderer, writeBuffer, readBuffer, deltaTime
+  /*, maskActive */
+  ) {
+    this.uniforms['tDiffuse'].value = readBuffer.texture;
+    this.uniforms['time'].value += deltaTime;
+
+    if (this.renderToScreen) {
+      renderer.setRenderTarget(null);
+      this.fsQuad.render(renderer);
+    } else {
+      renderer.setRenderTarget(writeBuffer);
+      if (this.clear) renderer.clear();
+      this.fsQuad.render(renderer);
+    }
+  }
+
+}
+
+exports.FilmPass = FilmPass;
+},{"three":"node_modules/three/build/three.module.js","../postprocessing/Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js","../shaders/FilmShader.js":"node_modules/three/examples/jsm/shaders/FilmShader.js"}],"node_modules/three/examples/jsm/shaders/FXAAShader.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -56193,6 +56360,8 @@ var _RenderPass = require("three/examples/jsm/postprocessing/RenderPass");
 
 var _ShaderPass = require("three/examples/jsm/postprocessing/ShaderPass");
 
+var _FilmPass = require("three/examples/jsm/postprocessing/FilmPass");
+
 var _FXAAShader = require("three/examples/jsm/shaders/FXAAShader");
 
 // import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
@@ -56206,13 +56375,19 @@ function composer(_ref) {
   composer.addPass(new _RenderPass.RenderPass(scene, camera)); // const bloomFx = new UnrealBloomPass(new Vector2(window.innerWidth * 2, window.innerHeight * 2), 0.8, 0.01, 0)
   // composer.addPass(bloomFx)
 
+  var filmPass = new _FilmPass.FilmPass(0.2, // noise intensity
+  0, // scanline intensity
+  648, // scanline count
+  false);
+  filmPass.renderToScreen = true;
+  composer.addPass(filmPass);
   var fxaa = new _ShaderPass.ShaderPass(_FXAAShader.FXAAShader);
   composer.addPass(fxaa);
   return {
     composer: composer
   };
 }
-},{"three/examples/jsm/postprocessing/EffectComposer":"node_modules/three/examples/jsm/postprocessing/EffectComposer.js","three/examples/jsm/postprocessing/RenderPass":"node_modules/three/examples/jsm/postprocessing/RenderPass.js","three/examples/jsm/postprocessing/ShaderPass":"node_modules/three/examples/jsm/postprocessing/ShaderPass.js","three/examples/jsm/shaders/FXAAShader":"node_modules/three/examples/jsm/shaders/FXAAShader.js"}],"src/js/utils/helpers.js":[function(require,module,exports) {
+},{"three/examples/jsm/postprocessing/EffectComposer":"node_modules/three/examples/jsm/postprocessing/EffectComposer.js","three/examples/jsm/postprocessing/RenderPass":"node_modules/three/examples/jsm/postprocessing/RenderPass.js","three/examples/jsm/postprocessing/ShaderPass":"node_modules/three/examples/jsm/postprocessing/ShaderPass.js","three/examples/jsm/postprocessing/FilmPass":"node_modules/three/examples/jsm/postprocessing/FilmPass.js","three/examples/jsm/shaders/FXAAShader":"node_modules/three/examples/jsm/shaders/FXAAShader.js"}],"src/js/utils/helpers.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -56290,7 +56465,41 @@ function resetCubeRotation(cube) {
 }
 },{"three":"node_modules/three/build/three.module.js"}],"src/assets/normalmap.jpeg":[function(require,module,exports) {
 module.exports = "/normalmap.d4c6ba73.jpeg";
-},{}],"src/js/rubiks/rubiks.js":[function(require,module,exports) {
+},{}],"src/js/rubiks/particleSystem.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createParticleSystem;
+
+var THREE = _interopRequireWildcard(require("three"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function createParticleSystem(n) {
+  var particles = new THREE.BufferGeometry();
+  var vertices = [];
+  var pMaterial = new THREE.PointsMaterial({
+    color: 0xFFFFFF,
+    opacity: 0.15,
+    size: 0.1,
+    transparent: true
+  });
+
+  for (var p = 0; p < n; p++) {
+    var pX = Math.random() * 20 - 10;
+    var pY = Math.random() * 20 - 10;
+    var pZ = Math.random() * 20 - 10;
+    vertices.push(pX, pY, pZ);
+  }
+
+  particles.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+  return new THREE.Points(particles, pMaterial);
+}
+},{"three":"node_modules/three/build/three.module.js"}],"src/js/rubiks/rubiks.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -56316,6 +56525,8 @@ var _normalmap = _interopRequireDefault(require("../../assets/normalmap.jpeg"));
 
 var _state = _interopRequireDefault(require("../../state"));
 
+var _particleSystem = _interopRequireDefault(require("./particleSystem"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -56325,8 +56536,8 @@ function startRubiks() {
 
   var Random = (0, _helpers.randomGenerator)(17846364); // seed qui marche bien (le random sera toujours le même au refresh)
 
-  var light1 = new _three.PointLight(0xffffff, 1.8, 0, 1);
-  var light2 = new _three.PointLight(0xffffff, 1.8, 0, 1);
+  var light1 = new _three.PointLight(0xffffff, 1.5, 0, 1);
+  var light2 = new _three.PointLight(0xffffff, 2, 0, 1);
   var amb = new _three.AmbientLight(0xffffff, 0.4);
   light1.position.set(10, 20, 15);
   light2.position.set(-20, 40, 30);
@@ -56340,13 +56551,13 @@ function startRubiks() {
         var wrapper = new _three.Object3D();
         var color = colors[Math.round(Random() * (colors.length - 1))];
         var normalMap = loader.load(_normalmap.default);
-        normalMap.wrapS = _three.RepeatWrapping;
-        normalMap.wrapT = _three.RepeatWrapping;
+        normalMap.wrapS = _three.CubeReflectionMapping;
+        normalMap.wrapT = _three.CubeReflectionMapping;
         var geometry = (0, _rubiksHelpers.createBoxWithRoundedEdges)(0.98, 0.98, 0.98, 0.07, 4);
         var material = new _three.MeshPhysicalMaterial({
           color: color,
-          metalness: 0.2,
-          roughness: 0.05,
+          metalness: 0.3,
+          roughness: 0.2,
           normalMap: normalMap
         });
         var mesh = new _three.Mesh(geometry, material);
@@ -56377,7 +56588,7 @@ function startRubiks() {
     var random = (0, _helpers.randomGenerator)(17846364); // seed qui marche bien (le random sera toujours le même au refresh)
 
     renderer.pixelRatio = 2;
-    if (i === 0) scene.background = new _three.Color(0x080A18);
+    if (i === 0) scene.background = new _three.Color(0x10122C);
     composers.push((0, _effects.default)({
       renderer: renderer,
       scene: scene,
@@ -56386,9 +56597,11 @@ function startRubiks() {
     camera.position.z = 25;
     camera.position.x = 25;
     camera.position.y = 25;
-    scene.fog = new _three.Fog(0x080A18, 8, 16); // SKETCH
+    scene.fog = new _three.Fog(0x10122C, 8, 16);
+    var particles = (0, _particleSystem.default)(400); // SKETCH
 
     scene.add(light1.clone(), light2.clone(), amb.clone());
+    scene.add(particles);
     var rubiks = originalRubiks.clone(true);
     scene.add(rubiks);
     rubiks.children.forEach(function (c) {
@@ -56461,6 +56674,9 @@ function startRubiks() {
       y: 0.7,
       z: 0.7
     }, 0);
+    cubeExplosion.to(particles.position, {
+      y: 2
+    }, 0);
     rubiks.children.map(function (c) {
       return c.children[0];
     }).forEach(function (c) {
@@ -56492,7 +56708,7 @@ function startRubiks() {
     });
   });
 }
-},{"./three-helpers":"src/js/rubiks/three-helpers.js","../utils/raf":"src/js/utils/raf.js","./effects":"src/js/rubiks/effects.js","../utils/helpers":"src/js/utils/helpers.js","three":"node_modules/three/build/three.module.js","./rubiks-helpers":"src/js/rubiks/rubiks-helpers.js","gsap/all":"node_modules/gsap/all.js","../../assets/normalmap.jpeg":"src/assets/normalmap.jpeg","../../state":"src/state.js"}],"src/js/rubiks/randomCubes.js":[function(require,module,exports) {
+},{"./three-helpers":"src/js/rubiks/three-helpers.js","../utils/raf":"src/js/utils/raf.js","./effects":"src/js/rubiks/effects.js","../utils/helpers":"src/js/utils/helpers.js","three":"node_modules/three/build/three.module.js","./rubiks-helpers":"src/js/rubiks/rubiks-helpers.js","gsap/all":"node_modules/gsap/all.js","../../assets/normalmap.jpeg":"src/assets/normalmap.jpeg","../../state":"src/state.js","./particleSystem":"src/js/rubiks/particleSystem.js"}],"src/js/rubiks/randomCubes.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -56516,6 +56732,8 @@ var _all = _interopRequireDefault(require("gsap/all"));
 
 var _normalmap = _interopRequireDefault(require("../../assets/normalmap.jpeg"));
 
+var _particleSystem = _interopRequireDefault(require("./particleSystem"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function startCubes(positions) {
@@ -56533,7 +56751,7 @@ function startCubes(positions) {
     var geometry = (0, _rubiksHelpers.createBoxWithRoundedEdges)(0.98, 0.98, 0.98, 0.07, 2);
     var material = new _three.MeshPhysicalMaterial({
       color: color,
-      metalness: 0.2,
+      metalness: 0.3,
       roughness: 0.2,
       normalMap: normalMap
     });
@@ -56569,9 +56787,11 @@ function startCubes(positions) {
     camera.position.z = 18;
     camera.position.x = 16;
     camera.position.y = 60;
-    scene.fog = new _three.Fog(0x080A18, 8, 20); // SKETCH
+    scene.fog = new _three.Fog(0x10122C, 8, 20);
+    var particles = (0, _particleSystem.default)(200); // SKETCH
 
     scene.add(light1, light2, amb);
+    scene.add(particles);
     var cubes = new _three.Object3D(); // HERE CUBES
 
     positions.forEach(function (position) {
@@ -56609,20 +56829,24 @@ function startCubes(positions) {
     }, 0);
     cubeExplosion.to(cubes.position, {
       y: 20
+    }, 0);
+    cubeExplosion.to(particles.position, {
+      y: 2
     }, 0); // ANIMATION
 
     _raf.default.subscribe(function (time) {
       var r = (0, _helpers.randomGenerator)(3675);
       cubes.children.forEach(function (c) {
-        c.rotation.x = progress.val * r() * 3;
-        c.rotation.y = progress.val * r() * 3;
-        c.rotation.z = progress.val * r() * 3;
+        c.rotation.x = time * (r() - 0.5) / 1500;
+        c.rotation.y = time * (r() - 0.5) / 1500;
+        c.rotation.z = time * (r() - 0.5) / 1500;
       });
+      particles.rotation.y = time / 12000;
       composers[i].render();
     });
   });
 }
-},{"./three-helpers":"src/js/rubiks/three-helpers.js","../utils/raf":"src/js/utils/raf.js","./effects":"src/js/rubiks/effects.js","../utils/helpers":"src/js/utils/helpers.js","three":"node_modules/three/build/three.module.js","./rubiks-helpers":"src/js/rubiks/rubiks-helpers.js","gsap/all":"node_modules/gsap/all.js","../../assets/normalmap.jpeg":"src/assets/normalmap.jpeg"}],"src/main.js":[function(require,module,exports) {
+},{"./three-helpers":"src/js/rubiks/three-helpers.js","../utils/raf":"src/js/utils/raf.js","./effects":"src/js/rubiks/effects.js","../utils/helpers":"src/js/utils/helpers.js","three":"node_modules/three/build/three.module.js","./rubiks-helpers":"src/js/rubiks/rubiks-helpers.js","gsap/all":"node_modules/gsap/all.js","../../assets/normalmap.jpeg":"src/assets/normalmap.jpeg","./particleSystem":"src/js/rubiks/particleSystem.js"}],"src/main.js":[function(require,module,exports) {
 "use strict";
 
 var _gsap = _interopRequireDefault(require("gsap"));
@@ -57062,6 +57286,11 @@ _core.default.init({
       _state.default.nextContainer = next.container;
       smooth(next.container);
       homeLaunch();
+
+      if (isMobile.any()) {
+        next.container.querySelector('.gl-front').style.position = 'fixed';
+        next.container.querySelector('.gl-back').style.position = 'fixed';
+      }
     },
     afterEnter: function afterEnter(_ref4) {
       var next = _ref4.next;
@@ -57099,6 +57328,11 @@ _core.default.init({
         y: -20,
         z: -1
       }]);
+
+      if (isMobile.any()) {
+        next.container.querySelector('.gl-front').style.position = 'fixed';
+        next.container.querySelector('.gl-back').style.position = 'fixed';
+      }
     },
     afterEnter: function afterEnter(_ref6) {// smooth(next.container)
       // homeScroll()
@@ -57144,6 +57378,11 @@ _core.default.init({
         y: 4,
         z: -6
       }]);
+
+      if (isMobile.any()) {
+        next.container.querySelector('.gl-front').style.position = 'fixed';
+        next.container.querySelector('.gl-back').style.position = 'fixed';
+      }
     },
     afterEnter: function afterEnter(_ref8) {// smooth(next.container)
       // homeScroll()
@@ -57180,7 +57419,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58769" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63735" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

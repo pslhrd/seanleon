@@ -1,6 +1,6 @@
 :root {
-  --c-bg: #080A18;
-  --c-fg: #FFFFFF;
+  --c-bg: #10122C;
+  --c-fg: #F9F9F9;
 }
 
 * {
@@ -26,6 +26,10 @@ body a, body button {
   padding: 0;
   outline: none;
 }
+body main {
+  width: 100%;
+  overflow-x: hidden;
+}
 body .data {
   position: absolute;
   font-size: 12px;
@@ -44,9 +48,53 @@ body .transition {
   height: 100vh;
   position: fixed;
   z-index: 100;
-  background-color: #0C0F24;
-  transform: scaleY(0);
   transform-origin: bottom;
+  pointer-events: none;
+}
+body .transition-wrapper {
+  opacity: 0;
+  position: absolute;
+  width: 20vw;
+  height: 15vw;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+body .transition .t01 {
+  left: 0;
+  top: 0;
+}
+body .transition .t02 {
+  transform: rotate(-90deg);
+  left: 0;
+  bottom: 0;
+}
+body .transition .t03 {
+  transform: rotate(90deg);
+  right: 0;
+  top: 0;
+}
+body .transition .t04 {
+  transform: rotate(180deg);
+  right: 0;
+  bottom: 0;
+}
+body .transition .t01, body .transition .t02, body .transition .t03, body .transition .t04 {
+  position: absolute;
+}
+body .transition .t01:before, body .transition .t02:before, body .transition .t03:before, body .transition .t04:before {
+  position: absolute;
+  content: "";
+  width: 15px;
+  height: 2px;
+  background-color: #39A289;
+}
+body .transition .t01:after, body .transition .t02:after, body .transition .t03:after, body .transition .t04:after {
+  position: absolute;
+  content: "";
+  height: 15px;
+  width: 2px;
+  background-color: #39A289;
 }
 body .margin {
   margin-bottom: -4.6875vw;
@@ -54,7 +102,7 @@ body .margin {
 body header {
   position: fixed;
   top: 0;
-  z-index: 65;
+  z-index: 999;
   width: 100%;
   font-size: 12px;
   font-family: "Monument Grotesk Mono";
@@ -192,6 +240,7 @@ body .hero {
   position: relative;
   width: 100%;
   height: 100vh;
+  z-index: 998;
 }
 body .hero-img {
   position: absolute;
@@ -222,9 +271,9 @@ body .hero .title-wrapper {
 }
 body .hero .title-wrapper svg {
   overflow: visible;
-  width: 54vw;
+  width: 64vw;
   fill: var(--c-fg);
-  margin-top: -2vw;
+  margin-top: -3.15vw;
 }
 @media (max-width: 900px) {
   body .hero .title-wrapper svg {
@@ -233,11 +282,14 @@ body .hero .title-wrapper svg {
   body .hero .title-wrapper svg .gods {
     display: block;
   }
+  body .hero .title-wrapper svg .gods, body .hero .title-wrapper svg .algo {
+    opacity: 0;
+  }
 }
 body .hero-title {
-  font-size: 14.583vw;
+  font-size: 16vw;
   font-family: "Skrappa";
-  line-height: 14.583vw;
+  line-height: 16vw;
   opacity: 0;
 }
 @media (max-width: 900px) {
@@ -247,12 +299,14 @@ body .hero-title {
   }
 }
 body .hero .hero01 {
+  color: #39A289;
   left: 13.5vw;
   top: 27vw;
   width: 230px;
 }
 @media (max-width: 900px) {
   body .hero .hero01 {
+    color: var(--c-fg);
     width: 130px;
     left: 50px;
     top: 150px;
@@ -301,6 +355,7 @@ body .hero .hero04 {
 body .hero .hero05 {
   top: 41vw;
   left: 13.5vw;
+  color: #39A289;
 }
 body .hero .hero05 span {
   display: block;
@@ -325,9 +380,9 @@ body .protagonist {
 }
 body .protagonist-title {
   position: absolute;
-  font-size: 14.583vw;
+  font-size: 16vw;
   font-family: "Skrappa";
-  line-height: 14.583vw;
+  line-height: 16vw;
   left: 17.34vw;
   top: 16vw;
 }
@@ -360,6 +415,7 @@ body .protagonist-title .third {
   }
 }
 body .protagonist .protagonist01 {
+  color: #39A289;
   right: 29vw;
   bottom: 14.5vw;
 }
@@ -405,9 +461,9 @@ body .objective {
 }
 body .objective-title {
   position: absolute;
-  font-size: 14.583vw;
+  font-size: 16vw;
   font-family: "Skrappa";
-  line-height: 14.583vw;
+  line-height: 16vw;
   text-align: right;
   right: 8vw;
   top: 16vw;
@@ -443,6 +499,7 @@ body .objective-title .second {
   }
 }
 body .objective .objective01 {
+  color: #39A289;
   top: 30vw;
   left: -1vw;
 }
@@ -456,6 +513,7 @@ body .objective .objective01 span {
   display: block;
 }
 body .objective .objective02 {
+  color: #39A289;
   top: 30vw;
   right: 14vw;
 }
@@ -501,9 +559,9 @@ body .reality {
 }
 body .reality-title {
   position: absolute;
-  font-size: 14.583vw;
+  font-size: 16vw;
   font-family: "Skrappa";
-  line-height: 14.583vw;
+  line-height: 16vw;
   text-align: left;
   left: 8vw;
   top: 16vw;
@@ -537,6 +595,7 @@ body .reality-title .third {
   }
 }
 body .reality .reality01 {
+  color: #39A289;
   top: 21vw;
   left: 60vw;
 }
@@ -584,9 +643,9 @@ body .simulation-title {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 14.583vw;
+  font-size: 16vw;
   font-family: "Skrappa";
-  line-height: 14.583vw;
+  line-height: 16vw;
   padding-top: 12vw;
   text-align: center;
 }
@@ -792,8 +851,8 @@ body .preloader {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #080A18;
-  z-index: 200;
+  background-color: var(--c-fg);
+  z-index: 1000;
 }
 body .preloader .loading {
   width: 100%;
@@ -884,6 +943,7 @@ html.has-scroll-dragging {
 }
 
 .c-scrollbar {
+  display: none;
   position: absolute;
   right: 0;
   top: 0;
@@ -938,7 +998,7 @@ html.has-scroll-dragging {
 }
 
 .gl-back {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -948,13 +1008,13 @@ html.has-scroll-dragging {
 }
 
 .gl-front {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   pointer-events: none;
-  z-index: 999;
+  z-index: 888;
 }
 
 /*# sourceMappingURL=/style.6d80b553.css.map */
