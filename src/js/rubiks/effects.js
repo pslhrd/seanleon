@@ -21,9 +21,19 @@ export default function composer ({ renderer, scene, camera }) {
 	    false,  // grayscale
 	)
 	filmPass.renderToScreen = true
-	composer.addPass(filmPass)
+
+  const uA = navigator.userAgent
+  const vendor = navigator.vendor
+
+  if (/Safari/i.test(uA) && /Apple Computer/.test(vendor) && !/Mobi|Android/i.test(uA)) {
+
+  } else {
+    composer.addPass(filmPass)
+  }
+	// 
 
   const fxaa = new ShaderPass(FXAAShader)
+  fxaa.renderToScreen = true
   composer.addPass(fxaa)
 
   return { composer }

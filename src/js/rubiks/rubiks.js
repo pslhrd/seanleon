@@ -35,7 +35,7 @@ export function startRubiks () {
         normalMap.wrapS = CubeReflectionMapping
         normalMap.wrapT = CubeReflectionMapping
 
-        const geometry = createBoxWithRoundedEdges(0.98, 0.98, 0.98, 0.07, 4)
+        const geometry = createBoxWithRoundedEdges(0.98, 0.98, 0.98, 0.07, 2)
         const material = new MeshPhysicalMaterial({
           color,
           metalness: 0.3,
@@ -59,19 +59,12 @@ export function startRubiks () {
   const vendor = navigator.vendor
 
   if (/Safari/i.test(uA) && /Apple Computer/.test(vendor) && !/Mobi|Android/i.test(uA)) {
-    console.log('its')
-    inits = [
-      init('.gl-back', { alpha: false, from: 1, to: 100 }),
-      // init('.gl-front', { alpha: true, from: 0.01, to: 11.01 })
-    ]
   }
-  else {
-    console.log('itsnot')
-    inits = [
-      init('.gl-back', { alpha: false, from: 11, to: 100 }),
-      init('.gl-front', { alpha: true, from: 0.01, to: 11.01 })
-    ]
-  }
+
+  inits = [
+    init('.gl-back', { alpha: false, from: 11, to: 100 }),
+    init('.gl-front', { alpha: true, from: 0.01, to: 11.01 })
+  ]
 
   inits.forEach(({ renderer, camera, scene, controls }, i) => {
     // const seed = Math.round(Math.random() * 999999999)
