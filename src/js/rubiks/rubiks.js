@@ -51,12 +51,27 @@ export function startRubiks () {
   }
 
   const composers = []
+  let inits = []
 
   // INIT
-  const inits = [
-    init('.gl-back', { alpha: false, from: 11, to: 100 }),
-    init('.gl-front', { alpha: true, from: 0.01, to: 11.01 })
-  ]
+
+  const uA = navigator.userAgent
+  const vendor = navigator.vendor
+
+  if (/Safari/i.test(uA) && /Apple Computer/.test(vendor) && !/Mobi|Android/i.test(uA)) {
+    console.log('its')
+    inits = [
+      init('.gl-back', { alpha: false, from: 1, to: 100 }),
+      // init('.gl-front', { alpha: true, from: 0.01, to: 11.01 })
+    ]
+  }
+  else {
+    console.log('itsnot')
+    inits = [
+      init('.gl-back', { alpha: false, from: 11, to: 100 }),
+      init('.gl-front', { alpha: true, from: 0.01, to: 11.01 })
+    ]
+  }
 
   inits.forEach(({ renderer, camera, scene, controls }, i) => {
     // const seed = Math.round(Math.random() * 999999999)

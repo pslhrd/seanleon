@@ -1051,6 +1051,7 @@ body {
       }
       svg {
         transform-origin: center;
+
         display: block;
         position: absolute;
         left: 0;
@@ -1063,7 +1064,8 @@ body {
         }
 
         .rectangle, .circle {
-          transform-origin: center;
+          transform-origin: center !important;
+          transform-box: fill-box;
         }
       }
 

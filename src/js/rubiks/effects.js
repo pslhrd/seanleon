@@ -19,9 +19,9 @@ export default function composer ({ renderer, scene, camera }) {
 	    0,  // scanline intensity
 	    648,    // scanline count
 	    false,  // grayscale
-	);
-	filmPass.renderToScreen = true;
-	composer.addPass(filmPass);
+	)
+	filmPass.renderToScreen = true
+	composer.addPass(filmPass)
 
   const fxaa = new ShaderPass(FXAAShader)
   composer.addPass(fxaa)
