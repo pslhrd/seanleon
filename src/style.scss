@@ -13,7 +13,7 @@ $mono: 'Monument Grotesk Mono';
 $h1: 'Skrappa';
 
 $main: 12px;
-$title: 16vw;
+$title: 14vw;
 $ease-out: cubic-bezier(.165,.84,.44,1);
 
 @mixin mobile {
@@ -59,7 +59,25 @@ body {
     text-transform: uppercase;
 
     @include mobile {
+      font-size: 12px;
       line-height: 16px;
+    }
+  }
+
+  .clear {
+    @include mobile {
+      clear: both;
+      display: block;
+    }
+  }
+
+  .lines {
+    white-space: nowrap;
+  }
+
+  .opacity {
+    &::before {
+      opacity: 1 !important;
     }
   }
 
@@ -129,6 +147,10 @@ body {
     margin-bottom: -4.6875vw;
   }
 
+  .vh50 {
+    height: 80vh !important;
+  }
+
   header {
     position: fixed;
     top: 0;
@@ -176,23 +198,72 @@ body {
   }
 
   footer {
+    position: relative;
+    z-index: 1001;
     width: 100%;
     font-size: $main;
     font-family: $mono;
     text-transform: uppercase;
+    background-color: $c-bg;
     position: relative;
-    padding-top: 20vw;
-    padding-bottom: 6vw;
+    border-top: 1px solid #2B2C45;
 
-    @include mobile {
-      padding-top: 100px;
-      padding-bottom: 100px;
+    .footer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding-top: 7.8125vw;
+
+      @include mobile {
+        padding-top: 60px;
+      }
+
+      &-title {
+        font-size: 6.25vw;
+        font-family: $h1;
+
+        @include mobile {        
+          font-size: 14vw;
+        }
+      }
+      &-content {
+        margin-top: 3vw;
+        text-align: center;
+        opacity: 0.3;
+        width: 48.4375vw;
+
+        @include mobile {
+          width: calc(100vw - 80px);
+          font-size: 12px;
+          line-height: 16px;
+          text-align: center;
+          margin-top: 40px;
+        }
+      }
+
+      &-menu {
+        width: 100%;
+        position: relative;
+        margin-top: 7vw;
+        height: 60px;
+
+        @include mobile {
+          margin-top: 60px;
+          height: 100px;
+        }
+      }
     }
 
     .footer-logo {
       position: absolute;
       width: 140px;
       left: 3.125vw;
+      top: 0;
+
+      @include mobile {
+        display: none;
+      }
     }
 
     ul {
@@ -200,13 +271,17 @@ body {
       display: block;
       left: 31.5vw;
       line-height: 1.5;
+      top: 0;
       @include mobile {
-        left: 200px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
       }
 
       li {
+        margin-right: 30px;
+        display: inline-block;
         list-style: none;
-        display: block;
         &:hover {
           cursor: pointer;
         }
@@ -216,7 +291,7 @@ body {
     .star {
       position: absolute;
       left: 70vw;
-
+      top: 0;
       @include mobile {
         display: none;
         left: 20px;
@@ -226,6 +301,7 @@ body {
     .pupil {
       position: absolute;
       left: 79vw;
+      top: 0;
       @include mobile {
         display: none;
       }
@@ -234,8 +310,47 @@ body {
     .cta {
       position: absolute;
       right: 3.125vw;
+      top: 0;
       @include mobile {
         display: none;
+      }
+    }
+  }
+
+  .fixed-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1001;
+    pointer-events: none;
+
+    &-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      flex-direction: column;
+      font-size: 20px;
+      line-height: 24px;
+      color: #939393;
+      font-family: $mono;
+      text-transform: uppercase;
+      text-align: center;
+      color: white;
+
+      @include mobile {
+        font-size: 14px;
+        line-height: 16px;
+      }
+
+      span {
+        opacity: 0;
+        transform: translateY(40px);
+        display: block;
       }
     }
   }
@@ -274,11 +389,54 @@ body {
     }
   }
 
+  .introduction {
+    pointer-events: none;
+    position: relative;
+    width: 100vw;
+    height: 200vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .content-page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &-title {
+      padding-top: 10vw;
+      font-size: $title;
+      font-family: $h1;
+      overflow: hidden;
+
+      @include mobile {
+
+      }
+    }
+
+    &-text {
+      margin-top: 2.125vw;
+      text-align: center;
+      position: relative;
+      font-size: 12px;
+      line-height: 14px;
+      color: #939393;
+      font-family: $mono;
+      text-transform: uppercase;
+      width: 250px;
+    }
+  }
+
   .hero {
     position: relative;
     width: 100%;
     height: 100vh;
     z-index: 998;
+
 
     &-img {
       position: absolute;
@@ -297,24 +455,57 @@ body {
     }
 
     @include mobile {
-      height: calc(100vh - 50px);
+      height: calc(100vh);
     }
 
     .title-wrapper {
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
       width: 100%;
       height: 100%;
 
-      svg {
-        overflow: visible;
-        width: 64vw;
-        fill: $c-fg;
-        margin-top: -3.15vw;
+      &-infos {
+        font-size: 12px;
+        line-height: 14px;
+        color: #939393;
+        font-family: $mono;
+        text-transform: uppercase;
+        margin-bottom: 4vw;
 
         @include mobile {
-          width: 85vw;
+          margin-bottom: 70px;
+        }
+      }
+
+      &-content {
+        text-align: center;
+        margin-top: 4vw;
+        font-size: 12px;
+        line-height: 14px;
+        color: #939393;
+        font-family: $mono;
+        text-transform: uppercase;
+
+        span {
+          display: block;
+        }
+
+        @include mobile {
+          margin-top: 70px;
+        }
+      }
+
+      svg {
+        overflow: visible;
+        width: 54vw;
+        fill: $c-fg;
+        margin-top: -2.2vw;
+
+        @include mobile {
+          margin-top: -20px;
+          width: calc(100vw - 40px);
 
           .gods {
             display: block;
@@ -324,19 +515,6 @@ body {
             opacity: 0;
           }
         }
-      }
-    }
-
-    &-title {
-      font-size: $title;
-      font-family: $h1;
-      line-height: $title;
-
-      opacity: 0;
-
-      @include mobile {
-        font-size: 50vw;
-        line-height: 50vw;
       }
     }
 
@@ -350,7 +528,9 @@ body {
         color: $c-fg;
         width: 130px;
         left: 50px;
-        top: 150px;
+        top: 0vw;
+        bottom: 150px;
+        display: none;
       }
       &::before {
         position: absolute;
@@ -418,22 +598,25 @@ body {
     height: 120vh;
 
     @include mobile {
-      height: 670px;
+      height: 80vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
     }
 
     &-title {
-      position: absolute;
+      position: relative;
       font-size: $title;
       font-family: $h1;
       line-height: $title;
-      left: 17.34vw;
-      top: 16vw;
+      margin-left: 17.34vw;
+      padding-top: 11vw;
 
       @include mobile {
-        top: 150px;
-        left: 50px;
-        font-size: 24vw;
-        line-height: 24vw;
+        margin-left: 20px;
+        font-size: 25vw;
+        line-height: 25vw;
       }
 
       span {
@@ -443,40 +626,40 @@ body {
       .second {
         margin-left: 14vw;
         @include mobile {
-          margin-left: 70px;
+          margin-left: 50px;
         }
       }
       .third {
         display: block;
         margin-left: 9.5vw;
         @include mobile {
-          margin-left: 30px;
+          display: block;
+          float: right;
+          margin-left: 0px;
+          margin-right: 20px;
         }
       }
     }
 
-    .protagonist01 {
-      color: #39A289;
-      right: 29vw;
-      bottom: 14.5vw;
-      @include mobile {
-        right: 50px;
-        bottom: 50px;
-      }
-      span {
-        display: block;
-      }
-    }
-
-    .protagonist02 {
-      width: 230px;
-      left: 13vw;
-      bottom: -3vw;
+    &-content {
+      clear: both;
+      position: relative;
+      font-size: 12px;
+      line-height: 14px;
+      color: #939393;
+      font-family: $mono;
+      text-transform: uppercase;
+      width: 250px;
+      margin-left: 30vw;
+      margin-top: 11vw;
 
       @include mobile {
-        left: 50px;
-        bottom: 150px;
-        width: 180px;
+        width: calc(100vw - 80px);
+        margin-left: 0;
+        font-size: 12px;
+        line-height: 16px;
+        text-align: center;
+        margin-top: 60px;
       }
 
       &::before {
@@ -487,6 +670,25 @@ body {
         background-color: white; 
         top: -2vw;
         left: 0;
+        opacity: 0;
+
+        @include mobile {
+          left: calc(50% - 3px);
+          top: -20px;
+        }
+      }
+    }
+
+    .protagonist01 {
+      color: #39A289;
+      left: 25vw;
+      top: 26.5vw;
+      @include mobile {
+        right: 50px;
+        bottom: 50px;
+      }
+      span {
+        display: block;
       }
     }
   }
@@ -497,27 +699,36 @@ body {
     height: 120vh;
 
     @include mobile {
-      height: 500px;
+      height: 80vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
     }
 
     &-title {
-      position: absolute;
+      width: 100%;
+      position: relative;
       font-size: $title;
       font-family: $h1;
       line-height: $title;
       text-align: right;
       right: 8vw;
-      top: 16vw;
+      padding-top: 11vw;
+
+      @include mobile {
+        right: 0vw;
+        padding-top: 0vw;
+      }
 
       .first {
-        display: inline-block;
+        display: block;
+        margin-right: 20px;
       }
 
       @include mobile {
-        top: 50px;
-        right: 50px;
-        font-size: 24vw;
-        line-height: 24vw;
+        font-size: 25vw;
+        line-height: 25vw;
       }
 
       .number {
@@ -533,7 +744,46 @@ body {
         margin-right: 5vw;
         display: block;
         @include mobile {
+          text-align: left;
           margin-right: 0px;
+          margin-left: 20px;
+        }
+      }
+    }
+
+    &-content {
+      position: relative;
+      font-size: 12px;
+      line-height: 14px;
+      color: #939393;
+      font-family: $mono;
+      text-transform: uppercase;
+      width: 250px;
+      margin-top: 11vw;
+      margin-left: 50.5vw;
+
+      @include mobile {
+        width: calc(100vw - 80px);
+        margin-left: 0px;
+        font-size: 12px;
+        line-height: 16px;
+        text-align: center;
+        margin-top: 60px;
+      }
+
+      &::before {
+        position: absolute;
+        content: '';
+        width: 6px;
+        height: 1px;
+        background-color: white; 
+        top: -2vw;
+        left: 0;
+        opacity: 0;
+
+        @include mobile {
+          left: calc(50% - 3px);
+          top: -20px;
         }
       }
     }
@@ -564,26 +814,6 @@ body {
         display: block;
       }
     }
-
-    .objective03 {
-      width: 230px;
-      bottom: -3vw;
-      right: 36vw;
-
-      @include mobile {
-        right: 50px;
-        bottom: 100px;
-      }
-      &::before {
-        position: absolute;
-        content: '';
-        width: 6px;
-        height: 1px;
-        background-color: white; 
-        top: -2vw;
-        left: 0;
-      }
-    }
   }
 
   .reality {
@@ -592,44 +822,90 @@ body {
     height: 120vh;
 
     @include mobile {
-      height: 650px;
+      height: 80vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
     }
 
     &-title {
-      position: absolute;
       font-size: $title;
       font-family: $h1;
       line-height: $title;
       text-align: left;
-      left: 8vw;
-      top: 16vw;
+      margin-left: 8vw;
+      padding-top: 11vw;
 
       @include mobile {
+        width: 100%;
         font-size: 24vw;
         line-height: 24vw;
-        top: 100px;
-        left: 50px;
+        margin-left: 0;
+        padding-top: 0;
       }
 
       .first {
         display: inline-block;
+        margin-left: 20px;
       }
 
       .second {
         margin-left: 27vw;
         @include mobile {
-          margin-left: 100px;
+          float: right;
+          margin-left: 0px;
+          margin-right: 20px;
         }
       }
 
       .third {
         margin-left: 9.5vw;
         @include mobile {
-          margin-left: 50px;
+          margin-left: 75px;
         }
         display: block;
       }
     }
+
+    &-content {
+      position: relative;
+      font-size: 12px;
+      line-height: 14px;
+      color: #939393;
+      font-family: $mono;
+      text-transform: uppercase;
+      width: 250px;
+      margin-top: 11vw;
+      margin-left: 60.5vw;
+
+      @include mobile {
+        width: calc(100vw - 80px);
+        margin-left: 00px;
+        font-size: 12px;
+        line-height: 18px;
+        text-align: center;
+        margin-top: 60px;
+        margin-left: 0;
+      }
+
+      &::before {
+        position: absolute;
+        content: '';
+        width: 6px;
+        height: 1px;
+        background-color: white; 
+        top: -2vw;
+        left: 0;
+        opacity: 0;
+
+        @include mobile {
+          left: calc(50% - 3px);
+          top: -20px;
+        }
+      }
+    }
+
     .reality01 {
       color: #39A289;
       top: 21vw;
@@ -642,35 +918,23 @@ body {
         display: block;
       }
     }
-    .reality02 {
-      width: 340px;
-      right: 17vw;
-      bottom: -3vw;
-
-      @include mobile {
-        width: 280px;
-        right: 50px;
-        bottom: 75px;
-      }
-      &::before {
-        position: absolute;
-        content: '';
-        width: 6px;
-        height: 1px;
-        background-color: white; 
-        top: -2vw;
-        left: 0;
-      }
-    }
   }
 
   .simulation {
     width: 100%;
     position: relative;
     height: 120vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     @include mobile {
-      height: 600px;
+      height: 80vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
     }
 
     &-title {
@@ -680,7 +944,7 @@ body {
       font-size: $title;
       font-family: $h1;
       line-height: $title;
-      padding-top: 12vw;
+      padding-top: 11vw;
       text-align: center;
 
       @include mobile {
@@ -706,16 +970,26 @@ body {
         }
       }
     }
-    .simulation01 {
-      width: 340px;
-      bottom: -3vw;
-      left: 26vw;
+
+    &-content {
+      position: relative;
+      text-align: center;
+      font-size: 12px;
+      line-height: 14px;
+      color: #939393;
+      font-family: $mono;
+      text-transform: uppercase;
+      width: 465px;
+      margin-top: 11vw;
 
       @include mobile {
-        width: 230px;
-        left: 50px;
-        bottom: 50px;
+        width: calc(100vw - 80px);
+        font-size: 12px;
+        line-height: 16px;
+        text-align: center;
+        margin-top: 60px;
       }
+
       &::before {
         position: absolute;
         content: '';
@@ -723,10 +997,101 @@ body {
         height: 1px;
         background-color: white; 
         top: -2vw;
-        left: 0;
+        left: calc(50% - 3px);
+        opacity: 0;
+
+        @include mobile {
+          top: -20px;
+        }
+
       }
     }
   }
+
+  .album {
+    width: 100%;
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @include mobile {
+      height: 80vh;
+    }
+
+    &-content {
+      text-align: center;
+      margin-top: 4.6875vw;
+      font-size: 12px;
+      line-height: 14px;
+      color: #939393;
+      font-family: $mono;
+      text-transform: uppercase;
+
+      .last {
+        margin-top: 1em;
+      }
+
+      span {
+        display: block;
+        text-align: center;
+      }
+    }
+
+    &-cover {
+      position: relative;
+      width: 470px;
+      height: 470px;
+
+      @include mobile {
+        width: 250px;
+        height: 250px;
+      }
+      svg {
+        display: block;
+        position: absolute;
+        left: 0;
+        width: 470px;
+        height: 470px;
+
+        @include mobile {
+          width: 250px;
+          height: 250px;
+        }
+
+        .rectangle, .circle {
+          transform-origin: center;
+        }
+      }
+
+      .img-wrapper {
+        position: absolute;
+        transform: rotate(13deg);
+        margin-left: 70px;
+        margin-top: 70px;      
+        width: 330px;
+        height: 330px;
+
+        @include mobile {
+          width: 176px;
+          height: 176px;
+          margin-top: 37px;
+          margin-left: 37px;
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+
+  /* PRODUCT PAGE */
+
 
   .products {
     width: 100%;
@@ -735,6 +1100,7 @@ body {
     font-size: $main;
     color: #939393;
     text-transform: uppercase;
+    padding-bottom: 10vw;
 
     @include mobile {
       display: flex;
@@ -839,9 +1205,9 @@ body {
       &-img {
         width: 32vw;
         height: 32vw;
-        border-radius: 10px;
         overflow: hidden;
         margin-bottom: 20px;
+        border: 1px solid #2B2C45;
 
         @include mobile {
           width: 80vw;
@@ -858,6 +1224,59 @@ body {
       }
     }
   }
+
+  /* SEE PAGE */
+
+  .see-content {
+    width: 100%;
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &-part01 {
+      width: 40vw;
+      height: 50vw;
+      margin-left: 30vw;
+      
+      @include mobile {
+        width: 80vw;
+        height: 70vh;
+        margin-left: 10vw;
+      }
+    }
+
+    &-part02 {
+      width: 30vw;
+      height: 40vw;
+      margin-left: 15vw;
+      margin-top: -4vw;
+
+      @include mobile {
+        width: 80vw;
+        height: 70vh;
+        margin-left: 10vw;
+        margin-top: 50px;
+      }
+    }
+
+    &-part03 {
+      width: 30vw;
+      height: 50vw;
+      margin-left: 65vw;
+      margin-top: -4vw;
+
+      @include mobile {
+        width: 80vw;
+        height: 70vh;
+        margin-left: 10vw;
+        margin-top: 50px;
+      }
+    }
+  }
+
   .see-video {
     width: 100%;
     height: 100vh;
@@ -866,6 +1285,7 @@ body {
     align-items: center;
 
     iframe {
+      touch-action: none !important;
       width: 80vw;
       height: 80vh;
       border-radius: 10px;
@@ -879,12 +1299,13 @@ body {
     width: 100vw;
     height: 100vh;
     background-color: $c-bg;
-    z-index: 1000;
+    z-index: 10010;
     cursor: wait;
   }
 }
 
 /*! locomotive-scroll v4.1.1 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+
 html.has-scroll-smooth {
   overflow: hidden; }
 

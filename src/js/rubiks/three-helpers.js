@@ -11,6 +11,8 @@ export function init (selector, opt) {
   const renderer = new THREE.WebGLRenderer({ canvas: c, antialias: true, alpha: opt.alpha })
   const controls = new OrbitControls(camera, renderer.domElement)
 
+  const target = new THREE.Vector3( 0, 4, 0 )
+
   renderer.setSize(window.innerWidth, window.innerHeight)
   // document.querySelector('main').appendChild(renderer.domElement)
 

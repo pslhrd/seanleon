@@ -6,6 +6,7 @@ import { startRubiks } from './js/rubiks/rubiks'
 import { startCubes } from './js/rubiks/randomCubes'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import state from './state'
+import SplitText from './SplitText'
 
 gsap.registerPlugin(ScrollToPlugin)
 gsap.registerPlugin(ScrollTrigger)
@@ -36,6 +37,8 @@ if (isMobile.any() === null) {
 } else {
   console.log(isMobile.any())
 }
+
+let videos;
 
 function smooth (container) {
   if (state.locoScroll) state.locoScroll.destroy()
@@ -72,7 +75,7 @@ function homeLaunch () {
   gsap.set('.algo', { opacity: 0, y: '-20%' })
   gsap.set('.hero .data', { opacity: 0 })
   gsap.set('.hero01', { x: '10%' })
-  gsap.set('.hero03', { x: '-50%' })
+  gsap.set('.title-wrapper-content span, .title-wrapper-infos span', { opacity: 0 })
   gsap.set('header .logo, ul li a', { opacity: 0 })
 
   tl
@@ -82,28 +85,44 @@ function homeLaunch () {
     .to('.gods', { x: '0%', duration: 1.5, ease: 'power4.out' })
     .to('.algo', { opacity: 1, duration: 0.01 }, '-=1.4')
     .to('.algo', { y: '0%', duration: 1.4, ease: 'power4.out' }, '-=1.4')
+    .to('.title-wrapper-content span, .title-wrapper-infos span', {opacity: 1, duration: 0.01, stagger: 0.1, ease: 'power4.out'}, '-=0.8')
     .to('.hero .data', { opacity: 1, duration: 0.1, stagger: 0.075 }, '-=1')
     .to('.hero01', { x: '0%', duration: 1.2, ease: 'power4.out' }, '-=1')
-    .to('.hero03', { x: '0%', duration: 1.2, ease: 'power4.out' }, '-=1')
 }
 
 function touchLaunch (cubes) {
-  const tl = gsap.timeline()
-  gsap.set('.hero-title', { opacity: 0, x: '-10%' })
-  gsap.set('.hero03', { x: '50%' })
-  gsap.set('.hero .data', { opacity: 0 })
-  gsap.set('header .logo, ul li a', { opacity: 0 })
 
-  tl
+  const words = new SplitText(".content-page-title", {type:"words", wordsClass:"words"})
+  const lines = new SplitText(".content-page-text", {type:"lines", linesClass:"lines"})
+
+  const tl2 = gsap.timeline()
+  gsap.set('.words', { opacity: 0, y: '80%' })
+  gsap.set('.lines', { opacity: 0})
+  gsap.set('header .logo, ul li a', { opacity: 0 })
+  gsap.set('.appear', { opacity:0, y:'20%' })
+
+  tl2
     .add(() => startCubes(cubes))
-    .to('header .logo, ul li a', { opacity: 1, stagger: 0.1, duration: 0.1 }, '+=0.6')
-    .to('.hero-title', { opacity: 1, duration: 0.01 })
-    .to('.hero-title', { x: '0%', duration: 1.5, ease: 'power4.out' })
-    .to('.hero .data', { opacity: 1, duration: 0.1, stagger: 0.075 }, '-=1.4')
-    .to('.hero03', { x: '0%', duration: 1.2, ease: 'power4.out' }, '-=1.4')
+    .to('header .logo, ul li a', { opacity: 1, stagger: 0.1, duration: 0.1 })
+    .to('.words', { opacity: 1, y: '0%', duration:1.3, ease:'power4.out', stagger:0.075}, '-=0.2')
+    .to('.content-page-text .lines', { opacity: 1, duration: 0.1, stagger: 0.1}, '-=1.1')
+    .to('.appear', { opacity: 1, y: '0%', duration:1.3, ease:'power4.out'}, '-=1')
+}
+
+function seeScroll() {
+  state.locoScroll.on('call', function (event, element, i) {
+    if (event === 'video') {
+      let video = i.el.querySelector('video')
+      video.play()
+    }
+  })
 }
 
 function homeScroll () {
+
+  const splitLines = new SplitText(".protagonist-content, .objective-content, .reality-content, .simulation-content", {type:"lines", linesClass:"lines"})
+  gsap.set('.lines', { opacity: 0 })
+
   gsap.set('.protagonist .first', { opacity: 0, y: '15%' })
   gsap.set('.protagonist .second', { opacity: 0, x: '10%' })
   gsap.set('.protagonist .third', { opacity: 0, x: '-5%' })
@@ -118,6 +137,7 @@ function homeScroll () {
 
   gsap.set('.simulation .first', { opacity: 0, x: '-10%' })
   gsap.set('.simulation .second', { opacity: 0, x: '10%' })
+  gsap.set('.simulation .mono', { opacity: 0 })
 
   state.locoScroll.on('call', function (event, element, i) {
     if (event === 'protagonist') {
@@ -155,30 +175,55 @@ function homeScroll () {
     if (event === 'simulation') {
       const tl = gsap.timeline()
       tl
-        .to('.simulation .first', { opacity: 1, duration: 0.1 })
-        .to('.simulation .first', { x: '0%', duration: 1.2, ease: 'power4.out' })
+        .to('.simulation .mono', { opacity: 1, stagger:0.4, duration:0.1})
+        .to('.simulation .first', { opacity: 1, duration: 0.1 }, '-=0.4')
+        .to('.simulation .first', { x: '0%', duration: 1.2, ease: 'power4.out' }, '-=1')
         .to('.simulation .second', { opacity: 1, duration: 0.1 }, '-=1.1')
         .to('.simulation .second', { x: '0%', duration: 1.2, ease: 'power4.out' }, '-=1.1')
     }
 
     if (event === 'appear') {
-      const text = i.el.querySelectorAll('span')
-      gsap.to(text, { y: '0%', opacity: 1, duration: 1.3, stagger: 0.1, ease: 'power3.out' })
+      i.el.classList.add('opacity')
+      const text = i.el.querySelectorAll('.lines')
+      gsap.to(text, { opacity: 1, duration: 0.01, stagger: 0.2, ease: 'power3.out' })
     }
 
     if (event === 'opacity') {
       gsap.to(i.el, { opacity: 1, duration: 1.3, y: 0, ease: 'power4.out' })
     }
-    // if (event === 'video') {
-    //   i.el.play()
-    //   gsap.to(i.el, {scale:1, opacity:1, duration:1.5, ease:'power3.out'})
-    // }
-
-    // if (event === 'text') {
-    //   const text = i.el.querySelectorAll('.lines')
-    //   gsap.to(text, {y:'0%', opacity:1, duration:1.5, stagger:0.1, ease:'power3.out'})
-    // }
   })
+
+  const albumTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '.album',
+      scroller: '[data-scroll-container]',
+      scrub: 1,
+      start: '-=60%',
+      end: '+=90%',
+    }
+  })
+
+  const introTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".introduction",
+      scroller: '[data-scroll-container]',
+      scrub: true,
+      start: "top top",
+      end: "+=100%",
+    } 
+  })
+
+  introTl
+  .to('.fixed-wrapper-content span', {opacity:1, stagger:0.1, y:0, duration:1, ease:'power3.out'})
+  .to('.fixed-wrapper-content span', {opacity:0, stagger:0.1, y:-40, duration:1, ease:'power3.in'})
+
+
+  albumTl
+  .from('.rectangle', { rotationX: 6, scale:0.7, autoAlpha:0, duration:1, ease:'power3.inOut' })
+  .from('.circle', {scale:0.7, autoAlpha:0, duration:1, ease:'power3.inOut' }, '-=0.8')
+  .from('.album-cover .img-wrapper', { rotation: -10, scale:0.7, autoAlpha:0, duration:1.6, ease:'power4.out' }, '-=0.5')
+  .from('.album-content span', { y:20, autoAlpha:0,duration:1, ease:'power3.out', stagger:0.1 }, '-=0.6')
+  
 }
 
 barba.init({
@@ -198,13 +243,13 @@ barba.init({
         gsap.set(window, { scrollTo: 0 })
       }
       document.querySelector('.transition').style.transformOrigin = 'bottom'
-      return gsap.to(data.current.container, { opacity: 0, duration: 1, ease: 'power3.inOut' })
+      return gsap.to(data.current.container, { opacity: 0, duration: 0.6, ease: 'power3.inOut' })
     },
     enter (data) {
       data.current.container.style.display = 'none'
       document.querySelector('.transition').style.transformOrigin = 'top'
       state.locoScroll.update()
-      return gsap.from(data.next.container, { opacity: 0, duration: 0.5, ease: 'power3.inOut' })
+      return gsap.from(data.next.container, { opacity: 0, duration: 1, ease: 'power3.inOut', delay: 0.5 })
     }
   }],
   views: [{
@@ -219,7 +264,6 @@ barba.init({
       }
     },
     afterEnter ({ next }) {
-      smooth(next.container)
       homeScroll()
     }
   }, {
@@ -242,7 +286,6 @@ barba.init({
     },
     afterEnter ({ next }) {
       // smooth(next.container)
-      // homeScroll()
     }
   }, {
     namespace: 'see',
@@ -266,7 +309,7 @@ barba.init({
     },
     afterEnter ({ next }) {
       // smooth(next.container)
-      // homeScroll()
+      seeScroll()
     }
   }]
 })

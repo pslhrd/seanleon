@@ -58,9 +58,9 @@ export function startCubes (positions) {
 
     composers.push(fx({ renderer, scene, camera }).composer)
 
-    camera.position.z = 18
-    camera.position.x = 16
-    camera.position.y = 60
+    camera.position.z = 20
+    camera.position.x = 40
+    camera.position.y = 40
 
     scene.fog = new Fog(0x10122C, 8, 20)
 
@@ -81,6 +81,7 @@ export function startCubes (positions) {
     scene.add(cubes)
 
     gsap.to(camera.position, { x: 8, y: 8, z: 8, ease: 'expo.out', duration: 1.6 })
+    gsap.from(cubes.rotation, { y: -2, z: 2, x: -2, ease: 'expo.out', duration: 3 })
     // gsap.from(cubes.rotation, { x: 3, ease: 'expo.inOut', duration: 3 })
 
     const cubeExplosion = gsap.timeline({

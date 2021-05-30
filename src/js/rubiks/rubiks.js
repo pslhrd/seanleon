@@ -1,3 +1,4 @@
+import * as THREE from 'three'
 import { init } from './three-helpers'
 import raf from '../utils/raf'
 import fx from './effects'
@@ -54,7 +55,7 @@ export function startRubiks () {
   // INIT
   const inits = [
     init('.gl-back', { alpha: false, from: 11, to: 100 }),
-    init('.gl-front', { alpha: true, from: 0.1, to: 11.1 })
+    init('.gl-front', { alpha: true, from: 0.01, to: 11.01 })
   ]
 
   inits.forEach(({ renderer, camera, scene, controls }, i) => {
@@ -69,10 +70,10 @@ export function startRubiks () {
     camera.position.z = 25
     camera.position.x = 25
     camera.position.y = 25
-
+    
     scene.fog = new Fog(0x10122C, 8, 16)
 
-    const particles = createParticleSystem(400)
+    const particles = createParticleSystem(500)
 
     // SKETCH
     scene.add(light1.clone(), light2.clone(), amb.clone())
@@ -85,6 +86,9 @@ export function startRubiks () {
 
     gsap.to(camera.position, { x: 8, y: 8, z: 8, ease: 'expo.out', duration: 3 })
     gsap.from(rubiks.rotation, { y: -16, z: 4, x: 4, ease: 'expo.out', duration: 3 })
+    // gsap.fromTo(controls.target,{ y : 0 }, { y : 4, duration: 1, ease:'power3.inOut' }, 2)
+    // gsap.to(rubiks.position, { y: -4, duration: 2, ease:'expo.inOut' }, 2)
+    // gsap.to(camera.position, { y: 4, duration: 2, ease:'expo.inOut' }, 2)
 
     // cubes moves every 3.5 seconds
     let currentAnim
