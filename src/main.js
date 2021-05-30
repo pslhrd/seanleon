@@ -185,7 +185,7 @@ function homeScroll () {
     if (event === 'appear') {
       i.el.classList.add('opacity')
       const text = i.el.querySelectorAll('.lines')
-      gsap.to(text, { opacity: 1, duration: 0.01, stagger: 0.2, ease: 'power3.out' })
+      gsap.to(text, { opacity: 1, duration: 0.01, stagger: 0.1, ease: 'power3.out' })
     }
 
     if (event === 'opacity') {
