@@ -1,8 +1,10 @@
 # GOD'S ALGORITHM
 
+Promotional website for Sean Leon, God's Algorithm [V1.0]
+
 ## Usage
 
-https://pslhrd.github.io/seanleon/
+https://godsalgorithm.world/
 
 ## Commands
 
