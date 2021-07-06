@@ -9,7 +9,7 @@ import { randomGenerator } from '../utils/helpers'
 import createParticleSystem from './particleSystem'
 import normalMapTexture from '../../assets/normalmap.jpeg'
 import albumTexture from '../../assets/images/album.jpg'
-import aquariusTexture from '../../assets/images/aquarius.jpeg'
+import aquariusTexture from '../../assets/images/aquarius.jpg'
 import logoTexture from '../../assets/images/wordmark.png'
 import artworkTexture from '../../assets/images/artwork.jpg'
 import aquariusSong from '../../assets/sounds/aquarius.mp3'
@@ -33,11 +33,11 @@ export function startMuseum(canvas) {
 
     const loader = new TextureLoader(manager)
     const normalMap = loader.load(normalMapTexture)
-    const planeTexture = loader.load(albumTexture)
-    const planeTexture2 = loader.load(aquariusTexture)
-    const planeTexture3 = loader.load(logoTexture)
-    const planeTexture4 = loader.load(artworkTexture)
-    
+    // const planeTexture = loader.load(albumTexture)
+    const planeTexture = loader.load(aquariusTexture)
+    // const planeTexture3 = loader.load(logoTexture)
+    // const planeTexture4 = loader.load(artworkTexture)
+
 
     // AUDIO
     const listener = new THREE.AudioListener()
@@ -84,7 +84,7 @@ export function startMuseum(canvas) {
 
 
     // CUBES
-    const cubeNumber = 14
+    const cubeNumber = 18
     const cubes = new Object3D()
 
     for (let createCubes = 0; createCubes < cubeNumber; createCubes++) {
@@ -109,7 +109,7 @@ export function startMuseum(canvas) {
 
 
     // PLANE
-    const planeGeo = new THREE.PlaneGeometry(4,4)
+    const planeGeo = new THREE.PlaneGeometry(5,5)
 
     const album = new THREE.MeshBasicMaterial({map: planeTexture})
     const plane_GA = new THREE.Mesh(planeGeo, album)
@@ -122,37 +122,37 @@ export function startMuseum(canvas) {
     targetList.push(plane_GA)
 
 
-    const aquarius = new THREE.MeshBasicMaterial({map: planeTexture2})
-    const plane_AQ = new THREE.Mesh(planeGeo, aquarius)
-    plane_AQ.material.side = THREE.DoubleSide
-    plane_AQ.position.y = 0
-    plane_AQ.position.z = -12
-    plane_AQ.rotation.x = 0
-    scene.add(plane_AQ)
-    targetList.push(plane_AQ)
+    // const aquarius = new THREE.MeshBasicMaterial({map: planeTexture2})
+    // const plane_AQ = new THREE.Mesh(planeGeo, aquarius)
+    // plane_AQ.material.side = THREE.DoubleSide
+    // plane_AQ.position.y = 0
+    // plane_AQ.position.z = -12
+    // plane_AQ.rotation.x = 0
+    // scene.add(plane_AQ)
+    // targetList.push(plane_AQ)
 
-    const planeGeo2 = new THREE.PlaneGeometry(14,4)
+    // const planeGeo2 = new THREE.PlaneGeometry(14,4)
 
-    const logo = new THREE.MeshBasicMaterial({map: planeTexture3, transparent: true})
-    const plane_LG = new THREE.Mesh(planeGeo2, logo)
-    plane_LG.material.side = THREE.DoubleSide
-    plane_LG.position.y = -12
-    plane_LG.position.z = 0
-    plane_LG.rotation.x = Math.PI / 2
-    plane_LG.rotation.y = Math.PI
-    scene.add(plane_LG)
-    targetList.push(plane_LG)
+    // const logo = new THREE.MeshBasicMaterial({map: planeTexture3, transparent: true})
+    // const plane_LG = new THREE.Mesh(planeGeo2, logo)
+    // plane_LG.material.side = THREE.DoubleSide
+    // plane_LG.position.y = -12
+    // plane_LG.position.z = 0
+    // plane_LG.rotation.x = Math.PI / 2
+    // plane_LG.rotation.y = Math.PI
+    // scene.add(plane_LG)
+    // targetList.push(plane_LG)
 
 
 
-    const artwork = new THREE.MeshBasicMaterial({map: planeTexture4})
-    const plane_AT = new THREE.Mesh(planeGeo, artwork)
-    plane_AT.material.side = THREE.DoubleSide
-    plane_AT.position.y = 12
-    plane_AT.position.z = 0
-    plane_AT.rotation.x = -Math.PI / 2
-    scene.add(plane_AT)
-    targetList.push(plane_AT)
+    // const artwork = new THREE.MeshBasicMaterial({map: planeTexture4})
+    // const plane_AT = new THREE.Mesh(planeGeo, artwork)
+    // plane_AT.material.side = THREE.DoubleSide
+    // plane_AT.position.y = 12
+    // plane_AT.position.z = 0
+    // plane_AT.rotation.x = -Math.PI / 2
+    // scene.add(plane_AT)
+    // targetList.push(plane_AT)
 
 
     // LIGHTS
@@ -171,8 +171,8 @@ export function startMuseum(canvas) {
 
     // CAMERA
     camera.position.z = -10
-    camera.position.x = -4
-    camera.position.y = -3
+    camera.position.x = 0
+    camera.position.y = 0
     scene.add(camera)
     camera.add(listener)
 
