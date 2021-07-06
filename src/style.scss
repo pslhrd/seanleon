@@ -213,15 +213,29 @@ body {
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding-top: 7.8125vw;
+      padding-top: 6vw;
+
+      .pupil {
+        margin-top: 40px;
+        width: 100%;
+        text-align: center;
+        display: block;
+        opacity: .3;
+      }
 
       @include mobile {
         padding-top: 60px;
       }
 
       &-title {
-        font-size: 6.25vw;
         font-family: $h1;
+        width: 180px;
+        height: 180px;
+
+        svg {
+          width: 180px;
+          height: 180px;
+        }
 
         @include mobile {        
           font-size: 14vw;
@@ -247,7 +261,6 @@ body {
         position: relative;
         margin-top: 3vw;
         padding-bottom: 6vw;
-        height: 60px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -256,7 +269,6 @@ body {
         @include mobile {
           margin-top: 30px;
           padding-bottom: 50px;
-          height: 100px;
         }
       }
     }
@@ -302,15 +314,6 @@ body {
       @include mobile {
         display: none;
         left: 20px;
-      }
-    }
-
-    .pupil {
-      position: absolute;
-      left: 79vw;
-      top: 0;
-      @include mobile {
-        display: none;
       }
     }
 
