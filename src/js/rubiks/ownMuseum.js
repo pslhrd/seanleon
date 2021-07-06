@@ -220,7 +220,6 @@ export function startMuseum(canvas) {
     }
 
     function onDocumentTouchEnd(event) {
-        event.preventDefault()
         mouse.x = (event.changedTouches[0].clientX / window.innerWidth) * 2 - 1
         mouse.y = -(event.changedTouches[0].clientY / window.innerHeight) * 2 + 1
 
