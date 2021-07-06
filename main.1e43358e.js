@@ -54466,7 +54466,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function init(selector, opt) {
   var c = document.querySelector(selector);
   if (_state.default.nextContainer) c = _state.default.nextContainer.querySelector(selector);
-  console.log(c);
   var scene = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, opt.from, opt.to);
   var renderer = new THREE.WebGLRenderer({
@@ -56375,13 +56374,21 @@ function composer(_ref) {
   composer.addPass(new _RenderPass.RenderPass(scene, camera)); // const bloomFx = new UnrealBloomPass(new Vector2(window.innerWidth * 2, window.innerHeight * 2), 0.8, 0.01, 0)
   // composer.addPass(bloomFx)
 
-  var filmPass = new _FilmPass.FilmPass(0.2, // noise intensity
+  var filmPass = new _FilmPass.FilmPass(0.4, // noise intensity
   0, // scanline intensity
   648, // scanline count
   false);
   filmPass.renderToScreen = true;
-  composer.addPass(filmPass);
+  var uA = navigator.userAgent;
+  var vendor = navigator.vendor;
+
+  if (/Safari/i.test(uA) && /Apple Computer/.test(vendor) && !/Mobi|Android/i.test(uA)) {} else {
+    composer.addPass(filmPass);
+  } // 
+
+
   var fxaa = new _ShaderPass.ShaderPass(_FXAAShader.FXAAShader);
+  fxaa.renderToScreen = true;
   composer.addPass(fxaa);
   return {
     composer: composer
@@ -56507,6 +56514,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.startRubiks = startRubiks;
 
+var THREE = _interopRequireWildcard(require("three"));
+
 var _threeHelpers = require("./three-helpers");
 
 var _raf = _interopRequireDefault(require("../utils/raf"));
@@ -56514,8 +56523,6 @@ var _raf = _interopRequireDefault(require("../utils/raf"));
 var _effects = _interopRequireDefault(require("./effects"));
 
 var _helpers = require("../utils/helpers");
-
-var _three = require("three");
 
 var _rubiksHelpers = require("./rubiks-helpers");
 
@@ -56529,38 +56536,42 @@ var _particleSystem = _interopRequireDefault(require("./particleSystem"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function startRubiks() {
-  var loader = new _three.TextureLoader(); // const seed = Math.round(Math.random() * 999999999)
+  var loader = new THREE.TextureLoader(); // const seed = Math.round(Math.random() * 999999999)
 
   var Random = (0, _helpers.randomGenerator)(17846364); // seed qui marche bien (le random sera toujours le même au refresh)
 
-  var light1 = new _three.PointLight(0xffffff, 1.5, 0, 1);
-  var light2 = new _three.PointLight(0xffffff, 2, 0, 1);
-  var amb = new _three.AmbientLight(0xffffff, 0.4);
+  var light1 = new THREE.PointLight(0xffffff, 1.5, 0, 1);
+  var light2 = new THREE.PointLight(0xffffff, 2, 0, 1);
+  var amb = new THREE.AmbientLight(0xffffff, 0.4);
   light1.position.set(10, 20, 15);
   light2.position.set(-20, 40, 30);
   var colors = [0x2A3493, 0x329B8A, 0x483090, 0x2E6DA0, 0x4A589F]; // creating rubiks cube
 
-  var originalRubiks = new _three.Object3D();
+  var originalRubiks = new THREE.Object3D();
 
   for (var x = 0; x < 3; x++) {
     for (var y = 0; y < 3; y++) {
       for (var z = 0; z < 3; z++) {
-        var wrapper = new _three.Object3D();
+        var wrapper = new THREE.Object3D();
         var color = colors[Math.round(Random() * (colors.length - 1))];
         var normalMap = loader.load(_normalmap.default);
-        normalMap.wrapS = _three.CubeReflectionMapping;
-        normalMap.wrapT = _three.CubeReflectionMapping;
-        var geometry = (0, _rubiksHelpers.createBoxWithRoundedEdges)(0.98, 0.98, 0.98, 0.07, 4);
-        var material = new _three.MeshPhysicalMaterial({
+        normalMap.wrapS = THREE.CubeReflectionMapping;
+        normalMap.wrapT = THREE.CubeReflectionMapping;
+        var geometry = (0, _rubiksHelpers.createBoxWithRoundedEdges)(0.98, 0.98, 0.98, 0.07, 2);
+        var material = new THREE.MeshPhysicalMaterial({
           color: color,
           metalness: 0.3,
           roughness: 0.2,
           normalMap: normalMap
         });
-        var mesh = new _three.Mesh(geometry, material);
+        var mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(x - 1, y - 1, z - 1);
         wrapper.add(mesh);
         originalRubiks.add(wrapper);
@@ -56568,16 +56579,22 @@ function startRubiks() {
     }
   }
 
-  var composers = []; // INIT
+  var composers = [];
+  var inits = []; // INIT
 
-  var inits = [(0, _threeHelpers.init)('.gl-back', {
+  var uA = navigator.userAgent;
+  var vendor = navigator.vendor;
+
+  if (/Safari/i.test(uA) && /Apple Computer/.test(vendor) && !/Mobi|Android/i.test(uA)) {}
+
+  inits = [(0, _threeHelpers.init)('.gl-back', {
     alpha: false,
     from: 11,
     to: 100
   }), (0, _threeHelpers.init)('.gl-front', {
     alpha: true,
-    from: 0.1,
-    to: 11.1
+    from: 0.01,
+    to: 11.01
   })];
   inits.forEach(function (_ref, i) {
     var renderer = _ref.renderer,
@@ -56588,7 +56605,7 @@ function startRubiks() {
     var random = (0, _helpers.randomGenerator)(17846364); // seed qui marche bien (le random sera toujours le même au refresh)
 
     renderer.pixelRatio = 2;
-    if (i === 0) scene.background = new _three.Color(0x10122C);
+    if (i === 0) scene.background = new THREE.Color(0x10122C);
     composers.push((0, _effects.default)({
       renderer: renderer,
       scene: scene,
@@ -56597,8 +56614,8 @@ function startRubiks() {
     camera.position.z = 25;
     camera.position.x = 25;
     camera.position.y = 25;
-    scene.fog = new _three.Fog(0x10122C, 8, 16);
-    var particles = (0, _particleSystem.default)(400); // SKETCH
+    scene.fog = new THREE.Fog(0x10122C, 8, 16);
+    var particles = (0, _particleSystem.default)(500); // SKETCH
 
     scene.add(light1.clone(), light2.clone(), amb.clone());
     scene.add(particles);
@@ -56622,7 +56639,10 @@ function startRubiks() {
       x: 4,
       ease: 'expo.out',
       duration: 3
-    }); // cubes moves every 3.5 seconds
+    }); // gsap.fromTo(controls.target,{ y : 0 }, { y : 4, duration: 1, ease:'power3.inOut' }, 2)
+    // gsap.to(rubiks.position, { y: -4, duration: 2, ease:'expo.inOut' }, 2)
+    // gsap.to(camera.position, { y: 4, duration: 2, ease:'expo.inOut' }, 2)
+    // cubes moves every 3.5 seconds
 
 
     var currentAnim;
@@ -56708,7 +56728,7 @@ function startRubiks() {
     });
   });
 }
-},{"./three-helpers":"src/js/rubiks/three-helpers.js","../utils/raf":"src/js/utils/raf.js","./effects":"src/js/rubiks/effects.js","../utils/helpers":"src/js/utils/helpers.js","three":"node_modules/three/build/three.module.js","./rubiks-helpers":"src/js/rubiks/rubiks-helpers.js","gsap/all":"node_modules/gsap/all.js","../../assets/normalmap.jpeg":"src/assets/normalmap.jpeg","../../state":"src/state.js","./particleSystem":"src/js/rubiks/particleSystem.js"}],"src/js/rubiks/randomCubes.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","./three-helpers":"src/js/rubiks/three-helpers.js","../utils/raf":"src/js/utils/raf.js","./effects":"src/js/rubiks/effects.js","../utils/helpers":"src/js/utils/helpers.js","./rubiks-helpers":"src/js/rubiks/rubiks-helpers.js","gsap/all":"node_modules/gsap/all.js","../../assets/normalmap.jpeg":"src/assets/normalmap.jpeg","../../state":"src/state.js","./particleSystem":"src/js/rubiks/particleSystem.js"}],"src/js/rubiks/randomCubes.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -56784,9 +56804,9 @@ function startCubes(positions) {
       scene: scene,
       camera: camera
     }).composer);
-    camera.position.z = 18;
-    camera.position.x = 16;
-    camera.position.y = 60;
+    camera.position.z = 20;
+    camera.position.x = 40;
+    camera.position.y = 40;
     scene.fog = new _three.Fog(0x10122C, 8, 20);
     var particles = (0, _particleSystem.default)(200); // SKETCH
 
@@ -56800,7 +56820,6 @@ function startCubes(positions) {
       cubes.add(cube);
     });
     scene.add(cubes);
-    console.log(cubes.children);
 
     _all.default.to(camera.position, {
       x: 8,
@@ -56808,6 +56827,14 @@ function startCubes(positions) {
       z: 8,
       ease: 'expo.out',
       duration: 1.6
+    });
+
+    _all.default.from(cubes.rotation, {
+      y: -2,
+      z: 2,
+      x: -2,
+      ease: 'expo.out',
+      duration: 3
     }); // gsap.from(cubes.rotation, { x: 3, ease: 'expo.inOut', duration: 3 })
 
 
@@ -56846,7 +56873,1009 @@ function startCubes(positions) {
     });
   });
 }
-},{"./three-helpers":"src/js/rubiks/three-helpers.js","../utils/raf":"src/js/utils/raf.js","./effects":"src/js/rubiks/effects.js","../utils/helpers":"src/js/utils/helpers.js","three":"node_modules/three/build/three.module.js","./rubiks-helpers":"src/js/rubiks/rubiks-helpers.js","gsap/all":"node_modules/gsap/all.js","../../assets/normalmap.jpeg":"src/assets/normalmap.jpeg","./particleSystem":"src/js/rubiks/particleSystem.js"}],"src/main.js":[function(require,module,exports) {
+},{"./three-helpers":"src/js/rubiks/three-helpers.js","../utils/raf":"src/js/utils/raf.js","./effects":"src/js/rubiks/effects.js","../utils/helpers":"src/js/utils/helpers.js","three":"node_modules/three/build/three.module.js","./rubiks-helpers":"src/js/rubiks/rubiks-helpers.js","gsap/all":"node_modules/gsap/all.js","../../assets/normalmap.jpeg":"src/assets/normalmap.jpeg","./particleSystem":"src/js/rubiks/particleSystem.js"}],"src/assets/images/album.jpg":[function(require,module,exports) {
+module.exports = "/album.57e4d48c.jpg";
+},{}],"src/assets/images/aquarius.jpeg":[function(require,module,exports) {
+module.exports = "/aquarius.900f22de.jpeg";
+},{}],"src/assets/images/wordmark.png":[function(require,module,exports) {
+module.exports = "/wordmark.4e76e83f.png";
+},{}],"src/assets/images/artwork.jpg":[function(require,module,exports) {
+module.exports = "/artwork.5853a084.jpg";
+},{}],"src/assets/sounds/aquarius.mp3":[function(require,module,exports) {
+module.exports = "/aquarius.92ce4f63.mp3";
+},{}],"src/js/rubiks/ownMuseum.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.startMuseum = startMuseum;
+
+var THREE = _interopRequireWildcard(require("three"));
+
+var _threeHelpers = require("./three-helpers");
+
+var _raf = _interopRequireDefault(require("../utils/raf"));
+
+var _effects = _interopRequireDefault(require("./effects"));
+
+var _OrbitControls = require("three/examples/jsm/controls/OrbitControls");
+
+var _rubiksHelpers = require("./rubiks-helpers");
+
+var _helpers = require("../utils/helpers");
+
+var _particleSystem = _interopRequireDefault(require("./particleSystem"));
+
+var _normalmap = _interopRequireDefault(require("../../assets/normalmap.jpeg"));
+
+var _album = _interopRequireDefault(require("../../assets/images/album.jpg"));
+
+var _aquarius = _interopRequireDefault(require("../../assets/images/aquarius.jpeg"));
+
+var _wordmark = _interopRequireDefault(require("../../assets/images/wordmark.png"));
+
+var _artwork = _interopRequireDefault(require("../../assets/images/artwork.jpg"));
+
+var _aquarius2 = _interopRequireDefault(require("../../assets/sounds/aquarius.mp3"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function startMuseum(canvas) {
+  function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  var inits = [(0, _threeHelpers.init)('.touch', {})]; // MANAGER
+
+  var manager = new THREE.LoadingManager();
+  var loader = new THREE.TextureLoader(manager);
+  var normalMap = loader.load(_normalmap.default);
+  var planeTexture = loader.load(_album.default);
+  var planeTexture2 = loader.load(_aquarius.default);
+  var planeTexture3 = loader.load(_wordmark.default);
+  var planeTexture4 = loader.load(_artwork.default); // AUDIO
+
+  var listener = new THREE.AudioListener();
+  var sound = new THREE.Audio(listener);
+  var audioLoader = new THREE.AudioLoader(manager);
+  audioLoader.load(_aquarius2.default, function (buffer) {
+    sound.setBuffer(buffer);
+    sound.setLoop(true);
+    sound.setVolume(0.5);
+  });
+  inits.forEach(function (_ref, i) {
+    var camera = _ref.camera,
+        renderer = _ref.renderer,
+        scene = _ref.scene,
+        controls = _ref.controls;
+    var composers = [];
+    var mouse = new THREE.Vector2();
+    var targetList = [];
+    var INTERSECTED;
+    var colors = [0x2A3493, 0x329B8A, 0x483090, 0x2E6DA0, 0x4A589F];
+    var Random = (0, _helpers.randomGenerator)(17846364); // CUBES
+
+    function buildCube(color) {
+      normalMap.wrapS = THREE.CubeReflectionMapping;
+      normalMap.wrapT = THREE.CubeReflectionMapping;
+      var geometry = (0, _rubiksHelpers.createBoxWithRoundedEdges)(0.98, 0.98, 0.98, 0.07, 2);
+      var material = new THREE.MeshPhysicalMaterial({
+        color: color,
+        metalness: 0.3,
+        roughness: 0.2,
+        normalMap: normalMap
+      });
+      return new THREE.Mesh(geometry, material);
+    } // CREATE SCENE
+
+
+    scene.background = new THREE.Color(0x10122C);
+    scene.fog = new THREE.Fog(0x10122C, 20, 30); // CUBES
+
+    var cubeNumber = 14;
+    var cubes = new THREE.Object3D();
+
+    for (var createCubes = 0; createCubes < cubeNumber; createCubes++) {
+      var cube = buildCube(colors[Math.round(Random() * (colors.length - 1))]);
+      var positions = {
+        x: getRandomInt(-16, 16),
+        y: getRandomInt(-16, 16),
+        z: getRandomInt(-16, 16),
+        rotationZ: getRandomInt(-60, 60),
+        rotationX: getRandomInt(-60, 60),
+        rotationY: getRandomInt(-60, 60)
+      };
+      cubes.add(cube);
+      cube.position.x = positions.x;
+      cube.position.z = positions.z;
+      cube.position.y = positions.y;
+      cube.rotation.z = positions.rotationZ;
+      cube.rotation.x = positions.rotationX;
+      cube.rotation.x = positions.rotationY;
+    }
+
+    scene.add(cubes); // PLANE
+
+    var planeGeo = new THREE.PlaneGeometry(4, 4);
+    var album = new THREE.MeshBasicMaterial({
+      map: planeTexture
+    });
+    var plane_GA = new THREE.Mesh(planeGeo, album);
+    plane_GA.material.side = THREE.DoubleSide;
+    plane_GA.position.y = 0;
+    plane_GA.position.z = 12;
+    plane_GA.rotation.x = 0;
+    plane_GA.userData = {
+      URL: "https://www.godsalgorithm.world/"
+    };
+    scene.add(plane_GA);
+    targetList.push(plane_GA);
+    var aquarius = new THREE.MeshBasicMaterial({
+      map: planeTexture2
+    });
+    var plane_AQ = new THREE.Mesh(planeGeo, aquarius);
+    plane_AQ.material.side = THREE.DoubleSide;
+    plane_AQ.position.y = 0;
+    plane_AQ.position.z = -12;
+    plane_AQ.rotation.x = 0;
+    scene.add(plane_AQ);
+    targetList.push(plane_AQ);
+    var planeGeo2 = new THREE.PlaneGeometry(14, 4);
+    var logo = new THREE.MeshBasicMaterial({
+      map: planeTexture3,
+      transparent: true
+    });
+    var plane_LG = new THREE.Mesh(planeGeo2, logo);
+    plane_LG.material.side = THREE.DoubleSide;
+    plane_LG.position.y = -12;
+    plane_LG.position.z = 0;
+    plane_LG.rotation.x = Math.PI / 2;
+    plane_LG.rotation.y = Math.PI;
+    scene.add(plane_LG);
+    targetList.push(plane_LG);
+    var artwork = new THREE.MeshBasicMaterial({
+      map: planeTexture4
+    });
+    var plane_AT = new THREE.Mesh(planeGeo, artwork);
+    plane_AT.material.side = THREE.DoubleSide;
+    plane_AT.position.y = 12;
+    plane_AT.position.z = 0;
+    plane_AT.rotation.x = -Math.PI / 2;
+    scene.add(plane_AT);
+    targetList.push(plane_AT); // LIGHTS
+
+    var light1 = new THREE.PointLight(0xffffff, 1.8, 0, 1);
+    var light2 = new THREE.PointLight(0xffffff, 2, 0, 1);
+    var amb = new THREE.AmbientLight(0xffffff, 0.5);
+    light1.position.set(10, 20, 15);
+    light2.position.set(-20, 40, 30);
+    scene.add(light1, light2, amb); // RENDERER
+
+    renderer.setPixelRatio = 2;
+    renderer.setSize(window.innerWidth, window.innerHeight); // CAMERA
+
+    camera.position.z = -10;
+    camera.position.x = -4;
+    camera.position.y = -3;
+    scene.add(camera);
+    camera.add(listener); // LIGHTS
+
+    var light = new THREE.AmbientLight(0x404040); // soft white light
+
+    scene.add(light); // PARTICLES
+
+    var particles = (0, _particleSystem.default)(250);
+    scene.add(particles); // CONTROLS
+
+    controls.enableZoom = false;
+    controls.enablePan = false;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.085;
+    controls.autoRotateSpeed = 0;
+    var vector;
+    var raycaster = new THREE.Raycaster();
+
+    function onDocumentMouseMove(event) {
+      mouse.x = event.clientX / window.innerWidth * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    }
+
+    document.addEventListener('mousemove', onDocumentMouseMove, false);
+
+    function onWindowResize() {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      animate();
+    }
+
+    function onDocumentMouseClick(event) {
+      raycaster.setFromCamera(vector, camera);
+      var intersects = raycaster.intersectObjects(targetList);
+
+      if (intersects.length > 0) {
+        sound.play();
+      }
+    }
+
+    function onDocumentTouchEnd(event) {
+      event.preventDefault();
+      mouse.x = event.changedTouches[0].clientX / window.innerWidth * 2 - 1;
+      mouse.y = -(event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+      var intersects = raycaster.intersectObjects(targetList);
+
+      if (intersects.length > 0) {
+        sound.play();
+      }
+    }
+
+    document.addEventListener('click', onDocumentMouseClick, false);
+    document.addEventListener('resize', onWindowResize, false);
+    document.addEventListener('touchend', onDocumentTouchEnd, false);
+    composers.push((0, _effects.default)({
+      renderer: renderer,
+      scene: scene,
+      camera: camera
+    }).composer); // ANIMATION
+
+    _raf.default.subscribe(function (time) {
+      var r = (0, _helpers.randomGenerator)(3675);
+      cubes.children.forEach(function (c) {
+        c.rotation.x = time * (r() - 0.5) / 1500;
+        c.rotation.y = time * (r() - 0.5) / 1500;
+        c.rotation.z = time * (r() - 0.5) / 1500;
+      });
+      vector = new THREE.Vector3(mouse.x, mouse.y, 1);
+      raycaster.setFromCamera(vector, camera);
+      var intersects = raycaster.intersectObjects(targetList);
+
+      if (intersects.length > 0) {
+        if (intersects[0].object != INTERSECTED) {
+          if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
+          INTERSECTED = intersects[0].object;
+          INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
+          INTERSECTED.material.color.setHex(0x99ccff);
+          renderer.domElement.style.cursor = 'pointer';
+        }
+      } else {
+        if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
+        INTERSECTED = null;
+        renderer.domElement.style.cursor = 'grab';
+      }
+
+      composers[i].render();
+    });
+  });
+}
+},{"three":"node_modules/three/build/three.module.js","./three-helpers":"src/js/rubiks/three-helpers.js","../utils/raf":"src/js/utils/raf.js","./effects":"src/js/rubiks/effects.js","three/examples/jsm/controls/OrbitControls":"node_modules/three/examples/jsm/controls/OrbitControls.js","./rubiks-helpers":"src/js/rubiks/rubiks-helpers.js","../utils/helpers":"src/js/utils/helpers.js","./particleSystem":"src/js/rubiks/particleSystem.js","../../assets/normalmap.jpeg":"src/assets/normalmap.jpeg","../../assets/images/album.jpg":"src/assets/images/album.jpg","../../assets/images/aquarius.jpeg":"src/assets/images/aquarius.jpeg","../../assets/images/wordmark.png":"src/assets/images/wordmark.png","../../assets/images/artwork.jpg":"src/assets/images/artwork.jpg","../../assets/sounds/aquarius.mp3":"src/assets/sounds/aquarius.mp3"}],"src/SplitText.js":[function(require,module,exports) {
+var global = arguments[3];
+var define;
+/*!
+ * VERSION: 0.7.0
+ * DATE: 2019-02-07
+ * UPDATES AND DOCS AT: http://greensock.com
+ *
+ * @license Copyright (c) 2008-2019, GreenSock. All rights reserved.
+ * SplitText is a Club GreenSock membership benefit; You must have a valid membership to use
+ * this code without violating the terms of use. Visit http://greensock.com/club/ to sign up or get more details.
+ * This work is subject to the software agreement that was issued with your membership.
+ * 
+ * @author: Jack Doyle, jack@greensock.com
+ */
+
+/* eslint-disable */
+var _gsScope = typeof module !== "undefined" && module.exports && typeof global !== "undefined" ? global : this || window; //helps ensure compatibility with AMD/RequireJS and CommonJS/Node
+
+
+(function (window) {
+  "use strict";
+
+  var _globals = window.GreenSockGlobals || window,
+      _namespace = function _namespace(ns) {
+    var a = ns.split("."),
+        p = _globals,
+        i;
+
+    for (i = 0; i < a.length; i++) {
+      p[a[i]] = p = p[a[i]] || {};
+    }
+
+    return p;
+  },
+      pkg = _namespace("com.greensock.utils"),
+      _getText = function _getText(e) {
+    var type = e.nodeType,
+        result = "";
+
+    if (type === 1 || type === 9 || type === 11) {
+      if (typeof e.textContent === "string") {
+        return e.textContent;
+      } else {
+        for (e = e.firstChild; e; e = e.nextSibling) {
+          result += _getText(e);
+        }
+      }
+    } else if (type === 3 || type === 4) {
+      return e.nodeValue;
+    }
+
+    return result;
+  },
+      _doc = _gsScope.document || {},
+      _computedStyleScope = typeof window !== "undefined" ? window : _doc.defaultView || {
+    getComputedStyle: function getComputedStyle() {}
+  },
+      _getComputedStyle = function _getComputedStyle(e) {
+    return _computedStyleScope.getComputedStyle(e); //to avoid errors in Microsoft Edge, we need to call getComputedStyle() from a specific scope, typically window.
+  },
+      _capsExp = /([A-Z])/g,
+      _getStyle = function _getStyle(t, p, cs, str) {
+    var result;
+
+    if (cs = cs || _getComputedStyle(t, null)) {
+      t = cs.getPropertyValue(p.replace(_capsExp, "-$1").toLowerCase());
+      result = t || cs.length ? t : cs[p]; //Opera behaves VERY strangely - length is usually 0 and cs[p] is the only way to get accurate results EXCEPT when checking for -o-transform which only works with cs.getPropertyValue()!
+    } else if (t.currentStyle) {
+      cs = t.currentStyle;
+      result = cs[p];
+    }
+
+    return str ? result : parseInt(result, 10) || 0;
+  },
+      _isArrayLike = function _isArrayLike(e) {
+    return e.length && e[0] && (e[0].nodeType && e[0].style && !e.nodeType || e[0].length && e[0][0]) ? true : false; //could be an array of jQuery objects too, so accommodate that.
+  },
+      _flattenArray = function _flattenArray(a) {
+    var result = [],
+        l = a.length,
+        i,
+        e,
+        j;
+
+    for (i = 0; i < l; i++) {
+      e = a[i];
+
+      if (_isArrayLike(e)) {
+        j = e.length;
+
+        for (j = 0; j < e.length; j++) {
+          result.push(e[j]);
+        }
+      } else {
+        result.push(e);
+      }
+    }
+
+    return result;
+  },
+      //some characters are combining marks (think diacritics/accents in European languages) which involve 2 or 4 characters that combine in the browser to form a single character. Pass in the remaining text and an array of the special characters to search for and if the text starts with one of those special characters, it'll spit back the number of characters to retain (often 2 or 4). Used in the specialChars features that was introduced in 0.6.0.
+  _findSpecialChars = function _findSpecialChars(text, chars) {
+    var i = chars.length,
+        s;
+
+    while (--i > -1) {
+      s = chars[i];
+
+      if (text.substr(0, s.length) === s) {
+        return s.length;
+      }
+    }
+  },
+      _stripExp = /(?:\r|\n|\t\t)/g,
+      //find carriage returns, new line feeds and double-tabs.
+  _multipleSpacesExp = /(?:\s\s+)/g,
+      _emojiStart = 0xD800,
+      _emojiEnd = 0xDBFF,
+      _emojiLowStart = 0xDC00,
+      _emojiRegionStart = 0x1F1E6,
+      _emojiRegionEnd = 0x1F1FF,
+      _emojiModStart = 0x1f3fb,
+      _emojiModEnd = 0x1f3ff,
+      _emojiPairCode = function _emojiPairCode(s) {
+    return (s.charCodeAt(0) - _emojiStart << 10) + (s.charCodeAt(1) - _emojiLowStart) + 0x10000;
+  },
+      _isOldIE = _doc.all && !_doc.addEventListener,
+      _divStart = " style='position:relative;display:inline-block;" + (_isOldIE ? "*display:inline;*zoom:1;'" : "'"),
+      //note: we must use both display:inline-block and *display:inline for IE8 and earlier, otherwise it won't flow correctly (and if we only use display:inline, IE won't render most of the property tweens - very odd).
+  _cssClassFunc = function _cssClassFunc(cssClass, tag) {
+    cssClass = cssClass || "";
+    var iterate = cssClass.indexOf("++") !== -1,
+        num = 1;
+
+    if (iterate) {
+      cssClass = cssClass.split("++").join("");
+    }
+
+    return function () {
+      return "<" + tag + _divStart + (cssClass ? " class='" + cssClass + (iterate ? num++ : "") + "'>" : ">");
+    };
+  },
+      SplitText = pkg.SplitText = _globals.SplitText = function (element, vars) {
+    if (typeof element === "string") {
+      element = SplitText.selector(element);
+    }
+
+    if (!element) {
+      throw "cannot split a null element.";
+    }
+
+    this.elements = _isArrayLike(element) ? _flattenArray(element) : [element];
+    this.chars = [];
+    this.words = [];
+    this.lines = [];
+    this._originals = [];
+    this.vars = vars || {};
+    this.split(vars);
+  },
+      _swapText = function _swapText(element, oldText, newText) {
+    var type = element.nodeType;
+
+    if (type === 1 || type === 9 || type === 11) {
+      for (element = element.firstChild; element; element = element.nextSibling) {
+        _swapText(element, oldText, newText);
+      }
+    } else if (type === 3 || type === 4) {
+      element.nodeValue = element.nodeValue.split(oldText).join(newText);
+    }
+  },
+      _pushReversed = function _pushReversed(a, merge) {
+    var i = merge.length;
+
+    while (--i > -1) {
+      a.push(merge[i]);
+    }
+  },
+      _slice = function _slice(a) {
+    //don't use Array.prototype.slice.call(target, 0) because that doesn't work in IE8 with a NodeList that's returned by querySelectorAll()
+    var b = [],
+        l = a.length,
+        i;
+
+    for (i = 0; i !== l; b.push(a[i++])) {}
+
+    return b;
+  },
+      _isBeforeWordDelimiter = function _isBeforeWordDelimiter(e, root, wordDelimiter) {
+    var next;
+
+    while (e && e !== root) {
+      next = e._next || e.nextSibling;
+
+      if (next) {
+        return next.textContent.charAt(0) === wordDelimiter;
+      }
+
+      e = e.parentNode || e._parent;
+    }
+
+    return false;
+  },
+      _deWordify = function _deWordify(e) {
+    var children = _slice(e.childNodes),
+        l = children.length,
+        i,
+        child;
+
+    for (i = 0; i < l; i++) {
+      child = children[i];
+
+      if (child._isSplit) {
+        _deWordify(child);
+      } else {
+        if (i && child.previousSibling.nodeType === 3) {
+          child.previousSibling.nodeValue += child.nodeType === 3 ? child.nodeValue : child.firstChild.nodeValue;
+        } else if (child.nodeType !== 3) {
+          e.insertBefore(child.firstChild, child);
+        }
+
+        e.removeChild(child);
+      }
+    }
+  },
+      _setPositionsAfterSplit = function _setPositionsAfterSplit(element, vars, allChars, allWords, allLines, origWidth, origHeight) {
+    var cs = _getComputedStyle(element),
+        paddingLeft = _getStyle(element, "paddingLeft", cs),
+        lineOffsetY = -999,
+        borderTopAndBottom = _getStyle(element, "borderBottomWidth", cs) + _getStyle(element, "borderTopWidth", cs),
+        borderLeftAndRight = _getStyle(element, "borderLeftWidth", cs) + _getStyle(element, "borderRightWidth", cs),
+        padTopAndBottom = _getStyle(element, "paddingTop", cs) + _getStyle(element, "paddingBottom", cs),
+        padLeftAndRight = _getStyle(element, "paddingLeft", cs) + _getStyle(element, "paddingRight", cs),
+        lineThreshold = _getStyle(element, "fontSize") * 0.2,
+        textAlign = _getStyle(element, "textAlign", cs, true),
+        charArray = [],
+        wordArray = [],
+        lineArray = [],
+        wordDelimiter = vars.wordDelimiter || " ",
+        tag = vars.tag ? vars.tag : vars.span ? "span" : "div",
+        types = vars.type || vars.split || "chars,words,lines",
+        lines = allLines && types.indexOf("lines") !== -1 ? [] : null,
+        words = types.indexOf("words") !== -1,
+        chars = types.indexOf("chars") !== -1,
+        absolute = vars.position === "absolute" || vars.absolute === true,
+        linesClass = vars.linesClass,
+        iterateLine = (linesClass || "").indexOf("++") !== -1,
+        spaceNodesToRemove = [],
+        i,
+        j,
+        l,
+        node,
+        nodes,
+        isChild,
+        curLine,
+        addWordSpaces,
+        style,
+        lineNode,
+        lineWidth,
+        offset;
+
+    if (iterateLine) {
+      linesClass = linesClass.split("++").join("");
+    } //copy all the descendant nodes into an array (we can't use a regular nodeList because it's live and we may need to renest things)
+
+
+    j = element.getElementsByTagName("*");
+    l = j.length;
+    nodes = [];
+
+    for (i = 0; i < l; i++) {
+      nodes[i] = j[i];
+    } //for absolute positioning, we need to record the x/y offsets and width/height for every <div>. And even if we're not positioning things absolutely, in order to accommodate lines, we must figure out where the y offset changes so that we can sense where the lines break, and we populate the lines array.
+
+
+    if (lines || absolute) {
+      for (i = 0; i < l; i++) {
+        node = nodes[i];
+        isChild = node.parentNode === element;
+
+        if (isChild || absolute || chars && !words) {
+          offset = node.offsetTop;
+
+          if (lines && isChild && Math.abs(offset - lineOffsetY) > lineThreshold && (node.nodeName !== "BR" || i === 0)) {
+            //we found some rare occasions where a certain character like &#8209; could cause the offsetTop to be off by 1 pixel, so we build in a threshold.
+            curLine = [];
+            lines.push(curLine);
+            lineOffsetY = offset;
+          }
+
+          if (absolute) {
+            //record offset x and y, as well as width and height so that we can access them later for positioning. Grabbing them at once ensures we don't trigger a browser paint & we maximize performance.
+            node._x = node.offsetLeft;
+            node._y = offset;
+            node._w = node.offsetWidth;
+            node._h = node.offsetHeight;
+          }
+
+          if (lines) {
+            if (node._isSplit && isChild || !chars && isChild || words && isChild || !words && node.parentNode.parentNode === element && !node.parentNode._isSplit) {
+              curLine.push(node);
+              node._x -= paddingLeft;
+
+              if (_isBeforeWordDelimiter(node, element, wordDelimiter)) {
+                node._wordEnd = true;
+              }
+            }
+
+            if (node.nodeName === "BR" && (node.nextSibling && node.nextSibling.nodeName === "BR" || i === 0)) {
+              //two consecutive <br> tags signify a new [empty] line. Also, if the entire block of content STARTS with a <br>, add a line.
+              lines.push([]);
+            }
+          }
+        }
+      }
+    }
+
+    for (i = 0; i < l; i++) {
+      node = nodes[i];
+      isChild = node.parentNode === element;
+
+      if (node.nodeName === "BR") {
+        if (lines || absolute) {
+          if (node.parentNode) {
+            node.parentNode.removeChild(node);
+          }
+
+          nodes.splice(i--, 1);
+          l--;
+        } else if (!words) {
+          element.appendChild(node);
+        }
+
+        continue;
+      }
+
+      if (absolute) {
+        style = node.style;
+
+        if (!words && !isChild) {
+          node._x += node.parentNode._x;
+          node._y += node.parentNode._y;
+        }
+
+        style.left = node._x + "px";
+        style.top = node._y + "px";
+        style.position = "absolute";
+        style.display = "block"; //if we don't set the width/height, things collapse in older versions of IE and the origin for transforms is thrown off in all browsers.
+
+        style.width = node._w + 1 + "px"; //IE is 1px short sometimes. Avoid wrapping
+
+        style.height = node._h + "px";
+      }
+
+      if (!words && chars) {
+        //we always start out wrapping words in their own <div> so that line breaks happen correctly, but here we'll remove those <div> tags if necessary and renest the characters directly into the element rather than inside the word <div>
+        if (node._isSplit) {
+          node._next = node.nextSibling;
+          node.parentNode.appendChild(node); //put it at the end to keep the order correct.
+        } else if (node.parentNode._isSplit) {
+          node._parent = node.parentNode;
+
+          if (!node.previousSibling && node.firstChild) {
+            node.firstChild._isFirst = true;
+          }
+
+          if (node.nextSibling && node.nextSibling.textContent === " " && !node.nextSibling.nextSibling) {
+            //if the last node inside a nested element is just a space (like T<span>nested </span>), remove it otherwise it'll get placed in the wrong order. Don't remove it right away, though, because we need to sense when words/characters are before a space like _isBeforeWordDelimiter(). Removing it now would make that a false negative.
+            spaceNodesToRemove.push(node.nextSibling);
+          }
+
+          node._next = node.nextSibling && node.nextSibling._isFirst ? null : node.nextSibling;
+          node.parentNode.removeChild(node);
+          nodes.splice(i--, 1);
+          l--;
+        } else if (!isChild) {
+          offset = !node.nextSibling && _isBeforeWordDelimiter(node.parentNode, element, wordDelimiter); //if this is the last letter in the word (and we're not breaking by lines and not positioning things absolutely), we need to add a space afterwards so that the characters don't just mash together
+
+          if (node.parentNode._parent) {
+            node.parentNode._parent.appendChild(node);
+          }
+
+          if (offset) {
+            node.parentNode.appendChild(_doc.createTextNode(" "));
+          }
+
+          if (tag === "span") {
+            node.style.display = "inline"; //so that word breaks are honored properly.
+          }
+
+          charArray.push(node);
+        }
+      } else if (node.parentNode._isSplit && !node._isSplit && node.innerHTML !== "") {
+        wordArray.push(node);
+      } else if (chars && !node._isSplit) {
+        if (tag === "span") {
+          node.style.display = "inline";
+        }
+
+        charArray.push(node);
+      }
+    }
+
+    i = spaceNodesToRemove.length;
+
+    while (--i > -1) {
+      spaceNodesToRemove[i].parentNode.removeChild(spaceNodesToRemove[i]);
+    }
+
+    if (lines) {
+      //the next 7 lines just give us the line width in the most reliable way and figure out the left offset (if position isn't relative or absolute). We must set the width along with text-align to ensure everything works properly for various alignments.
+      if (absolute) {
+        lineNode = _doc.createElement(tag);
+        element.appendChild(lineNode);
+        lineWidth = lineNode.offsetWidth + "px";
+        offset = lineNode.offsetParent === element ? 0 : element.offsetLeft;
+        element.removeChild(lineNode);
+      }
+
+      style = element.style.cssText;
+      element.style.cssText = "display:none;"; //to improve performance, set display:none on the element so that the browser doesn't have to worry about reflowing or rendering while we're renesting things. We'll revert the cssText later.
+      //we can't use element.innerHTML = "" because that causes IE to literally delete all the nodes and their content even though we've stored them in an array! So we must loop through the children and remove them.
+
+      while (element.firstChild) {
+        element.removeChild(element.firstChild);
+      }
+
+      addWordSpaces = wordDelimiter === " " && (!absolute || !words && !chars);
+
+      for (i = 0; i < lines.length; i++) {
+        curLine = lines[i];
+        lineNode = _doc.createElement(tag);
+        lineNode.style.cssText = "display:block;text-align:" + textAlign + ";position:" + (absolute ? "absolute;" : "relative;");
+
+        if (linesClass) {
+          lineNode.className = linesClass + (iterateLine ? i + 1 : "");
+        }
+
+        lineArray.push(lineNode);
+        l = curLine.length;
+
+        for (j = 0; j < l; j++) {
+          if (curLine[j].nodeName !== "BR") {
+            node = curLine[j];
+            lineNode.appendChild(node);
+
+            if (addWordSpaces && node._wordEnd) {
+              lineNode.appendChild(_doc.createTextNode(" "));
+            }
+
+            if (absolute) {
+              if (j === 0) {
+                lineNode.style.top = node._y + "px";
+                lineNode.style.left = paddingLeft + offset + "px";
+              }
+
+              node.style.top = "0px";
+
+              if (offset) {
+                node.style.left = node._x - offset + "px";
+              }
+            }
+          }
+        }
+
+        if (l === 0) {
+          //if there are no nodes in the line (typically meaning there were two consecutive <br> tags, just add a non-breaking space so that things display properly.
+          lineNode.innerHTML = "&nbsp;";
+        } else if (!words && !chars) {
+          _deWordify(lineNode);
+
+          _swapText(lineNode, String.fromCharCode(160), " ");
+        }
+
+        if (absolute) {
+          lineNode.style.width = lineWidth;
+          lineNode.style.height = node._h + "px";
+        }
+
+        element.appendChild(lineNode);
+      }
+
+      element.style.cssText = style;
+    } //if everything shifts to being position:absolute, the container can collapse in terms of height or width, so fix that here.
+
+
+    if (absolute) {
+      if (origHeight > element.clientHeight) {
+        element.style.height = origHeight - padTopAndBottom + "px";
+
+        if (element.clientHeight < origHeight) {
+          //IE8 and earlier use a different box model - we must include padding and borders
+          element.style.height = origHeight + borderTopAndBottom + "px";
+        }
+      }
+
+      if (origWidth > element.clientWidth) {
+        element.style.width = origWidth - padLeftAndRight + "px";
+
+        if (element.clientWidth < origWidth) {
+          //IE8 and earlier use a different box model - we must include padding and borders
+          element.style.width = origWidth + borderLeftAndRight + "px";
+        }
+      }
+    }
+
+    _pushReversed(allChars, charArray);
+
+    if (words) {
+      _pushReversed(allWords, wordArray);
+    }
+
+    _pushReversed(allLines, lineArray);
+  },
+      _splitRawText = function _splitRawText(element, vars, wordStart, charStart) {
+    var tag = vars.tag ? vars.tag : vars.span ? "span" : "div",
+        types = vars.type || vars.split || "chars,words,lines",
+        //words = (types.indexOf("words") !== -1),
+    chars = types.indexOf("chars") !== -1,
+        absolute = vars.position === "absolute" || vars.absolute === true,
+        wordDelimiter = vars.wordDelimiter || " ",
+        space = wordDelimiter !== " " ? "" : absolute ? "&#173; " : " ",
+        wordEnd = "</" + tag + ">",
+        wordIsOpen = true,
+        specialChars = vars.specialChars ? typeof vars.specialChars === "function" ? vars.specialChars : _findSpecialChars : null,
+        //specialChars can be an array or a function. For performance reasons, we always set this local "specialChars" to a function to which we pass the remaining text and whatever the original vars.specialChars was so that if it's an array, it works with the _findSpecialChars() function.
+    text,
+        splitText,
+        i,
+        j,
+        l,
+        character,
+        hasTagStart,
+        emojiPair1,
+        emojiPair2,
+        testResult,
+        container = _doc.createElement("div"),
+        parent = element.parentNode;
+
+    parent.insertBefore(container, element);
+    container.textContent = element.nodeValue;
+    parent.removeChild(element);
+    element = container;
+    text = _getText(element);
+    hasTagStart = text.indexOf("<") !== -1;
+
+    if (vars.reduceWhiteSpace !== false) {
+      text = text.replace(_multipleSpacesExp, " ").replace(_stripExp, "");
+    }
+
+    if (hasTagStart) {
+      text = text.split("<").join("{{LT}}"); //we can't leave "<" in the string, or when we set the innerHTML, it can be interpreted as a node
+    }
+
+    l = text.length;
+    splitText = (text.charAt(0) === " " ? space : "") + wordStart();
+
+    for (i = 0; i < l; i++) {
+      character = text.charAt(i);
+
+      if (specialChars && (testResult = specialChars(text.substr(i), vars.specialChars))) {
+        // look for any specialChars that were declared. Remember, they can be passed in like {specialChars:["मी", "पा", "है"]} or a function could be defined instead. Either way, the function should return the number of characters that should be grouped together for this "character".
+        character = text.substr(i, testResult || 1);
+        splitText += chars && character !== " " ? charStart() + character + "</" + tag + ">" : character;
+        i += testResult - 1;
+      } else if (character === wordDelimiter && text.charAt(i - 1) !== wordDelimiter && i) {
+        splitText += wordIsOpen ? wordEnd : "";
+        wordIsOpen = false;
+
+        while (text.charAt(i + 1) === wordDelimiter) {
+          //skip over empty spaces (to avoid making them words)
+          splitText += space;
+          i++;
+        }
+
+        if (i === l - 1) {
+          splitText += space;
+        } else if (text.charAt(i + 1) !== ")") {
+          splitText += space + wordStart();
+          wordIsOpen = true;
+        }
+      } else if (character === "{" && text.substr(i, 6) === "{{LT}}") {
+        splitText += chars ? charStart() + "{{LT}}" + "</" + tag + ">" : "{{LT}}";
+        i += 5;
+      } else if (character.charCodeAt(0) >= _emojiStart && character.charCodeAt(0) <= _emojiEnd || text.charCodeAt(i + 1) >= 0xFE00 && text.charCodeAt(i + 1) <= 0xFE0F) {
+        //special emoji characters use 2 or 4 unicode characters that we must keep together.
+        emojiPair1 = _emojiPairCode(text.substr(i, 2));
+        emojiPair2 = _emojiPairCode(text.substr(i + 2, 2));
+        j = emojiPair1 >= _emojiRegionStart && emojiPair1 <= _emojiRegionEnd && emojiPair2 >= _emojiRegionStart && emojiPair2 <= _emojiRegionEnd || emojiPair2 >= _emojiModStart && emojiPair2 <= _emojiModEnd ? 4 : 2;
+        splitText += chars && character !== " " ? charStart() + text.substr(i, j) + "</" + tag + ">" : text.substr(i, j);
+        i += j - 1;
+      } else {
+        splitText += chars && character !== " " ? charStart() + character + "</" + tag + ">" : character;
+      }
+    }
+
+    element.outerHTML = splitText + (wordIsOpen ? wordEnd : "");
+
+    if (hasTagStart) {
+      _swapText(parent, "{{LT}}", "<"); //note: don't perform this on "element" because that gets replaced with all new elements when we set element.outerHTML.
+
+    }
+  },
+      _split = function _split(element, vars, wordStart, charStart) {
+    var children = _slice(element.childNodes),
+        l = children.length,
+        absolute = vars.position === "absolute" || vars.absolute === true,
+        i,
+        child;
+
+    if (element.nodeType !== 3 || l > 1) {
+      vars.absolute = false;
+
+      for (i = 0; i < l; i++) {
+        child = children[i];
+
+        if (child.nodeType !== 3 || /\S+/.test(child.nodeValue)) {
+          if (absolute && child.nodeType !== 3 && _getStyle(child, "display", null, true) === "inline") {
+            //if there's a child node that's display:inline, switch it to inline-block so that absolute positioning works properly (most browsers don't report offsetTop/offsetLeft properly inside a <span> for example)
+            child.style.display = "inline-block";
+            child.style.position = "relative";
+          }
+
+          child._isSplit = true;
+
+          _split(child, vars, wordStart, charStart); //don't split lines on child elements
+
+        }
+      }
+
+      vars.absolute = absolute;
+      element._isSplit = true;
+      return;
+    }
+
+    _splitRawText(element, vars, wordStart, charStart);
+  },
+      p = SplitText.prototype;
+
+  p.split = function (vars) {
+    if (this.isSplit) {
+      this.revert();
+    }
+
+    this.vars = vars = vars || this.vars;
+    this._originals.length = this.chars.length = this.words.length = this.lines.length = 0;
+
+    var i = this.elements.length,
+        tag = vars.tag ? vars.tag : vars.span ? "span" : "div",
+        wordStart = _cssClassFunc(vars.wordsClass, tag),
+        charStart = _cssClassFunc(vars.charsClass, tag),
+        origHeight,
+        origWidth,
+        e; //we split in reversed order so that if/when we position:absolute elements, they don't affect the position of the ones after them in the document flow (shifting them up as they're taken out of the document flow).
+
+
+    while (--i > -1) {
+      e = this.elements[i];
+      this._originals[i] = e.innerHTML;
+      origHeight = e.clientHeight;
+      origWidth = e.clientWidth;
+
+      _split(e, vars, wordStart, charStart);
+
+      _setPositionsAfterSplit(e, vars, this.chars, this.words, this.lines, origWidth, origHeight);
+    }
+
+    this.chars.reverse();
+    this.words.reverse();
+    this.lines.reverse();
+    this.isSplit = true;
+    return this;
+  };
+
+  p.revert = function () {
+    if (!this._originals) {
+      throw "revert() call wasn't scoped properly.";
+    }
+
+    var i = this._originals.length;
+
+    while (--i > -1) {
+      this.elements[i].innerHTML = this._originals[i];
+    }
+
+    this.chars = [];
+    this.words = [];
+    this.lines = [];
+    this.isSplit = false;
+    return this;
+  };
+
+  SplitText.selector = window.$ || window.jQuery || function (e) {
+    var selector = window.$ || window.jQuery;
+
+    if (selector) {
+      SplitText.selector = selector;
+      return selector(e);
+    }
+
+    return typeof document === "undefined" ? e : document.querySelectorAll ? document.querySelectorAll(e) : document.getElementById(e.charAt(0) === "#" ? e.substr(1) : e);
+  };
+
+  SplitText.version = "0.7.0";
+})(_gsScope); //export to AMD/RequireJS and CommonJS/Node (precursor to full modular build system coming at a later date)
+
+
+(function (name) {
+  "use strict";
+
+  var getGlobal = function getGlobal() {
+    return (_gsScope.GreenSockGlobals || _gsScope)[name];
+  };
+
+  if (typeof module !== "undefined" && module.exports) {
+    //node
+    module.exports = getGlobal();
+  } else if (typeof define === "function" && define.amd) {
+    //AMD
+    define([], getGlobal);
+  }
+})("SplitText");
+},{}],"src/main.js":[function(require,module,exports) {
 "use strict";
 
 var _gsap = _interopRequireDefault(require("gsap"));
@@ -56861,9 +57890,13 @@ var _rubiks = require("./js/rubiks/rubiks");
 
 var _randomCubes = require("./js/rubiks/randomCubes");
 
+var _ownMuseum = require("./js/rubiks/ownMuseum");
+
 var _ScrollTrigger = require("gsap/ScrollTrigger");
 
 var _state = _interopRequireDefault(require("./state"));
+
+var _SplitText = _interopRequireDefault(require("./SplitText"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -56898,7 +57931,10 @@ if (isMobile.any() === null) {
   console.log(isMobile.any());
 }
 
+var videos;
+
 function smooth(container) {
+  if (_state.default.locoScroll) _state.default.locoScroll.destroy();
   _state.default.locoScroll = new _locomotiveScroll.default({
     el: container.querySelector('[data-scroll-container]'),
     smooth: true,
@@ -56956,8 +57992,8 @@ function homeLaunch() {
     x: '10%'
   });
 
-  _gsap.default.set('.hero03', {
-    x: '-50%'
+  _gsap.default.set('.title-wrapper-content span, .title-wrapper-infos span', {
+    opacity: 0
   });
 
   _gsap.default.set('header .logo, ul li a', {
@@ -56984,7 +58020,12 @@ function homeLaunch() {
     y: '0%',
     duration: 1.4,
     ease: 'power4.out'
-  }, '-=1.4').to('.hero .data', {
+  }, '-=1.4').to('.title-wrapper-content span, .title-wrapper-infos span', {
+    opacity: 1,
+    duration: 0.01,
+    stagger: 0.1,
+    ease: 'power4.out'
+  }, '-=0.8').to('.hero .data', {
     opacity: 1,
     duration: 0.1,
     stagger: 0.075
@@ -56992,26 +58033,27 @@ function homeLaunch() {
     x: '0%',
     duration: 1.2,
     ease: 'power4.out'
-  }, '-=1').to('.hero03', {
-    x: '0%',
-    duration: 1.2,
-    ease: 'power4.out'
   }, '-=1');
 }
 
 function touchLaunch(cubes) {
-  var tl = _gsap.default.timeline();
+  var words = new _SplitText.default(".content-page-title", {
+    type: "words",
+    wordsClass: "words"
+  });
+  var lines = new _SplitText.default(".content-page-text", {
+    type: "lines",
+    linesClass: "lines"
+  });
 
-  _gsap.default.set('.hero-title', {
+  var tl2 = _gsap.default.timeline();
+
+  _gsap.default.set('.words', {
     opacity: 0,
-    x: '-10%'
+    y: '80%'
   });
 
-  _gsap.default.set('.hero03', {
-    x: '50%'
-  });
-
-  _gsap.default.set('.hero .data', {
+  _gsap.default.set('.lines', {
     opacity: 0
   });
 
@@ -57019,31 +58061,70 @@ function touchLaunch(cubes) {
     opacity: 0
   });
 
-  tl.add(function () {
+  _gsap.default.set('.appear', {
+    opacity: 0,
+    y: '20%'
+  });
+
+  tl2.add(function () {
     return (0, _randomCubes.startCubes)(cubes);
   }).to('header .logo, ul li a', {
     opacity: 1,
     stagger: 0.1,
     duration: 0.1
-  }, '+=0.6').to('.hero-title', {
+  }).to('.words', {
     opacity: 1,
-    duration: 0.01
-  }).to('.hero-title', {
-    x: '0%',
-    duration: 1.5,
-    ease: 'power4.out'
-  }).to('.hero .data', {
+    y: '0%',
+    duration: 1.3,
+    ease: 'power4.out',
+    stagger: 0.075
+  }, '-=0.2').to('.content-page-text .lines', {
     opacity: 1,
     duration: 0.1,
-    stagger: 0.075
-  }, '-=1.4').to('.hero03', {
-    x: '0%',
-    duration: 1.2,
+    stagger: 0.1
+  }, '-=1.1').to('.appear', {
+    opacity: 1,
+    y: '0%',
+    duration: 1.3,
     ease: 'power4.out'
-  }, '-=1.4');
+  }, '-=1');
+}
+
+function ownLaunch() {
+  var tl2 = _gsap.default.timeline();
+
+  _gsap.default.set('header .logo, ul li a', {
+    opacity: 0
+  });
+
+  tl2.add(function () {
+    return (0, _ownMuseum.startMuseum)();
+  }).to('header .logo, ul li a', {
+    opacity: 1,
+    stagger: 0.1,
+    duration: 0.1
+  });
+}
+
+function seeScroll() {
+  _state.default.locoScroll.on('call', function (event, element, i) {
+    if (event === 'video') {
+      var video = i.el.querySelector('video');
+      video.play();
+    }
+  });
 }
 
 function homeScroll() {
+  var splitLines = new _SplitText.default(".protagonist-content, .objective-content, .reality-content, .simulation-content", {
+    type: "lines",
+    linesClass: "lines"
+  });
+
+  _gsap.default.set('.lines', {
+    opacity: 0
+  });
+
   _gsap.default.set('.protagonist .first', {
     opacity: 0,
     y: '15%'
@@ -57098,10 +58179,12 @@ function homeScroll() {
     x: '10%'
   });
 
+  _gsap.default.set('.simulation .mono', {
+    opacity: 0
+  });
+
   _state.default.locoScroll.on('call', function (event, element, i) {
     if (event === 'protagonist') {
-      console.log('done');
-
       var tl = _gsap.default.timeline();
 
       tl.to('.protagonist .first', {
@@ -57129,8 +58212,6 @@ function homeScroll() {
     }
 
     if (event === 'objective') {
-      console.log('done');
-
       var _tl = _gsap.default.timeline();
 
       _tl.to('.objective .first', {
@@ -57154,8 +58235,6 @@ function homeScroll() {
     }
 
     if (event === 'reality') {
-      console.log('done');
-
       var _tl2 = _gsap.default.timeline();
 
       _tl2.to('.reality .third', {
@@ -57183,18 +58262,20 @@ function homeScroll() {
     }
 
     if (event === 'simulation') {
-      console.log('done');
-
       var _tl3 = _gsap.default.timeline();
 
-      _tl3.to('.simulation .first', {
+      _tl3.to('.simulation .mono', {
         opacity: 1,
+        stagger: 0.4,
         duration: 0.1
       }).to('.simulation .first', {
+        opacity: 1,
+        duration: 0.1
+      }, '-=0.4').to('.simulation .first', {
         x: '0%',
         duration: 1.2,
         ease: 'power4.out'
-      }).to('.simulation .second', {
+      }, '-=1').to('.simulation .second', {
         opacity: 1,
         duration: 0.1
       }, '-=1.1').to('.simulation .second', {
@@ -57205,13 +58286,12 @@ function homeScroll() {
     }
 
     if (event === 'appear') {
-      var text = i.el.querySelectorAll('span');
-      console.log(text);
+      i.el.classList.add('opacity');
+      var text = i.el.querySelectorAll('.lines');
 
       _gsap.default.to(text, {
-        y: '0%',
         opacity: 1,
-        duration: 1.3,
+        duration: 0.01,
         stagger: 0.1,
         ease: 'power3.out'
       });
@@ -57224,32 +58304,86 @@ function homeScroll() {
         y: 0,
         ease: 'power4.out'
       });
-    } // if (event === 'video') {
-    //   i.el.play()
-    //   gsap.to(i.el, {scale:1, opacity:1, duration:1.5, ease:'power3.out'})
-    // }
-    // if (event === 'text') {
-    //   const text = i.el.querySelectorAll('.lines')
-    //   gsap.to(text, {y:'0%', opacity:1, duration:1.5, stagger:0.1, ease:'power3.out'})
-    // }
-
+    }
   });
+
+  var albumTl = _gsap.default.timeline({
+    scrollTrigger: {
+      trigger: '.album',
+      scroller: '[data-scroll-container]',
+      scrub: 1,
+      start: '-=60%',
+      end: '+=90%'
+    }
+  });
+
+  var introTl = _gsap.default.timeline({
+    scrollTrigger: {
+      trigger: ".introduction",
+      scroller: '[data-scroll-container]',
+      scrub: true,
+      start: "top top",
+      end: "+=100%"
+    }
+  });
+
+  introTl.to('.fixed-wrapper-content span', {
+    opacity: 1,
+    stagger: 0.1,
+    y: 0,
+    duration: 1,
+    ease: 'power3.out'
+  }).to('.fixed-wrapper-content span', {
+    opacity: 0,
+    stagger: 0.1,
+    y: -40,
+    duration: 1,
+    ease: 'power3.in'
+  });
+  albumTl.from('.rectangle', {
+    rotationX: 6,
+    scale: 0.7,
+    autoAlpha: 0,
+    duration: 1,
+    ease: 'power3.inOut'
+  }).from('.circle', {
+    scale: 0.7,
+    autoAlpha: 0,
+    duration: 1,
+    ease: 'power3.inOut'
+  }, '-=0.8').from('.album-cover .img-wrapper', {
+    rotation: -10,
+    scale: 0.7,
+    autoAlpha: 0,
+    duration: 1.6,
+    ease: 'power4.out'
+  }, '-=0.5').from('.album-content span', {
+    y: 20,
+    autoAlpha: 0,
+    duration: 1,
+    ease: 'power3.out',
+    stagger: 0.1
+  }, '-=0.6');
 }
 
 _core.default.init({
-  debug: true,
+  debug: false,
   transitions: [{
     name: 'opacity-transition',
     once: function once(_ref) {
       var next = _ref.next;
+
+      _gsap.default.to('.preloader', {
+        autoAlpha: 0,
+        duration: 1,
+        delay: 0.5
+      });
+
       smooth(next.container);
     },
     beforeEnter: function beforeEnter(_ref2) {
       var next = _ref2.next;
       _state.default.nextContainer = next.container;
-
-      _state.default.locoScroll.destroy();
-
       smooth(next.container);
     },
     leave: function leave(data) {
@@ -57262,7 +58396,7 @@ _core.default.init({
       document.querySelector('.transition').style.transformOrigin = 'bottom';
       return _gsap.default.to(data.current.container, {
         opacity: 0,
-        duration: 1,
+        duration: 0.6,
         ease: 'power3.inOut'
       });
     },
@@ -57274,8 +58408,9 @@ _core.default.init({
 
       return _gsap.default.from(data.next.container, {
         opacity: 0,
-        duration: 0.5,
-        ease: 'power3.inOut'
+        duration: 1,
+        ease: 'power3.inOut',
+        delay: 0.5
       });
     }
   }],
@@ -57294,11 +58429,10 @@ _core.default.init({
     },
     afterEnter: function afterEnter(_ref4) {
       var next = _ref4.next;
-      smooth(next.container);
       homeScroll();
     }
   }, {
-    namespace: 'touch',
+    namespace: 'own',
     beforeEnter: function beforeEnter(_ref5) {
       var next = _ref5.next;
       _state.default.nextContainer = next.container;
@@ -57335,7 +58469,6 @@ _core.default.init({
       }
     },
     afterEnter: function afterEnter(_ref6) {// smooth(next.container)
-      // homeScroll()
 
       var next = _ref6.next;
     }
@@ -57384,14 +58517,28 @@ _core.default.init({
         next.container.querySelector('.gl-back').style.position = 'fixed';
       }
     },
-    afterEnter: function afterEnter(_ref8) {// smooth(next.container)
-      // homeScroll()
-
+    afterEnter: function afterEnter(_ref8) {
       var next = _ref8.next;
+      // smooth(next.container)
+      seeScroll();
+    }
+  }, {
+    namespace: 'touch',
+    beforeEnter: function beforeEnter(_ref9) {
+      var next = _ref9.next;
+      _state.default.nextContainer = next.container;
+      smooth(next.container);
+      var canvas = next.container.querySelector('canvas');
+      ownLaunch();
+    },
+    afterEnter: function afterEnter(_ref10) {
+      var next = _ref10.next;
     }
   }]
 });
-},{"gsap":"node_modules/gsap/index.js","gsap/all":"node_modules/gsap/all.js","locomotive-scroll":"node_modules/locomotive-scroll/dist/locomotive-scroll.esm.js","@barba/core":"node_modules/@barba/core/dist/barba.umd.js","./js/rubiks/rubiks":"src/js/rubiks/rubiks.js","./js/rubiks/randomCubes":"src/js/rubiks/randomCubes.js","gsap/ScrollTrigger":"node_modules/gsap/ScrollTrigger.js","./state":"src/state.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+console.clear();
+},{"gsap":"node_modules/gsap/index.js","gsap/all":"node_modules/gsap/all.js","locomotive-scroll":"node_modules/locomotive-scroll/dist/locomotive-scroll.esm.js","@barba/core":"node_modules/@barba/core/dist/barba.umd.js","./js/rubiks/rubiks":"src/js/rubiks/rubiks.js","./js/rubiks/randomCubes":"src/js/rubiks/randomCubes.js","./js/rubiks/ownMuseum":"src/js/rubiks/ownMuseum.js","gsap/ScrollTrigger":"node_modules/gsap/ScrollTrigger.js","./state":"src/state.js","./SplitText":"src/SplitText.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -57419,7 +58566,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63735" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49643" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

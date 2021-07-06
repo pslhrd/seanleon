@@ -15,6 +15,8 @@ body {
   overflow-x: hidden;
   background-color: var(--c-bg);
   color: var(--c-fg);
+  /* PRODUCT PAGE */
+  /* SEE PAGE */
 }
 body a, body button {
   cursor: pointer;
@@ -40,8 +42,21 @@ body .data {
 }
 @media (max-width: 900px) {
   body .data {
+    font-size: 12px;
     line-height: 16px;
   }
+}
+@media (max-width: 900px) {
+  body .clear {
+    clear: both;
+    display: block;
+  }
+}
+body .lines {
+  white-space: nowrap;
+}
+body .opacity::before {
+  opacity: 1 !important;
 }
 body .transition {
   width: 100%;
@@ -99,6 +114,9 @@ body .transition .t01:after, body .transition .t02:after, body .transition .t03:
 body .margin {
   margin-bottom: -4.6875vw;
 }
+body .vh50 {
+  height: 80vh !important;
+}
 body header {
   position: fixed;
   top: 0;
@@ -141,39 +159,101 @@ body header .flex-wrapper ul li:hover {
   opacity: 0.6;
 }
 body footer {
+  position: relative;
+  z-index: 1001;
   width: 100%;
   font-size: 12px;
   font-family: "Monument Grotesk Mono";
   text-transform: uppercase;
+  background-color: var(--c-bg);
   position: relative;
-  padding-top: 20vw;
-  padding-bottom: 6vw;
+  border-top: 1px solid #2B2C45;
+}
+body footer .footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 7.8125vw;
 }
 @media (max-width: 900px) {
-  body footer {
-    padding-top: 100px;
-    padding-bottom: 100px;
+  body footer .footer {
+    padding-top: 60px;
+  }
+}
+body footer .footer-title {
+  font-size: 6.25vw;
+  font-family: "Skrappa";
+}
+@media (max-width: 900px) {
+  body footer .footer-title {
+    font-size: 14vw;
+  }
+}
+body footer .footer-content {
+  margin-top: 3vw;
+  text-align: center;
+  opacity: 0.3;
+  width: 48.4375vw;
+}
+@media (max-width: 900px) {
+  body footer .footer-content {
+    width: calc(100vw - 80px);
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    margin-top: 40px;
+  }
+}
+body footer .footer-menu {
+  width: 100%;
+  position: relative;
+  margin-top: 3vw;
+  padding-bottom: 6vw;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 900px) {
+  body footer .footer-menu {
+    margin-top: 30px;
+    padding-bottom: 50px;
+    height: 100px;
   }
 }
 body footer .footer-logo {
   position: absolute;
   width: 140px;
   left: 3.125vw;
+  top: 0;
+}
+@media (max-width: 900px) {
+  body footer .footer-logo {
+    display: none;
+  }
 }
 body footer ul {
-  position: absolute;
   display: block;
-  left: 31.5vw;
   line-height: 1.5;
 }
 @media (max-width: 900px) {
   body footer ul {
-    left: 200px;
+    text-align: center;
   }
 }
 body footer ul li {
+  margin-right: 30px;
+  display: inline-block;
   list-style: none;
-  display: block;
+}
+@media (max-width: 900px) {
+  body footer ul li {
+    display: block;
+    margin-right: 0px;
+    margin-top: 5px;
+  }
 }
 body footer ul li:hover {
   cursor: pointer;
@@ -181,6 +261,7 @@ body footer ul li:hover {
 body footer .star {
   position: absolute;
   left: 70vw;
+  top: 0;
 }
 @media (max-width: 900px) {
   body footer .star {
@@ -191,6 +272,7 @@ body footer .star {
 body footer .pupil {
   position: absolute;
   left: 79vw;
+  top: 0;
 }
 @media (max-width: 900px) {
   body footer .pupil {
@@ -200,11 +282,48 @@ body footer .pupil {
 body footer .cta {
   position: absolute;
   right: 3.125vw;
+  top: 0;
 }
 @media (max-width: 900px) {
   body footer .cta {
     display: none;
   }
+}
+body .fixed-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1001;
+  pointer-events: none;
+}
+body .fixed-wrapper-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  flex-direction: column;
+  font-size: 20px;
+  line-height: 24px;
+  color: #939393;
+  font-family: "Monument Grotesk Mono";
+  text-transform: uppercase;
+  text-align: center;
+  color: white;
+}
+@media (max-width: 900px) {
+  body .fixed-wrapper-content {
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+body .fixed-wrapper-content span {
+  opacity: 0;
+  transform: translateY(40px);
+  display: block;
 }
 body .menu-wrapper {
   position: fixed;
@@ -236,6 +355,40 @@ body .menu-wrapper ul li a {
   transform: translateY(100%);
   display: block;
 }
+body .introduction {
+  pointer-events: none;
+  position: relative;
+  width: 100vw;
+  height: 200vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body .content-page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+body .content-page-title {
+  padding-top: 10vw;
+  font-size: 14vw;
+  font-family: "Skrappa";
+  overflow: hidden;
+}
+body .content-page-text {
+  margin-top: 2.125vw;
+  text-align: center;
+  position: relative;
+  font-size: 12px;
+  line-height: 14px;
+  color: #939393;
+  font-family: "Monument Grotesk Mono";
+  text-transform: uppercase;
+  width: 250px;
+}
 body .hero {
   position: relative;
   width: 100%;
@@ -259,43 +412,63 @@ body .hero-img img {
 }
 @media (max-width: 900px) {
   body .hero {
-    height: calc(100vh - 50px);
+    height: calc(100vh);
   }
 }
 body .hero .title-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   width: 100%;
   height: 100%;
 }
+body .hero .title-wrapper-infos {
+  font-size: 12px;
+  line-height: 14px;
+  color: #939393;
+  font-family: "Monument Grotesk Mono";
+  text-transform: uppercase;
+  margin-bottom: 4vw;
+}
+@media (max-width: 900px) {
+  body .hero .title-wrapper-infos {
+    margin-bottom: 70px;
+  }
+}
+body .hero .title-wrapper-content {
+  text-align: center;
+  margin-top: 4vw;
+  font-size: 12px;
+  line-height: 14px;
+  color: #939393;
+  font-family: "Monument Grotesk Mono";
+  text-transform: uppercase;
+}
+body .hero .title-wrapper-content span {
+  display: block;
+}
+@media (max-width: 900px) {
+  body .hero .title-wrapper-content {
+    margin-top: 70px;
+  }
+}
 body .hero .title-wrapper svg {
   overflow: visible;
-  width: 64vw;
+  width: 54vw;
   fill: var(--c-fg);
-  margin-top: -3.15vw;
+  margin-top: -2.2vw;
 }
 @media (max-width: 900px) {
   body .hero .title-wrapper svg {
-    width: 85vw;
+    margin-top: -20px;
+    width: calc(100vw - 40px);
   }
   body .hero .title-wrapper svg .gods {
     display: block;
   }
   body .hero .title-wrapper svg .gods, body .hero .title-wrapper svg .algo {
     opacity: 0;
-  }
-}
-body .hero-title {
-  font-size: 16vw;
-  font-family: "Skrappa";
-  line-height: 16vw;
-  opacity: 0;
-}
-@media (max-width: 900px) {
-  body .hero-title {
-    font-size: 50vw;
-    line-height: 50vw;
   }
 }
 body .hero .hero01 {
@@ -309,7 +482,9 @@ body .hero .hero01 {
     color: var(--c-fg);
     width: 130px;
     left: 50px;
-    top: 150px;
+    top: 0vw;
+    bottom: 150px;
+    display: none;
   }
 }
 body .hero .hero01::before {
@@ -375,23 +550,26 @@ body .protagonist {
 }
 @media (max-width: 900px) {
   body .protagonist {
-    height: 670px;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
 }
 body .protagonist-title {
-  position: absolute;
-  font-size: 16vw;
+  position: relative;
+  font-size: 14vw;
   font-family: "Skrappa";
-  line-height: 16vw;
-  left: 17.34vw;
-  top: 16vw;
+  line-height: 14vw;
+  margin-left: 17.34vw;
+  padding-top: 11vw;
 }
 @media (max-width: 900px) {
   body .protagonist-title {
-    top: 150px;
-    left: 50px;
-    font-size: 24vw;
-    line-height: 24vw;
+    margin-left: 20px;
+    font-size: 25vw;
+    line-height: 25vw;
   }
 }
 body .protagonist-title span {
@@ -402,7 +580,7 @@ body .protagonist-title .second {
 }
 @media (max-width: 900px) {
   body .protagonist-title .second {
-    margin-left: 70px;
+    margin-left: 50px;
   }
 }
 body .protagonist-title .third {
@@ -411,13 +589,54 @@ body .protagonist-title .third {
 }
 @media (max-width: 900px) {
   body .protagonist-title .third {
-    margin-left: 30px;
+    display: block;
+    float: right;
+    margin-left: 0px;
+    margin-right: 20px;
+  }
+}
+body .protagonist-content {
+  clear: both;
+  position: relative;
+  font-size: 12px;
+  line-height: 14px;
+  color: #939393;
+  font-family: "Monument Grotesk Mono";
+  text-transform: uppercase;
+  width: 250px;
+  margin-left: 30vw;
+  margin-top: 11vw;
+}
+@media (max-width: 900px) {
+  body .protagonist-content {
+    width: calc(100vw - 80px);
+    margin-left: 0;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    margin-top: 60px;
+  }
+}
+body .protagonist-content::before {
+  position: absolute;
+  content: "";
+  width: 6px;
+  height: 1px;
+  background-color: white;
+  top: -2vw;
+  left: 0;
+  opacity: 0;
+}
+@media (max-width: 900px) {
+  body .protagonist-content::before {
+    left: calc(50% - 3px);
+    top: -20px;
   }
 }
 body .protagonist .protagonist01 {
   color: #39A289;
-  right: 29vw;
-  bottom: 14.5vw;
+  left: 25vw;
+  top: 26.5vw;
 }
 @media (max-width: 900px) {
   body .protagonist .protagonist01 {
@@ -428,27 +647,6 @@ body .protagonist .protagonist01 {
 body .protagonist .protagonist01 span {
   display: block;
 }
-body .protagonist .protagonist02 {
-  width: 230px;
-  left: 13vw;
-  bottom: -3vw;
-}
-@media (max-width: 900px) {
-  body .protagonist .protagonist02 {
-    left: 50px;
-    bottom: 150px;
-    width: 180px;
-  }
-}
-body .protagonist .protagonist02::before {
-  position: absolute;
-  content: "";
-  width: 6px;
-  height: 1px;
-  background-color: white;
-  top: -2vw;
-  left: 0;
-}
 body .objective {
   width: 100%;
   position: relative;
@@ -456,27 +654,37 @@ body .objective {
 }
 @media (max-width: 900px) {
   body .objective {
-    height: 500px;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
 }
 body .objective-title {
-  position: absolute;
-  font-size: 16vw;
+  width: 100%;
+  position: relative;
+  font-size: 14vw;
   font-family: "Skrappa";
-  line-height: 16vw;
+  line-height: 14vw;
   text-align: right;
   right: 8vw;
-  top: 16vw;
-}
-body .objective-title .first {
-  display: inline-block;
+  padding-top: 11vw;
 }
 @media (max-width: 900px) {
   body .objective-title {
-    top: 50px;
-    right: 50px;
-    font-size: 24vw;
-    line-height: 24vw;
+    right: 0vw;
+    padding-top: 0vw;
+  }
+}
+body .objective-title .first {
+  display: block;
+  margin-right: 20px;
+}
+@media (max-width: 900px) {
+  body .objective-title {
+    font-size: 25vw;
+    line-height: 25vw;
   }
 }
 body .objective-title .number {
@@ -495,7 +703,46 @@ body .objective-title .second {
 }
 @media (max-width: 900px) {
   body .objective-title .second {
+    text-align: left;
     margin-right: 0px;
+    margin-left: 20px;
+  }
+}
+body .objective-content {
+  position: relative;
+  font-size: 12px;
+  line-height: 14px;
+  color: #939393;
+  font-family: "Monument Grotesk Mono";
+  text-transform: uppercase;
+  width: 250px;
+  margin-top: 11vw;
+  margin-left: 50.5vw;
+}
+@media (max-width: 900px) {
+  body .objective-content {
+    width: calc(100vw - 80px);
+    margin-left: 0px;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    margin-top: 60px;
+  }
+}
+body .objective-content::before {
+  position: absolute;
+  content: "";
+  width: 6px;
+  height: 1px;
+  background-color: white;
+  top: -2vw;
+  left: 0;
+  opacity: 0;
+}
+@media (max-width: 900px) {
+  body .objective-content::before {
+    left: calc(50% - 3px);
+    top: -20px;
   }
 }
 body .objective .objective01 {
@@ -527,26 +774,6 @@ body .objective .objective02 {
 body .objective .objective02 span {
   display: block;
 }
-body .objective .objective03 {
-  width: 230px;
-  bottom: -3vw;
-  right: 36vw;
-}
-@media (max-width: 900px) {
-  body .objective .objective03 {
-    right: 50px;
-    bottom: 100px;
-  }
-}
-body .objective .objective03::before {
-  position: absolute;
-  content: "";
-  width: 6px;
-  height: 1px;
-  background-color: white;
-  top: -2vw;
-  left: 0;
-}
 body .reality {
   width: 100%;
   position: relative;
@@ -554,35 +781,42 @@ body .reality {
 }
 @media (max-width: 900px) {
   body .reality {
-    height: 650px;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
 }
 body .reality-title {
-  position: absolute;
-  font-size: 16vw;
+  font-size: 14vw;
   font-family: "Skrappa";
-  line-height: 16vw;
+  line-height: 14vw;
   text-align: left;
-  left: 8vw;
-  top: 16vw;
+  margin-left: 8vw;
+  padding-top: 11vw;
 }
 @media (max-width: 900px) {
   body .reality-title {
+    width: 100%;
     font-size: 24vw;
     line-height: 24vw;
-    top: 100px;
-    left: 50px;
+    margin-left: 0;
+    padding-top: 0;
   }
 }
 body .reality-title .first {
   display: inline-block;
+  margin-left: 20px;
 }
 body .reality-title .second {
   margin-left: 27vw;
 }
 @media (max-width: 900px) {
   body .reality-title .second {
-    margin-left: 100px;
+    float: right;
+    margin-left: 0px;
+    margin-right: 20px;
   }
 }
 body .reality-title .third {
@@ -591,7 +825,45 @@ body .reality-title .third {
 }
 @media (max-width: 900px) {
   body .reality-title .third {
-    margin-left: 50px;
+    margin-left: 75px;
+  }
+}
+body .reality-content {
+  position: relative;
+  font-size: 12px;
+  line-height: 14px;
+  color: #939393;
+  font-family: "Monument Grotesk Mono";
+  text-transform: uppercase;
+  width: 250px;
+  margin-top: 11vw;
+  margin-left: 60.5vw;
+}
+@media (max-width: 900px) {
+  body .reality-content {
+    width: calc(100vw - 80px);
+    margin-left: 0px;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
+    margin-top: 60px;
+    margin-left: 0;
+  }
+}
+body .reality-content::before {
+  position: absolute;
+  content: "";
+  width: 6px;
+  height: 1px;
+  background-color: white;
+  top: -2vw;
+  left: 0;
+  opacity: 0;
+}
+@media (max-width: 900px) {
+  body .reality-content::before {
+    left: calc(50% - 3px);
+    top: -20px;
   }
 }
 body .reality .reality01 {
@@ -608,45 +880,32 @@ body .reality .reality01 {
 body .reality .reality01 span {
   display: block;
 }
-body .reality .reality02 {
-  width: 340px;
-  right: 17vw;
-  bottom: -3vw;
-}
-@media (max-width: 900px) {
-  body .reality .reality02 {
-    width: 280px;
-    right: 50px;
-    bottom: 75px;
-  }
-}
-body .reality .reality02::before {
-  position: absolute;
-  content: "";
-  width: 6px;
-  height: 1px;
-  background-color: white;
-  top: -2vw;
-  left: 0;
-}
 body .simulation {
   width: 100%;
   position: relative;
   height: 120vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 @media (max-width: 900px) {
   body .simulation {
-    height: 600px;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
 }
 body .simulation-title {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 16vw;
+  font-size: 14vw;
   font-family: "Skrappa";
-  line-height: 16vw;
-  padding-top: 12vw;
+  line-height: 14vw;
+  padding-top: 11vw;
   text-align: center;
 }
 @media (max-width: 900px) {
@@ -672,26 +931,119 @@ body .simulation-title .mono {
     padding-bottom: 20px;
   }
 }
-body .simulation .simulation01 {
-  width: 340px;
-  bottom: -3vw;
-  left: 26vw;
+body .simulation-content {
+  position: relative;
+  text-align: center;
+  font-size: 12px;
+  line-height: 14px;
+  color: #939393;
+  font-family: "Monument Grotesk Mono";
+  text-transform: uppercase;
+  width: 465px;
+  margin-top: 11vw;
 }
 @media (max-width: 900px) {
-  body .simulation .simulation01 {
-    width: 230px;
-    left: 50px;
-    bottom: 50px;
+  body .simulation-content {
+    width: calc(100vw - 80px);
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    margin-top: 60px;
   }
 }
-body .simulation .simulation01::before {
+body .simulation-content::before {
   position: absolute;
   content: "";
   width: 6px;
   height: 1px;
   background-color: white;
   top: -2vw;
+  left: calc(50% - 3px);
+  opacity: 0;
+}
+@media (max-width: 900px) {
+  body .simulation-content::before {
+    top: -20px;
+  }
+}
+body .album {
+  width: 100%;
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+@media (max-width: 900px) {
+  body .album {
+    height: 80vh;
+  }
+}
+body .album-content {
+  text-align: center;
+  margin-top: 4.6875vw;
+  font-size: 12px;
+  line-height: 14px;
+  color: #939393;
+  font-family: "Monument Grotesk Mono";
+  text-transform: uppercase;
+}
+body .album-content .last {
+  margin-top: 1em;
+}
+body .album-content span {
+  display: block;
+  text-align: center;
+}
+body .album-cover {
+  position: relative;
+  width: 470px;
+  height: 470px;
+}
+@media (max-width: 900px) {
+  body .album-cover {
+    width: 250px;
+    height: 250px;
+  }
+}
+body .album-cover svg {
+  transform-origin: center;
+  display: block;
+  position: absolute;
   left: 0;
+  width: 470px;
+  height: 470px;
+}
+@media (max-width: 900px) {
+  body .album-cover svg {
+    width: 250px;
+    height: 250px;
+  }
+}
+body .album-cover svg .rectangle, body .album-cover svg .circle {
+  transform-origin: center;
+}
+body .album-cover .img-wrapper {
+  position: absolute;
+  transform: rotate(13deg);
+  margin-left: 70px;
+  margin-top: 70px;
+  width: 330px;
+  height: 330px;
+}
+@media (max-width: 900px) {
+  body .album-cover .img-wrapper {
+    width: 176px;
+    height: 176px;
+    margin-top: 37px;
+    margin-left: 37px;
+  }
+}
+body .album-cover .img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 body .products {
   width: 100%;
@@ -700,6 +1052,7 @@ body .products {
   font-size: 12px;
   color: #939393;
   text-transform: uppercase;
+  padding-bottom: 10vw;
 }
 @media (max-width: 900px) {
   body .products {
@@ -817,9 +1170,9 @@ body .products .product-price {
 body .products .product-img {
   width: 32vw;
   height: 32vw;
-  border-radius: 10px;
   overflow: hidden;
   margin-bottom: 20px;
+  border: 1px solid #2B2C45;
 }
 @media (max-width: 900px) {
   body .products .product-img {
@@ -833,6 +1186,54 @@ body .products .product-img img {
   object-fit: cover;
   transition: transform 1s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
+body .see-content {
+  width: 100%;
+}
+body .see-content video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+body .see-content-part01 {
+  width: 40vw;
+  height: 40vw;
+  margin-left: 30vw;
+}
+@media (max-width: 900px) {
+  body .see-content-part01 {
+    width: 80vw;
+    height: 70vh;
+    margin-left: 10vw;
+  }
+}
+body .see-content-part02 {
+  width: 30vw;
+  height: 40vw;
+  margin-left: 15vw;
+  margin-top: -4vw;
+}
+@media (max-width: 900px) {
+  body .see-content-part02 {
+    width: 80vw;
+    height: 70vh;
+    margin-left: 10vw;
+    margin-top: 50px;
+  }
+}
+body .see-content-part03 {
+  width: 30vw;
+  height: 50vw;
+  margin-left: 65vw;
+  margin-top: -4vw;
+}
+@media (max-width: 900px) {
+  body .see-content-part03 {
+    width: 80vw;
+    height: 70vh;
+    margin-left: 10vw;
+    margin-top: 50px;
+  }
+}
 body .see-video {
   width: 100%;
   height: 100vh;
@@ -840,10 +1241,26 @@ body .see-video {
   justify-content: center;
   align-items: center;
 }
+@media (max-width: 900px) {
+  body .see-video {
+    margin-bottom: 10vw;
+    height: 50vh;
+  }
+}
 body .see-video iframe {
+  touch-action: none !important;
   width: 80vw;
   height: 80vh;
   border-radius: 10px;
+}
+body .see-video iframe .player {
+  width: 100vw !important;
+}
+@media (max-width: 900px) {
+  body .see-video iframe {
+    width: 100vw;
+    height: auto;
+  }
 }
 body .preloader {
   position: fixed;
@@ -851,62 +1268,9 @@ body .preloader {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: var(--c-fg);
-  z-index: 1000;
-}
-body .preloader .loading {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-body .preloader .loading-square1 {
-  width: 5px;
-  height: 5px;
-  opacity: 0;
-  background-color: var(--c-fg);
-  animation: square1 2s cubic-bezier(0.165, 0.84, 0.44, 1) infinite 3s;
-}
-@keyframes square1 {
-  0% {
-    opacity: 0;
-  }
-  5% {
-    opacity: 1;
-  }
-}
-@keyframes square2 {
-  5% {
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-}
-@keyframes square3 {
-  10% {
-    opacity: 0;
-  }
-  15% {
-    opacity: 1;
-  }
-}
-body .preloader .loading-square2 {
-  width: 5px;
-  height: 5px;
-  margin-left: 15px;
-  background-color: var(--c-fg);
-  opacity: 0;
-  animation: square2 2s cubic-bezier(0.165, 0.84, 0.44, 1) infinite 3s;
-}
-body .preloader .loading-square3 {
-  width: 5px;
-  height: 5px;
-  opacity: 0;
-  margin-left: 15px;
-  animation: square3 2s cubic-bezier(0.165, 0.84, 0.44, 1) infinite 3s;
-  background-color: var(--c-fg);
+  background-color: var(--c-bg);
+  z-index: 10010;
+  cursor: wait;
 }
 
 /*! locomotive-scroll v4.1.1 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
@@ -1014,6 +1378,16 @@ html.has-scroll-dragging {
   right: 0;
   bottom: 0;
   pointer-events: none;
+  z-index: 888;
+}
+
+.touch {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100vh;
+  width: 100vw;
   z-index: 888;
 }
 
