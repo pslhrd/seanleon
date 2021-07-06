@@ -56875,8 +56875,8 @@ function startCubes(positions) {
 }
 },{"./three-helpers":"src/js/rubiks/three-helpers.js","../utils/raf":"src/js/utils/raf.js","./effects":"src/js/rubiks/effects.js","../utils/helpers":"src/js/utils/helpers.js","three":"node_modules/three/build/three.module.js","./rubiks-helpers":"src/js/rubiks/rubiks-helpers.js","gsap/all":"node_modules/gsap/all.js","../../assets/normalmap.jpeg":"src/assets/normalmap.jpeg","./particleSystem":"src/js/rubiks/particleSystem.js"}],"src/assets/images/album.jpg":[function(require,module,exports) {
 module.exports = "/album.57e4d48c.jpg";
-},{}],"src/assets/images/aquarius.jpeg":[function(require,module,exports) {
-module.exports = "/aquarius.900f22de.jpeg";
+},{}],"src/assets/images/aquarius.jpg":[function(require,module,exports) {
+module.exports = "/aquarius.f85494ae.jpg";
 },{}],"src/assets/images/wordmark.png":[function(require,module,exports) {
 module.exports = "/wordmark.4e76e83f.png";
 },{}],"src/assets/images/artwork.jpg":[function(require,module,exports) {
@@ -56911,7 +56911,7 @@ var _normalmap = _interopRequireDefault(require("../../assets/normalmap.jpeg"));
 
 var _album = _interopRequireDefault(require("../../assets/images/album.jpg"));
 
-var _aquarius = _interopRequireDefault(require("../../assets/images/aquarius.jpeg"));
+var _aquarius = _interopRequireDefault(require("../../assets/images/aquarius.jpg"));
 
 var _wordmark = _interopRequireDefault(require("../../assets/images/wordmark.png"));
 
@@ -56934,11 +56934,11 @@ function startMuseum(canvas) {
 
   var manager = new THREE.LoadingManager();
   var loader = new THREE.TextureLoader(manager);
-  var normalMap = loader.load(_normalmap.default);
-  var planeTexture = loader.load(_album.default);
-  var planeTexture2 = loader.load(_aquarius.default);
-  var planeTexture3 = loader.load(_wordmark.default);
-  var planeTexture4 = loader.load(_artwork.default); // AUDIO
+  var normalMap = loader.load(_normalmap.default); // const planeTexture = loader.load(albumTexture)
+
+  var planeTexture = loader.load(_aquarius.default); // const planeTexture3 = loader.load(logoTexture)
+  // const planeTexture4 = loader.load(artworkTexture)
+  // AUDIO
 
   var listener = new THREE.AudioListener();
   var sound = new THREE.Audio(listener);
@@ -56977,7 +56977,7 @@ function startMuseum(canvas) {
     scene.background = new THREE.Color(0x10122C);
     scene.fog = new THREE.Fog(0x10122C, 20, 30); // CUBES
 
-    var cubeNumber = 14;
+    var cubeNumber = 18;
     var cubes = new THREE.Object3D();
 
     for (var createCubes = 0; createCubes < cubeNumber; createCubes++) {
@@ -57001,7 +57001,7 @@ function startMuseum(canvas) {
 
     scene.add(cubes); // PLANE
 
-    var planeGeo = new THREE.PlaneGeometry(4, 4);
+    var planeGeo = new THREE.PlaneGeometry(5, 5);
     var album = new THREE.MeshBasicMaterial({
       map: planeTexture
     });
@@ -57014,40 +57014,33 @@ function startMuseum(canvas) {
       URL: "https://www.godsalgorithm.world/"
     };
     scene.add(plane_GA);
-    targetList.push(plane_GA);
-    var aquarius = new THREE.MeshBasicMaterial({
-      map: planeTexture2
-    });
-    var plane_AQ = new THREE.Mesh(planeGeo, aquarius);
-    plane_AQ.material.side = THREE.DoubleSide;
-    plane_AQ.position.y = 0;
-    plane_AQ.position.z = -12;
-    plane_AQ.rotation.x = 0;
-    scene.add(plane_AQ);
-    targetList.push(plane_AQ);
-    var planeGeo2 = new THREE.PlaneGeometry(14, 4);
-    var logo = new THREE.MeshBasicMaterial({
-      map: planeTexture3,
-      transparent: true
-    });
-    var plane_LG = new THREE.Mesh(planeGeo2, logo);
-    plane_LG.material.side = THREE.DoubleSide;
-    plane_LG.position.y = -12;
-    plane_LG.position.z = 0;
-    plane_LG.rotation.x = Math.PI / 2;
-    plane_LG.rotation.y = Math.PI;
-    scene.add(plane_LG);
-    targetList.push(plane_LG);
-    var artwork = new THREE.MeshBasicMaterial({
-      map: planeTexture4
-    });
-    var plane_AT = new THREE.Mesh(planeGeo, artwork);
-    plane_AT.material.side = THREE.DoubleSide;
-    plane_AT.position.y = 12;
-    plane_AT.position.z = 0;
-    plane_AT.rotation.x = -Math.PI / 2;
-    scene.add(plane_AT);
-    targetList.push(plane_AT); // LIGHTS
+    targetList.push(plane_GA); // const aquarius = new THREE.MeshBasicMaterial({map: planeTexture2})
+    // const plane_AQ = new THREE.Mesh(planeGeo, aquarius)
+    // plane_AQ.material.side = THREE.DoubleSide
+    // plane_AQ.position.y = 0
+    // plane_AQ.position.z = -12
+    // plane_AQ.rotation.x = 0
+    // scene.add(plane_AQ)
+    // targetList.push(plane_AQ)
+    // const planeGeo2 = new THREE.PlaneGeometry(14,4)
+    // const logo = new THREE.MeshBasicMaterial({map: planeTexture3, transparent: true})
+    // const plane_LG = new THREE.Mesh(planeGeo2, logo)
+    // plane_LG.material.side = THREE.DoubleSide
+    // plane_LG.position.y = -12
+    // plane_LG.position.z = 0
+    // plane_LG.rotation.x = Math.PI / 2
+    // plane_LG.rotation.y = Math.PI
+    // scene.add(plane_LG)
+    // targetList.push(plane_LG)
+    // const artwork = new THREE.MeshBasicMaterial({map: planeTexture4})
+    // const plane_AT = new THREE.Mesh(planeGeo, artwork)
+    // plane_AT.material.side = THREE.DoubleSide
+    // plane_AT.position.y = 12
+    // plane_AT.position.z = 0
+    // plane_AT.rotation.x = -Math.PI / 2
+    // scene.add(plane_AT)
+    // targetList.push(plane_AT)
+    // LIGHTS
 
     var light1 = new THREE.PointLight(0xffffff, 1.8, 0, 1);
     var light2 = new THREE.PointLight(0xffffff, 2, 0, 1);
@@ -57060,8 +57053,8 @@ function startMuseum(canvas) {
     renderer.setSize(window.innerWidth, window.innerHeight); // CAMERA
 
     camera.position.z = -10;
-    camera.position.x = -4;
-    camera.position.y = -3;
+    camera.position.x = 0;
+    camera.position.y = 0;
     scene.add(camera);
     camera.add(listener); // LIGHTS
 
@@ -57153,7 +57146,7 @@ function startMuseum(canvas) {
     });
   });
 }
-},{"three":"node_modules/three/build/three.module.js","./three-helpers":"src/js/rubiks/three-helpers.js","../utils/raf":"src/js/utils/raf.js","./effects":"src/js/rubiks/effects.js","three/examples/jsm/controls/OrbitControls":"node_modules/three/examples/jsm/controls/OrbitControls.js","./rubiks-helpers":"src/js/rubiks/rubiks-helpers.js","../utils/helpers":"src/js/utils/helpers.js","./particleSystem":"src/js/rubiks/particleSystem.js","../../assets/normalmap.jpeg":"src/assets/normalmap.jpeg","../../assets/images/album.jpg":"src/assets/images/album.jpg","../../assets/images/aquarius.jpeg":"src/assets/images/aquarius.jpeg","../../assets/images/wordmark.png":"src/assets/images/wordmark.png","../../assets/images/artwork.jpg":"src/assets/images/artwork.jpg","../../assets/sounds/aquarius.mp3":"src/assets/sounds/aquarius.mp3"}],"src/SplitText.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","./three-helpers":"src/js/rubiks/three-helpers.js","../utils/raf":"src/js/utils/raf.js","./effects":"src/js/rubiks/effects.js","three/examples/jsm/controls/OrbitControls":"node_modules/three/examples/jsm/controls/OrbitControls.js","./rubiks-helpers":"src/js/rubiks/rubiks-helpers.js","../utils/helpers":"src/js/utils/helpers.js","./particleSystem":"src/js/rubiks/particleSystem.js","../../assets/normalmap.jpeg":"src/assets/normalmap.jpeg","../../assets/images/album.jpg":"src/assets/images/album.jpg","../../assets/images/aquarius.jpg":"src/assets/images/aquarius.jpg","../../assets/images/wordmark.png":"src/assets/images/wordmark.png","../../assets/images/artwork.jpg":"src/assets/images/artwork.jpg","../../assets/sounds/aquarius.mp3":"src/assets/sounds/aquarius.mp3"}],"src/SplitText.js":[function(require,module,exports) {
 var global = arguments[3];
 var define;
 /*!
@@ -58566,7 +58559,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49643" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54501" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
