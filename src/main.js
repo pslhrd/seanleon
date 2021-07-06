@@ -4,6 +4,7 @@ import LocomotiveScroll from 'locomotive-scroll'
 import barba from '@barba/core'
 import { startRubiks } from './js/rubiks/rubiks'
 import { startCubes } from './js/rubiks/randomCubes'
+import { startMuseum } from './js/rubiks/ownMuseum'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import state from './state'
 import SplitText from './SplitText'
@@ -107,6 +108,14 @@ function touchLaunch (cubes) {
     .to('.words', { opacity: 1, y: '0%', duration:1.3, ease:'power4.out', stagger:0.075}, '-=0.2')
     .to('.content-page-text .lines', { opacity: 1, duration: 0.1, stagger: 0.1}, '-=1.1')
     .to('.appear', { opacity: 1, y: '0%', duration:1.3, ease:'power4.out'}, '-=1')
+}
+
+function ownLaunch() {
+  const tl2 = gsap.timeline()
+  gsap.set('header .logo, ul li a', { opacity: 0 })
+  tl2
+    .add(() => startMuseum())
+    .to('header .logo, ul li a', { opacity: 1, stagger: 0.1, duration: 0.1 })
 }
 
 function seeScroll() {
@@ -227,7 +236,7 @@ function homeScroll () {
 }
 
 barba.init({
-  debug: true,
+  debug: false,
   transitions: [{
     name: 'opacity-transition',
     once ({ next }) {
@@ -267,7 +276,7 @@ barba.init({
       homeScroll()
     }
   }, {
-    namespace: 'touch',
+    namespace: 'own',
     beforeEnter ({ next }) {
       state.nextContainer = next.container
       smooth(next.container)
@@ -311,5 +320,18 @@ barba.init({
       // smooth(next.container)
       seeScroll()
     }
+   }, {
+    namespace: 'touch',
+    beforeEnter ({ next }) {
+      state.nextContainer = next.container
+      smooth(next.container)
+      let canvas = next.container.querySelector('canvas')
+      ownLaunch()
+    },
+    afterEnter ({ next }) {
+      
+    }
   }]
 })
+
+console.clear()

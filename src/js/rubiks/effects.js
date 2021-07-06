@@ -15,7 +15,7 @@ export default function composer ({ renderer, scene, camera }) {
   // composer.addPass(bloomFx)
 
 	const filmPass = new FilmPass(
-	    0.2,   // noise intensity
+	    0.4,   // noise intensity
 	    0,  // scanline intensity
 	    648,    // scanline count
 	    false,  // grayscale

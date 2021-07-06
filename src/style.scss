@@ -245,11 +245,17 @@ body {
       &-menu {
         width: 100%;
         position: relative;
-        margin-top: 7vw;
+        margin-top: 3vw;
+        padding-bottom: 6vw;
         height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        justify-content: center;
 
         @include mobile {
-          margin-top: 60px;
+          margin-top: 30px;
+          padding-bottom: 50px;
           height: 100px;
         }
       }
@@ -267,14 +273,9 @@ body {
     }
 
     ul {
-      position: absolute;
       display: block;
-      left: 31.5vw;
       line-height: 1.5;
-      top: 0;
       @include mobile {
-        left: 50%;
-        transform: translateX(-50%);
         text-align: center;
       }
 
@@ -282,6 +283,12 @@ body {
         margin-right: 30px;
         display: inline-block;
         list-style: none;
+
+        @include mobile {
+          display: block;
+          margin-right: 0px;
+          margin-top: 5px;
+        }
         &:hover {
           cursor: pointer;
         }
@@ -1405,5 +1412,15 @@ html.has-scroll-dragging {
   right: 0;
   bottom: 0;
   pointer-events: none;
+  z-index: 888;
+}
+
+.touch {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100vh;
+  width: 100vw;
   z-index: 888;
 }
