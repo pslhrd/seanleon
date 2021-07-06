@@ -174,7 +174,14 @@ body footer .footer {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 7.8125vw;
+  padding-top: 6vw;
+}
+body footer .footer .pupil {
+  margin-top: 40px;
+  width: 100%;
+  text-align: center;
+  display: block;
+  opacity: 0.3;
 }
 @media (max-width: 900px) {
   body footer .footer {
@@ -182,8 +189,13 @@ body footer .footer {
   }
 }
 body footer .footer-title {
-  font-size: 6.25vw;
   font-family: "Skrappa";
+  width: 180px;
+  height: 180px;
+}
+body footer .footer-title svg {
+  width: 180px;
+  height: 180px;
 }
 @media (max-width: 900px) {
   body footer .footer-title {
@@ -210,7 +222,6 @@ body footer .footer-menu {
   position: relative;
   margin-top: 3vw;
   padding-bottom: 6vw;
-  height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -220,7 +231,6 @@ body footer .footer-menu {
   body footer .footer-menu {
     margin-top: 30px;
     padding-bottom: 50px;
-    height: 100px;
   }
 }
 body footer .footer-logo {
@@ -267,16 +277,6 @@ body footer .star {
   body footer .star {
     display: none;
     left: 20px;
-  }
-}
-body footer .pupil {
-  position: absolute;
-  left: 79vw;
-  top: 0;
-}
-@media (max-width: 900px) {
-  body footer .pupil {
-    display: none;
   }
 }
 body footer .cta {
