@@ -29,7 +29,9 @@ $ease-out: cubic-bezier(.165,.84,.44,1);
 body {
   width: 100vw;
   max-width: 100%;
-  overflow-x: hidden;
+  height: 100vw;
+  overflow: hidden;
+  // overflow-x: hidden;
   background-color: $c-bg;
   color: $c-fg;
 
@@ -46,7 +48,8 @@ body {
 
   main {
     width: 100%;
-    overflow-x: hidden
+    overflow-x: hidden;
+    min-height: 100vh;
   }
 
 

@@ -77,11 +77,11 @@ function homeLaunch () {
   gsap.set('.hero .data', { opacity: 0 })
   gsap.set('.hero01', { x: '10%' })
   gsap.set('.title-wrapper-content span, .title-wrapper-infos span', { opacity: 0 })
-  gsap.set('header .logo, ul li a', { opacity: 0 })
+  // gsap.set('header .logo, ul li a', { opacity: 0 })
 
   tl
     .add(() => startRubiks())
-    .to('header .logo, ul li a', { opacity: 1, stagger: 0.1, duration: 0.1 }, '+=1.5')
+    // .to('header .logo, ul li a', { opacity: 1, stagger: 0.1, duration: 0.1 }, '+=1.5')
     .to('.gods', { opacity: 1, duration: 0.01 })
     .to('.gods', { x: '0%', duration: 1.5, ease: 'power4.out' })
     .to('.algo', { opacity: 1, duration: 0.01 }, '-=1.4')
@@ -273,7 +273,7 @@ barba.init({
       }
     },
     afterEnter ({ next }) {
-      homeScroll()
+      // homeScroll()
     }
   }, {
     namespace: 'own',
